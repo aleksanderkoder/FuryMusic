@@ -5,6 +5,7 @@ $username = "id15398232_furydb";
 $password = "Konbra7250**";
 $inUsername = $_POST["username"];
 $inPassword = $_POST["password"];
+$inEmail = $_POST["email"];
 
 // Create connection
 $conn = new mysqli($servername, $username, $password,"id15398232_furymusicdb");
@@ -15,21 +16,22 @@ if ($conn->connect_error) {
   echo json_encode("Can't connect to database");
 }
 
-$sql = "SELECT * FROM UserAccounts WHERE Password = '$inPassword' AND Username = '$inUsername'";
+$sql = "SELECT * FROM UserAccounts WHERE Username = '$inUsername' OR Email = '$inEmail'";
 $res = $conn->query($sql);
 
-
-if($conn->affected_rows > 0) {
-    $row = $res->fetch_object();
-    $UserInfo = array();
-
-    $UserInfo[0] = $row->Username;
-    $UserInfo[1] = $row->Email;
-
-    echo json_encode($UserInfo);
+if($conn->affected_rows > 0) 
+{
+    echo json_encode("Username taken");
 }
-else{
-    echo json_encode("Wrong info");
+else
+{
+    $sql3 = "INSERT INTO UserAccounts (Username, Password, Email) VALUES ('$inUsername','$inPassword','$inEmail')";
+    $res3 = $conn->query($sql3);
+
+    if($conn->affected_rows > 0) 
+    {
+        echo json_encode("OK");
+    }
 }
 
 

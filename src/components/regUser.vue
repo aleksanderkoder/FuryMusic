@@ -1,52 +1,59 @@
 <template>
-  <div id="divLogIn">
+  <div id="divSignUp">
     
     <img src="/src/assets/fury logo mindre.png">
     <br>
-    <h2 id="logInTittel">SIGN IN</h2>
+    <h2 id="regUserTittel">SIGN UP</h2>
     <form onSubmit="return false">
-      <input type="text" v-model="username" placeholder="Username" id="username"/>
+        <p>All fields must be filled</p>
+      <input type="text" v-model="regUsername" placeholder="Choose a username" id="regUsername"/>
       <br>
-      <input type="password" v-model="password" placeholder="Password" id="password"/>
+      <input type="text" v-model="regEmail" placeholder="Your email address" id="regEmail"/>
       <br>
-      <input type="submit" v-on:click="logIn()" value="SIGN IN" id="btnLogIn"/>
-      <p id="error">Wrong username or password!</p>
+      <input type="password" v-model="regPassword" placeholder="Choose a password" id="regPassword"/>
+      <br>
+      <input type="submit" v-on:click="registerUser()" value="SIGN UP" id="btnRegUser"/>
+      <p id="error2">Wrong username or password!</p>
     </form>
-  
-    <a href="">Forgot password?</a>
+
     
   </div>
 </template>
 
 <script>
 export default {
-  name: 'LogIn',
+  name: 'regUser',
   data () {
     return {
-      username: "",
-      password: "",
+      regUsername: "",
+      regPassword: "",
+      regEmail: "",
       apiURL: "https://furymusic.000webhostapp.com/Scripts/"
     }
   },
   methods: {
-    logIn() {
+    registerUser() {
       $.ajax(
       {
         type:"POST",
-        url: this.apiURL + "userLogIn.php",
+        url: this.apiURL + "userRegister.php",
         dataType: "json",
-        data:{username:this.username,password:this.password},
+        data:{username:this.regUsername,password:this.regPassword,email:this.regEmail},
         cache:false,
         success:function (data) {
-            if(data != "Wrong info")
+            console.log(data)
+
+            if(data == "Error")
             {
-              console.log("det gikk");
-              document.getElementById("error").style.display = "none";
+              document.getElementById("error2").style.display = "block";
+              document.getElementById("error2").innerHTML = "Username or email has already been taken!";
             }
             else
             {
-              document.getElementById("error").style.display = "block";
-              console.log("feil")
+              document.getElementById("error2").style.display = "block";
+              document.getElementById("error2").style.color = "green";
+              document.getElementById("error2").innerHTML = "You have been registered!";
+              
             }
           },
           error:function(er){
@@ -58,13 +65,13 @@ export default {
   }
 </script>
 
-<style>
+<style scoped>
 @font-face {
   font-family: "Monsterrat";
   src: url(/src/assets/fonts/Montserrat-Medium.ttf);
 }
 
-#divLogIn {
+#divSignUp {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -80,7 +87,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: 'Monsterrat', sans-serif;
 }
-#username, #password {
+#regUsername, #regPassword, #regEmail {
   border: none;
   margin: 15px;
   width: 150px;
@@ -88,11 +95,11 @@ export default {
   height: 30px;
   font-family: 'Monsterrat', sans-serif;
 }
-#error {
+#error2 {
   color: red;
   display: none;
 }
-#btnLogIn {
+#btnRegUser {
   margin: 20px;
   background-color: black;
   color: white;
@@ -104,13 +111,13 @@ export default {
   font-weight: bold; 
   font-family: 'Monsterrat', sans-serif;
 }
-#btnLogIn:hover {
+#btnRegUser:hover {
   background-color: #202225;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
-#logInTittel {
+#regUserTittel {
   border-bottom: 2px solid;
-  width: 95px;
+  width: 105px;
   margin: 20px auto;
   font-family: 'Monsterrat', sans-serif;
 }

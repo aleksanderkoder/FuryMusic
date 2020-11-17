@@ -1,20 +1,24 @@
 <template>
-  
-    <LogIn />
-  
+  <div id="app">
+    <LogIn v-show="showLogInComp" />
+    <regUser v-show="showRegUserComp" />
+  </div>
 </template>
 
 <script>
 import LogIn from "./components/LogIn.vue"
+import regUser from "./components/regUser.vue"
 
 export default {
   name: 'app',
   components: {
-    LogIn
+    LogIn, 
+    regUser
   },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      showLogInComp: true,
+      showRegUserComp: true
     }
   }
 }
@@ -33,16 +37,22 @@ export default {
   left: 0;
   right: 0;
   width: 100%;
+  height: 100%; 
   margin: auto;
-}
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   background: url(/src/assets/bak.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* background: url(/src/assets/bak.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; */
   background-color: black;
   font-family: 'Monsterrat', sans-serif;
 }
