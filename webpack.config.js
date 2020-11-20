@@ -76,11 +76,3 @@ if (process.env.NODE_ENV === 'production') {
     })
   ])
 }
-
-// module.exports = {
-//   // ...
-//   build: {
-//     assetsPublicPath: '/',
-//     assetsSubDirectory: 'assets'
-//   }
-// }

@@ -12,7 +12,9 @@
       <input type="submit" v-on:click="logIn()" value="SIGN IN" id="btnLogIn"/>
       <p id="error">Wrong username or password!</p>
     </form>
-  
+    <button id="btnGoToSignUp" v-on:click="goToSignUp()">SIGN UP</button>
+
+    <br>
     <a href="">Forgot password?</a>
     
   </div>
@@ -53,6 +55,9 @@ export default {
             console.log(er)
           }
       })
+    },
+    goToSignUp() {
+      this.$emit("GoToSignUp")
     }
   }
   }
@@ -103,6 +108,22 @@ export default {
   border-radius: 4px;
   font-weight: bold; 
   font-family: 'Monsterrat', sans-serif;
+}
+#btnGoToSignUp {
+  margin: 20px;
+  background-color: grey;
+  color: white;
+  text-decoration: none;
+  border: none;
+  height: 35px;
+  min-width: 35%;
+  border-radius: 4px;
+  font-weight: bold; 
+  font-family: 'Monsterrat', sans-serif;
+}
+#btnGoToSignUp:hover {
+  background-color: black;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 #btnLogIn:hover {
   background-color: #202225;

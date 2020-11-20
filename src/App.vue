@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <LogIn v-show="showLogInComp" />
+    <LogIn v-show="showLogInComp" @GoToSignUp="goToSignUp"/>
     <regUser v-show="showRegUserComp" />
   </div>
 </template>
@@ -18,7 +18,14 @@ export default {
   data () {
     return {
       showLogInComp: true,
-      showRegUserComp: true
+      showRegUserComp: false
+    }
+  },
+  methods: {
+    goToSignUp() {
+      this.showRegUserComp = true
+      this.showLogInComp = false
+      console.log("Showing sign up form...")
     }
   }
 }
