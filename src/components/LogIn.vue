@@ -5,6 +5,7 @@
     <br>
     <h2 id="logInTittel">SIGN IN</h2>
     <form onSubmit="return false">
+      <i class="fi fi-male"></i>
       <input type="text" v-model="username" placeholder="Username" id="username"/>
       <br>
       <input type="password" v-model="password" placeholder="Password" id="password"/>
