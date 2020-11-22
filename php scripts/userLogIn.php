@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 $servername = "localhost";
 $username = "id15398232_furydb";
@@ -15,20 +16,29 @@ if ($conn->connect_error) {
   echo json_encode("Can't connect to database");
 }
 
-$sql = "SELECT * FROM UserAccounts WHERE Password = '$inPassword' AND Username = '$inUsername'";
+$sql = "SELECT Password FROM UserAccounts WHERE Username = '$inUsername'";
 $res = $conn->query($sql);
 
-
 if($conn->affected_rows > 0) {
-    $row = $res->fetch_object();
-    $UserInfo = array();
+    $rad = $res->fetch_object();
+    $passCheck = $rad->Password; 
 
-    $UserInfo[0] = $row->Username;
-    $UserInfo[1] = $row->Email;
+    if(password_verify($inPassword,$passCheck)){
+      $_SESSION["loggedIn"] = true; 
+      $sql = "SELECT * FROM UserAccounts WHERE Username = '$inUsername'";
+      $res = $conn->query($sql);
+      $row = $res->fetch_object();
+      $UserInfo = array();
 
-    echo json_encode($UserInfo);
+      $UserInfo[0] = $row->Username;
+      $UserInfo[1] = $row->Email;
+      echo json_encode($UserInfo);
+    }
+    else {
+      echo json_encode("Wrong info");
+    }
 }
-else{
+else {
     echo json_encode("Wrong info");
 }
 

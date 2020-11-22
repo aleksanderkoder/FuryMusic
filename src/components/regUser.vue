@@ -1,21 +1,23 @@
 <template>
-  <div id="divSignUp">
+  <div class="animate__animated animate__fadeIn" id="divSignUp">
     
-    <img src="/src/assets/fury logo mindre.png">
+    <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury logo mindre.png">
     <br>
-    <h2 id="regUserTittel">SIGN UP</h2>
+    <h2 id="regUserTittel">Sign up</h2>
     <form onSubmit="return false">
-        <p>All fields must be filled</p>
+      <p id="error2" class="animate__animated animate__shakeX">Wrong username or password!</p>
+      <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
       <input type="text" v-model="regUsername" placeholder="Choose a username" id="regUsername"/>
       <br>
+      <font-awesome-icon style="color: black" :icon="['fas', 'at']" />
       <input type="text" v-model="regEmail" placeholder="Your email address" id="regEmail"/>
       <br>
+      <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
       <input type="password" v-model="regPassword" placeholder="Choose a password" id="regPassword"/>
       <br>
-      <input type="submit" v-on:click="registerUser()" value="SIGN UP" id="btnRegUser"/>
-      <p id="error2">Wrong username or password!</p>
+      <input type="submit" v-on:click="registerUser()" value="Sign up" id="btnRegUser"/>
     </form>
-
+    <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>
     
   </div>
 </template>
@@ -33,42 +35,57 @@ export default {
   },
   methods: {
     registerUser() {
-      $.ajax(
+      if(this.regUsername != "" && this.regPassword != "" && this.regEmail != "")
       {
-        type:"POST",
-        url: this.apiURL + "userRegister.php",
-        dataType: "json",
-        data:{username:this.regUsername,password:this.regPassword,email:this.regEmail},
-        cache:false,
-        success:function (data) {
-            console.log(data)
+        $.ajax(
+          {
+            type:"POST",
+            url: this.apiURL + "userRegister.php",
+            dataType: "json",
+            data:{username:this.regUsername,password:this.regPassword,email:this.regEmail},
+            cache:false,
+            success:function (data) {
+                console.log(data)
 
-            if(data == "Error")
-            {
-              document.getElementById("error2").style.display = "block";
-              document.getElementById("error2").innerHTML = "Username or email has already been taken!";
-            }
-            else
-            {
-              document.getElementById("error2").style.display = "block";
-              document.getElementById("error2").style.color = "green";
-              document.getElementById("error2").innerHTML = "You have been registered!";
-              
-            }
-          },
-          error:function(er){
-            console.log(er)
-          }
-      })
+                if(data == "Error")
+                {
+                  document.getElementById("error2").style.display = "block";
+                  document.getElementById("error2").innerHTML = "Username or email has already been taken!";
+                }
+                else
+                {
+                  document.getElementById("error2").style.display = "block";
+                  document.getElementById("error2").style.color = "green";
+                  document.getElementById("error2").innerHTML = "You have been registered!";
+                  
+                }
+              },
+              error:function(er){
+                console.log(er)
+              }
+          })
+      }
+      else
+      {
+        document.getElementById("error2").style.display = "block";
+        document.getElementById("error2").innerHTML = "All fields must be filled!"
+      }},
+      goToSignIn() {
+      this.$emit("GoToSignIn")
+    }
     }
   }
-  }
+  
 </script>
 
 <style scoped>
 @font-face {
   font-family: "Monsterrat";
   src: url(/src/assets/fonts/Montserrat-Medium.ttf);
+}
+@font-face {
+  font-family: "Wals";
+  src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
 
 #divSignUp {
@@ -93,15 +110,16 @@ export default {
   width: 150px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   height: 30px;
-  font-family: 'Monsterrat', sans-serif;
+  font-family: 'Wals';
 }
 #error2 {
   color: red;
   display: none;
 }
 #btnRegUser {
-  margin: 20px;
+  margin-top: 20px;
   background-color: black;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: white;
   text-decoration: none;
   border: none;
@@ -109,7 +127,7 @@ export default {
   min-width: 35%;
   border-radius: 4px;
   font-weight: bold; 
-  font-family: 'Monsterrat', sans-serif;
+  font-family: 'Wals';
 }
 #btnRegUser:hover {
   background-color: #202225;
@@ -117,10 +135,29 @@ export default {
 }
 #regUserTittel {
   border-bottom: 2px solid;
-  width: 105px;
+  width: 85px;
   margin: 20px auto;
-  font-family: 'Monsterrat', sans-serif;
+  font-family: 'Wals';
 }
+#btnBack {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: darkgrey;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: white;
+  text-decoration: none;
+  border: none;
+  height: 35px;
+  min-width: 35%;
+  border-radius: 4px;
+  font-family: "Wals";
+}
+#btnBack:hover {
+  background-color:#202225;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 h1, h2 {
   font-weight: normal;
 }

@@ -25,7 +25,8 @@ if($conn->affected_rows > 0)
 }
 else
 {
-    $sql3 = "INSERT INTO UserAccounts (Username, Password, Email) VALUES ('$inUsername','$inPassword','$inEmail')";
+    $inPasswordHash = password_hash($inPassword, PASSWORD_DEFAULT);
+    $sql3 = "INSERT INTO UserAccounts (Username, Password, Email) VALUES ('$inUsername','$inPasswordHash','$inEmail')";
     $res3 = $conn->query($sql3);
 
     if($conn->affected_rows > 0) 

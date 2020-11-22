@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <LogIn v-show="showLogInComp" @GoToSignUp="goToSignUp"/>
-    <regUser v-show="showRegUserComp" />
+    <regUser v-show="showRegUserComp" @GoToSignIn="goToSignIn"/>
   </div>
 </template>
 
@@ -26,6 +26,11 @@ export default {
       this.showRegUserComp = true
       this.showLogInComp = false
       console.log("Showing sign up form...")
+    },
+    goToSignIn() {
+      this.showRegUserComp = false
+      this.showLogInComp = true
+      console.log("Showing sign in form...")
     }
   }
 }
@@ -61,7 +66,8 @@ body {
   -o-background-size: cover;
   background-size: cover; */
   background-color: black;
-  font-family: 'Monsterrat', sans-serif;
+  font-family: "Wals";
+  overflow: hidden;
 }
 
 input:focus {
@@ -70,7 +76,8 @@ input:focus {
 
 h1, h2 {
   font-weight: normal;
-  font-family: 'Monsterrat', sans-serif;
+  font-family: "Wals";
+
 }
 
 ul {

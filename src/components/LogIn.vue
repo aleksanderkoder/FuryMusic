@@ -1,19 +1,21 @@
 <template>
-  <div id="divLogIn">
+  <div class="animate__animated animate__backInLeft" id="divLogIn">
     
-    <img src="/src/assets/fury logo mindre.png">
+    <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury logo mindre.png">
     <br>
-    <h2 id="logInTittel">SIGN IN</h2>
+    <h2 id="logInTittel">Sign in</h2>
     <form onSubmit="return false">
+      <p id="error" class="animate__animated animate__shakeX">Wrong username or password!</p>
+      <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
       <input type="text" v-model="username" placeholder="Username" id="username"/>
       <br>
+      <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
       <input type="password" v-model="password" placeholder="Password" id="password"/>
       <br>
-      <input type="submit" v-on:click="logIn()" value="SIGN IN" id="btnLogIn"/>
-      <p id="error">Wrong username or password!</p>
+      <input type="submit" v-on:click="logIn()" value="Sign in" id="btnLogIn"/>
+      
     </form>
-    <button id="btnGoToSignUp" v-on:click="goToSignUp()">SIGN UP</button>
-
+    <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
     <br>
     <a href="">Forgot password?</a>
     
@@ -63,10 +65,14 @@ export default {
   }
 </script>
 
-<style>
+<style scoped>
 @font-face {
   font-family: "Monsterrat";
   src: url(/src/assets/fonts/Montserrat-Medium.ttf);
+}
+@font-face {
+  font-family: "Wals";
+  src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
 
 #divLogIn {
@@ -83,7 +89,8 @@ export default {
   border-radius: 1%;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  font-family: 'Monsterrat', sans-serif;
+  font-family: "Monsterrat";
+
 }
 #username, #password {
   border: none;
@@ -91,38 +98,42 @@ export default {
   width: 150px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   height: 30px;
-  font-family: 'Monsterrat', sans-serif;
+  font-family: "Wals";
+
 }
 #error {
   color: red;
   display: none;
+  font-family: "Monsterrat";
 }
 #btnLogIn {
-  margin: 20px;
+  margin-top: 20px;
   background-color: black;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: white;
   text-decoration: none;
   border: none;
   height: 35px;
   min-width: 35%;
   border-radius: 4px;
-  font-weight: bold; 
-  font-family: 'Monsterrat', sans-serif;
+  font-family: "Wals";
 }
 #btnGoToSignUp {
-  margin: 20px;
-  background-color: grey;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: darkgrey;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: white;
   text-decoration: none;
   border: none;
   height: 35px;
   min-width: 35%;
   border-radius: 4px;
-  font-weight: bold; 
-  font-family: 'Monsterrat', sans-serif;
+  font-family: "Wals";
 }
 #btnGoToSignUp:hover {
-  background-color: black;
+  background-color:#202225;
+  color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 #btnLogIn:hover {
@@ -131,9 +142,9 @@ export default {
 }
 #logInTittel {
   border-bottom: 2px solid;
-  width: 95px;
+  width: 75px;
   margin: 20px auto;
-  font-family: 'Monsterrat', sans-serif;
+  font-family: "Wals";
 }
 h1, h2 {
   font-weight: normal;
