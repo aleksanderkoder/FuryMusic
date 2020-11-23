@@ -1,24 +1,25 @@
 <template>
-  <div class="animate__animated animate__backInLeft" id="divLogIn">
-    
-    <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury logo mindre.png">
-    <br>
-    <h2 id="logInTittel">Sign in</h2>
-    <form onSubmit="return false">
-      <p id="error" class="animate__animated animate__shakeX">Wrong username or password!</p>
-      <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
-      <input type="text" v-model="username" placeholder="Username" id="username"/>
+  <div id="backgroundOpacity">
+
+    <div class="animate__animated animate__backInLeft" id="divLogInWrapper">
+      <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
       <br>
-      <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
-      <input type="password" v-model="password" placeholder="Password" id="password"/>
+      <h2 id="logInTittel">Sign in</h2>
+      <form onSubmit="return false">
+        <p id="error" class="animate__animated animate__shakeX">Wrong username or password!</p>
+        <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
+        <input type="text" v-model="username" placeholder="Username" id="username"/>
+        <br>
+        <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
+        <input type="password" v-model="password" placeholder="Password" id="password"/>
+        <br>
+        <input type="submit" v-on:click="logIn()" value="Sign in" id="btnLogIn"/>
+      </form>
+      <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
       <br>
-      <input type="submit" v-on:click="logIn()" value="Sign in" id="btnLogIn"/>
-      
-    </form>
-    <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
-    <br>
-    <a href="">Forgot password?</a>
-    
+      <a href="">Forgot password?</a>
+    </div>
+
   </div>
 </template>
 
@@ -34,29 +35,39 @@ export default {
   },
   methods: {
     logIn() {
-      $.ajax(
+      if(this.username != "" && this.password != "") 
       {
-        type:"POST",
-        url: this.apiURL + "userLogIn.php",
-        dataType: "json",
-        data:{username:this.username,password:this.password},
-        cache:false,
-        success:function (data) {
-            if(data != "Wrong info")
-            {
-              console.log("det gikk");
-              document.getElementById("error").style.display = "none";
+        $.ajax(
+        {
+          type:"POST",
+          url: this.apiURL + "userLogIn.php",
+          dataType: "json",
+          data:{username:this.username,password:this.password},
+          cache:false,
+          success:function (data) {
+              if(data != "Wrong info")
+              {
+                console.log("det gikk");
+                document.getElementById("error").style.display = "none"
+              }
+              else
+              {
+                document.getElementById("error").style.display = "block"
+                document.getElementById("error").innerHTML = "Wrong username or password!"
+                console.log("feil")
+              }
+            },
+            error:function(er){
+              console.log(er)
             }
-            else
-            {
-              document.getElementById("error").style.display = "block";
-              console.log("feil")
-            }
-          },
-          error:function(er){
-            console.log(er)
-          }
-      })
+          })
+      }
+      else
+      {
+        document.getElementById("error").style.display = "block"
+        document.getElementById("error").innerHTML = "Please provide your username and password!"
+      }
+      
     },
     goToSignUp() {
       this.$emit("GoToSignUp")
@@ -74,18 +85,19 @@ export default {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
-
-#divLogIn {
+#backgroundOpacity {
+  opacity: 0.95;
+}
+#divLogInWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: white;
-  /* opacity: 95%; */
+  background-color: white; 
   min-width: 400px;
   max-width: 400px;
   margin: auto;
-  margin-top: 10%;
+  margin-top: 5%;
   border-radius: 1%;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -145,7 +157,9 @@ export default {
   width: 75px;
   margin: 20px auto;
   font-family: "Wals";
+  color: black;
 }
+
 h1, h2 {
   font-weight: normal;
 }

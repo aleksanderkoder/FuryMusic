@@ -2,23 +2,27 @@
   <div id="app">
     <LogIn v-show="showLogInComp" @GoToSignUp="goToSignUp"/>
     <regUser v-show="showRegUserComp" @GoToSignIn="goToSignIn"/>
+    <player v-show="showPlayerComp"/>
   </div>
 </template>
 
 <script>
 import LogIn from "./components/LogIn.vue"
 import regUser from "./components/regUser.vue"
+import player from "./components/player.vue"
 
 export default {
   name: 'app',
   components: {
     LogIn, 
-    regUser
+    regUser, 
+    player
   },
   data () {
     return {
       showLogInComp: true,
-      showRegUserComp: false
+      showRegUserComp: false,
+      showPlayerComp: false
     }
   },
   methods: {

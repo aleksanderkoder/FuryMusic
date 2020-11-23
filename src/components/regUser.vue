@@ -1,25 +1,27 @@
 <template>
-  <div class="animate__animated animate__fadeIn" id="divSignUp">
-    
-    <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury logo mindre.png">
+<div id="backgroundOpacity">
+
+  <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
+    <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
     <br>
     <h2 id="regUserTittel">Sign up</h2>
     <form onSubmit="return false">
       <p id="error2" class="animate__animated animate__shakeX">Wrong username or password!</p>
       <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
-      <input type="text" v-model="regUsername" placeholder="Choose a username" id="regUsername"/>
+      <input type="text" v-model="username" placeholder="Choose a username" id="regUsername"/>
       <br>
       <font-awesome-icon style="color: black" :icon="['fas', 'at']" />
-      <input type="text" v-model="regEmail" placeholder="Your email address" id="regEmail"/>
+      <input type="text" v-model="email" placeholder="Your email address" id="regEmail"/>
       <br>
       <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
-      <input type="password" v-model="regPassword" placeholder="Choose a password" id="regPassword"/>
+      <input type="password" v-model="password" placeholder="Choose a password" id="regPassword"/>
       <br>
       <input type="submit" v-on:click="registerUser()" value="Sign up" id="btnRegUser"/>
     </form>
     <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>
     
   </div>
+</div>
 </template>
 
 <script>
@@ -27,36 +29,35 @@ export default {
   name: 'regUser',
   data () {
     return {
-      regUsername: "",
-      regPassword: "",
-      regEmail: "",
+      username: "",
+      password: "",
+      email: "",
       apiURL: "https://furymusic.000webhostapp.com/Scripts/"
     }
   },
   methods: {
     registerUser() {
-      if(this.regUsername != "" && this.regPassword != "" && this.regEmail != "")
+      if(this.username != "" && this.password != "" && this.email != "")
       {
         $.ajax(
           {
             type:"POST",
             url: this.apiURL + "userRegister.php",
             dataType: "json",
-            data:{username:this.regUsername,password:this.regPassword,email:this.regEmail},
+            data:{username:this.username,password:this.password,email:this.email},
             cache:false,
             success:function (data) {
-                console.log(data)
-
+                
                 if(data == "Error")
                 {
-                  document.getElementById("error2").style.display = "block";
-                  document.getElementById("error2").innerHTML = "Username or email has already been taken!";
+                  document.getElementById("error2").style.display = "block"
+                  document.getElementById("error2").innerHTML = "Username or email has already been taken!"
                 }
                 else
                 {
-                  document.getElementById("error2").style.display = "block";
-                  document.getElementById("error2").style.color = "green";
-                  document.getElementById("error2").innerHTML = "You have been registered!";
+                  document.getElementById("error2").style.display = "block"
+                  document.getElementById("error2").style.color = "green"
+                  document.getElementById("error2").innerHTML = "You have been registered!"
                   
                 }
               },
@@ -87,18 +88,19 @@ export default {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
-
-#divSignUp {
+#backgroundOpacity {
+  opacity: 0.95;
+}
+#divSignUpWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   background-color: white;
-  /* opacity: 95%; */
   min-width: 400px;
   max-width: 400px;
   margin: auto;
-  margin-top: 10%;
+  margin-top: 5%;
   border-radius: 1%;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -138,6 +140,7 @@ export default {
   width: 85px;
   margin: 20px auto;
   font-family: 'Wals';
+  color: black;
 }
 #btnBack {
   margin-top: 20px;
