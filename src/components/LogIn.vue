@@ -30,7 +30,7 @@ export default {
     return {
       username: "",
       password: "",
-      apiURL: "https://furymusic.000webhostapp.com/Scripts/"
+      apiURL: "https://furymusic.000webhostapp.com/scripts/"
     }
   },
   methods: {

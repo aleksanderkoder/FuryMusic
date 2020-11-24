@@ -30,8 +30,8 @@ export default {
   data () {
     return {
       username: "",
-      songs: {},
-      apiURL: "https://furymusic.000webhostapp.com/Scripts/"
+      songs: [],
+      apiURL: "https://furymusic.000webhostapp.com/scripts/"
     }
   },
   methods: {
