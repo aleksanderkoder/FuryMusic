@@ -1,6 +1,6 @@
-# furymusic
+# Fury Music Player
 
-> A music player for the web.
+> A music player application built for the web.
 
 ## Build Setup
 
