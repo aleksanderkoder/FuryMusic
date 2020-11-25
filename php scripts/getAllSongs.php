@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 $servername = "localhost";
 $username = "id15398232_furydb";
@@ -17,19 +16,18 @@ if ($conn->connect_error) {
 $sql = "SELECT * FROM Songs";
 $res = $conn->query($sql);
 
-if($conn->affected_rows > 0 && $_SESSION["loggedIn"]) 
+if($conn->affected_rows > 0) 
 {
-    // $UserInfo = array();
-    // while($res->fetch_object())
-    // {
-    //     $UserInfo[] = $res->fetch_object()->SongID;
-    //     $UserInfo[] = $res->fetch_object()->ArtistName;
-    //     $UserInfo[] = $res->fetch_object()->SongName;
-    //     $UserInfo[] = $res->fetch_object()->URL;
-    // }
+    $UserInfo = array();
+    while($row = $res->fetch_object())
+    {
+        $UserInfo[] = $row->SongID;
+        $UserInfo[] = $row->ArtistName;
+        $UserInfo[] = $row->SongName;
+        $UserInfo[] = $row->URL;
+    }
 
-    // echo json_encode($UserInfo);
-    echo json_encode("ja");
+    echo json_encode($UserInfo);
 }
 else
 {
