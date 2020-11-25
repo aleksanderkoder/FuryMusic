@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <LogIn v-show="showLogInComp" @GoToSignUp="goToSignUp"/>
+    <LogIn v-show="showLogInComp" @GoToPlayer="goToPlayer" @GoToSignUp="goToSignUp"/>
     <regUser v-show="showRegUserComp" @GoToSignIn="goToSignIn"/>
-    <player v-show="showPlayerComp"/>
+    <player v-show="showPlayerComp" v-bind:loggedIn="loggedIn" />
   </div>
 </template>
 
@@ -22,7 +22,8 @@ export default {
     return {
       showLogInComp: true,
       showRegUserComp: false,
-      showPlayerComp: false
+      showPlayerComp: false,
+      loggedIn: false
     }
   },
   methods: {
@@ -35,6 +36,12 @@ export default {
       this.showRegUserComp = false
       this.showLogInComp = true
       console.log("Showing sign in form...")
+    },
+    goToPlayer() {
+      this.showPlayerComp = true
+      this.showLogInComp = false
+      this.loggedIn = true
+      console.log("Showing player...")
     }
   }
 }

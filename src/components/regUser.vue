@@ -6,7 +6,6 @@
     <br>
     <h2 id="regUserTittel">Sign up</h2>
     <form onSubmit="return false">
-      <p id="error2" class="animate__animated animate__shakeX">Wrong username or password!</p>
       <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
       <input type="text" v-model="username" placeholder="Choose a username" id="regUsername"/>
       <br>
@@ -16,6 +15,7 @@
       <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
       <input type="password" v-model="password" placeholder="Choose a password" id="regPassword"/>
       <br>
+      <p id="error2" class="animate__animated animate__shakeX">Wrong username or password!</p>
       <input type="submit" v-on:click="registerUser()" value="Sign up" id="btnRegUser"/>
     </form>
     <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>

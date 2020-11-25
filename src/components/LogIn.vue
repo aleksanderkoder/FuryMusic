@@ -6,13 +6,13 @@
       <br>
       <h2 id="logInTittel">Sign in</h2>
       <form onSubmit="return false">
-        <p id="error" class="animate__animated animate__shakeX">Wrong username or password!</p>
         <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
         <input type="text" v-model="username" placeholder="Username" id="username"/>
         <br>
         <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
         <input type="password" v-model="password" placeholder="Password" id="password"/>
         <br>
+        <p id="error" class="animate__animated animate__shakeX"></p>
         <input type="submit" v-on:click="logIn()" value="Sign in" id="btnLogIn"/>
       </form>
       <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
@@ -35,6 +35,8 @@ export default {
   },
   methods: {
     logIn() {
+
+      var self = this; 
       if(this.username != "" && this.password != "") 
       {
         $.ajax(
@@ -44,17 +46,20 @@ export default {
           dataType: "json",
           data:{username:this.username,password:this.password},
           cache:false,
-          success:function (data) {
+          success: function (data) {
+            
               if(data != "Wrong info")
               {
-                console.log("det gikk");
+                console.log("Logging in user...")
                 document.getElementById("error").style.display = "none"
+                self.$emit("GoToPlayer")
               }
               else
               {
                 document.getElementById("error").style.display = "block"
                 document.getElementById("error").innerHTML = "Wrong username or password!"
                 console.log("feil")
+                
               }
             },
             error:function(er){
