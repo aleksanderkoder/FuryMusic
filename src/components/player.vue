@@ -7,17 +7,22 @@
     </div>
 
     <div id="divSidebar">
+      <h3>Your library</h3>
+      <a>All public songs</a>
+      <a>My uploaded songs</a>
+      <a>My local songs</a>
 
-
+      <h3>Playlists</h3>
     </div>
 
     <div id="divCenter">
       <div v-if="loggedIn">
-        <div id="divSongPane" v-for="song in songs" :key="song.id">
+        <div id="divSongPane" v-for="song in songs" :key="song.SongID">
           <table id="tableSongs">
             <tr>
               <td>
-                <font-awesome-icon v-on:click="playSong(song.SongURL)" style="color: black" :icon="['fas', 'play']" />
+                <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL,song.SongID)" style="color: black" :icon="['fas', 'play']" />
+                <font-awesome-icon v-bind:id="'pause' + song.SongID" v-on:click="pauseSong(song.SongID)" style="color: black; display: none" :icon="['fas', 'pause']" />
               </td>
               <td>
                 {{song.SongName}}
@@ -53,6 +58,7 @@ export default {
       username: "",
       songs: [],
       currentSong: new Audio(),
+      currentSongID: "",
       playingSong: false,
       apiURL: "https://furymusic.000webhostapp.com/scripts/"
     }
@@ -61,10 +67,40 @@ export default {
     loggedIn: Boolean
   },
   methods: {
-    playSong(SongURL) {
-      this.currentSong.src = SongURL
-      this.currentSong.play()
-      
+    playSong(SongURL, SongID) {
+
+      // If no song is selected, play selected song
+      if(this.currentSongID == "")
+      {
+        this.currentSongID = SongID
+        this.currentSong.src = SongURL
+        this.currentSong.play()
+        document.getElementById("pause" + SongID).style.display = "block"
+        document.getElementById("play" + SongID).style.display = "none"
+      }
+      // Continues paused song
+      else if(this.currentSongID == SongID)
+      {
+        this.currentSong.play()
+        document.getElementById("pause" + SongID).style.display = "block"
+        document.getElementById("play" + SongID).style.display = "none"
+      }
+      // If a song has been selected before, but it's not the same song
+      else
+      {
+        document.getElementById("play" + this.currentSongID).style.display = "block"
+        document.getElementById("pause" + this.currentSongID).style.display = "none"
+        this.currentSongID = SongID
+        this.currentSong.src = SongURL
+        this.currentSong.play()
+        document.getElementById("play" + SongID).style.display = "none"
+        document.getElementById("pause" + SongID).style.display = "block"
+      }
+    },
+    pauseSong(SongID) {
+      this.currentSong.pause()
+      document.getElementById("play" + SongID).style.display = "block"
+      document.getElementById("pause" + SongID).style.display = "none"
     },
     populateSongList (songs) {
       for(var i = 0; i < songs.length; i+=4) 
@@ -149,12 +185,13 @@ export default {
   width: 170px;
   height: 100%;
   z-index: 0;
+  padding-top: 200px;
 }
 #divPlayerControls {
   position: absolute;
   background-color: white;
   width: 100%;
-  height: 10%;
+  height: 80px;
   left: 170px;
   bottom: 0;
   z-index: 0;
@@ -176,7 +213,10 @@ ul {
   list-style-type: none;
   padding: 0;
 }
-
+h3 {
+  color: white;
+  text-decoration: underline;
+}
 li {
   display: inline-block;
   margin: 0 10px;
@@ -186,5 +226,7 @@ a {
   color: #202225;
   font-size: 15px;
   font-family: 'Monsterrat', sans-serif;
+  display: block;
+  color: white;
 }
 </style>
