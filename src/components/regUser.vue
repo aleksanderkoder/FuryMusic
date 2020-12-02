@@ -1,7 +1,7 @@
 <template>
-<div id="backgroundOpacity">
 
   <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
+
     <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
     <br>
     <h2 id="regUserTittel">Sign up</h2>
@@ -21,7 +21,7 @@
     <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>
     
   </div>
-</div>
+
 </template>
 
 <script>
@@ -88,9 +88,7 @@ export default {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
-#backgroundOpacity {
-  opacity: 0.95;
-}
+
 #divSignUpWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

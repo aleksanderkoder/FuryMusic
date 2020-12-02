@@ -1,6 +1,5 @@
 <template>
-  <div id="backgroundOpacity">
-
+  
     <div class="animate__animated animate__backInLeft" id="divLogInWrapper">
       <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
       <br>
@@ -20,7 +19,6 @@
       <a href="">Forgot password?</a>
     </div>
 
-  </div>
 </template>
 
 <script>
@@ -36,8 +34,8 @@ export default {
   methods: {
     logIn() {
 
-      var self = this; 
-      if(this.username != "" && this.password != "") 
+      let self = this;
+      if(this.regExLogIn()) 
       {
         $.ajax(
         {
@@ -47,7 +45,7 @@ export default {
           data:{username:this.username,password:this.password},
           cache:false,
           success: function (data) {
-            
+              console.log(data)
               if(data != "Wrong info")
               {
                 console.log("Logging in user...")
@@ -70,11 +68,26 @@ export default {
       else
       {
         document.getElementById("error").style.display = "block"
-        document.getElementById("error").innerHTML = "Please provide your username and password!"
+        document.getElementById("error").innerHTML = "Please provide a valid username and password!"
       }
       
     },
+    regExLogIn() {
+      let regEx1=/^[0-9a-zæøåA-ZÆØÅ]{3,99}$/ 
+      let regEx2=/^[0-9a-zæøåA-ZÆØÅ!?,.-]{6,99}$/
+      
+      let ok1 = regEx1.test(this.username)
+      let ok2 = regEx2.test(this.password)
+      if(!ok1 || !ok2) {
+        return false
+      }
+      else {
+        return true
+      }
+
+    },
     goToSignUp() {
+      document.getElementById("error").style.display = "none"
       this.$emit("GoToSignUp")
     }
   }
@@ -90,9 +103,7 @@ export default {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
-#backgroundOpacity {
-  opacity: 0.95;
-}
+
 #divLogInWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -103,7 +114,7 @@ export default {
   max-width: 400px;
   margin: auto;
   margin-top: 5%;
-  border-radius: 1%;
+  /* border-radius: 1%; */
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Monsterrat";

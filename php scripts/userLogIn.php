@@ -1,5 +1,4 @@
-<?php
-session_start();
+<?php 
 
 $servername = "localhost";
 $username = "id15398232_furydb";
@@ -24,7 +23,7 @@ if($conn->affected_rows > 0) {
     $passCheck = $rad->Password; 
 
     if(password_verify($inPassword,$passCheck)){
-      $_SESSION["loggedIn"] = true; 
+      
       $sql = "SELECT * FROM UserAccounts WHERE Username = '$inUsername'";
       $res = $conn->query($sql);
       $row = $res->fetch_object();
@@ -38,7 +37,7 @@ if($conn->affected_rows > 0) {
       echo json_encode("Wrong info");
     }
 }
-else {
+else{
     echo json_encode("Wrong info");
 }
 

@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 $servername = "localhost";
 $username = "id15398232_furydb";
@@ -16,23 +16,26 @@ if ($conn->connect_error) {
 $sql = "SELECT * FROM Songs";
 $res = $conn->query($sql);
 
-if($conn->affected_rows > 0) 
-{
-    $UserInfo = array();
-    while($row = $res->fetch_object())
-    {
-        $UserInfo[] = $row->SongID;
-        $UserInfo[] = $row->ArtistName;
-        $UserInfo[] = $row->SongName;
-        $UserInfo[] = $row->URL;
-    }
 
-    echo json_encode($UserInfo);
-}
-else
-{
-    echo json_encode("Error occurred when fetching all songs");
-}
+    if($conn->affected_rows > 0) 
+    {
+        $UserInfo = array();
+        while($row = $res->fetch_object())
+        {
+            $UserInfo[] = $row->SongID;
+            $UserInfo[] = $row->ArtistName;
+            $UserInfo[] = $row->SongName;
+            $UserInfo[] = $row->URL;
+        }
+    
+        echo json_encode($UserInfo);
+        }
+        else
+        {
+            echo json_encode("Error occurred when fetching all songs");
+        }    
+
+
 
 
 ?>
