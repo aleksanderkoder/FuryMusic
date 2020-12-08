@@ -103,7 +103,18 @@ export default {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
-
+@font-face {
+  font-family: "Yellowtail";
+  src: url(/src/assets/fonts/Yellowtail-Regular.ttf);
+}
+#music {
+  font-family: "Yellowtail";
+  color: #5c1c09; 
+  font-size: 45px;
+  position: absolute;
+  left: 38%;
+  top: 240px; 
+}
 #divLogInWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

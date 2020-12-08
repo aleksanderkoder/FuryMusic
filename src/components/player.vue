@@ -10,7 +10,6 @@
       <h3>Your library</h3>
       <a>All public songs</a>
       <a>My uploaded songs</a>
-      <a>My local songs</a>
 
       <h3>Playlists</h3>
     </div>
