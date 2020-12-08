@@ -7,7 +7,6 @@ import { faUser,faLock,faUserSecret,faAt,faPlay,faPause} from '@fortawesome/free
 library.add(faUser,faLock,faUserSecret,faAt,faPlay,faPause)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
 Vue.config.productionTip = false
 
 new Vue({
