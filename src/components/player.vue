@@ -7,11 +7,16 @@
     </div>
 
     <div id="divSidebar">
-      <h3>Your library</h3>
+      <h3 id="h3Library">Your library</h3>
       <a>All public songs</a>
       <a>My uploaded songs</a>
 
       <h3>Playlists</h3>
+      
+      <div id="divSidebarCurrentSongInfo" v-if="currentSongName != ''">
+        <p style="font-weight: bold">{{currentSongName}}</p>
+        <p>{{currentArtistName}}</p>
+      </div>
     </div>
 
     <div id="divCenter">
@@ -19,14 +24,14 @@
         <div id="divSongPane" v-for="song in songs" :key="song.SongID">
           <table id="tableSongs">
             <tr>
-              <td>
-                <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL,song.SongID)" style="color: black" :icon="['fas', 'play']" />
+              <td id="tableSongsTdPlay">
+                <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName)" style="color: black" :icon="['fas', 'play']" />
                 <font-awesome-icon v-bind:id="'pause' + song.SongID" v-on:click="pauseSong(song.SongID)" style="color: black; display: none" :icon="['fas', 'pause']" />
               </td>
-              <td>
+              <td id="tableSongsTdSongName">
                 {{song.SongName}}
               </td>
-              <td>
+              <td id="tableSongsTdArtistName">
                 {{song.ArtistName}}
               </td>
             </tr>
@@ -36,8 +41,7 @@
     </div>
 
     <div id="divPlayerControls">
-
-
+        <audio id="audioPlayer" controls />
     </div>
 
 </div>
@@ -56,21 +60,25 @@ export default {
     return {
       username: "",
       songs: [],
-      currentSong: new Audio(),
+      currentSong: undefined,
       currentSongID: "",
-      playingSong: false,
-      apiURL: "https://furymusic.000webhostapp.com/scripts/"
+      currentSongName: "",
+      currentArtistName: "",
+      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
   props: {
     loggedIn: Boolean
   },
   methods: {
-    playSong(SongURL, SongID) {
+    playSong(SongURL, SongID, SongName, ArtistName) {
 
       // If no song is selected, play selected song
       if(this.currentSongID == "")
       {
+        this.currentSong = document.getElementById("audioPlayer")
+        this.currentSongName = SongName
+        this.currentArtistName = ArtistName
         this.currentSongID = SongID
         this.currentSong.src = SongURL
         this.currentSong.play()
@@ -90,6 +98,8 @@ export default {
         document.getElementById("play" + this.currentSongID).style.display = "block"
         document.getElementById("pause" + this.currentSongID).style.display = "none"
         this.currentSongID = SongID
+        this.currentSongName = SongName
+        this.currentArtistName = ArtistName
         this.currentSong.src = SongURL
         this.currentSong.play()
         document.getElementById("play" + SongID).style.display = "none"
@@ -120,11 +130,11 @@ export default {
             url: this.apiURL + "getAllSongs.php",
             dataType: "json",
             cache: false,
+            async: true,
             success:function (data) {
                 console.log(data)
                 if(data != "Error occurred when fetching all songs")
                 {
-                  
                   self.populateSongList(data)
                 }
                 else
@@ -152,14 +162,29 @@ export default {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
+
 #tableSongs {
   width: 100%;
+  text-align: left;
 }
+
+#tableSongsTdPlay {
+  width: 50px;
+}
+
+#tableSongsTdSongName {
+  width: 500px; 
+}
+
+#tableSongsTdArtistName {
+  width: 150px; 
+}
+
 #divSongPane {
   background-color: white; 
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 10px;
-  width: 450px;
+  width: 850px;
   margin-top: 15px;
   margin-left: 15px; 
 }
@@ -174,18 +199,29 @@ export default {
   padding: 2px;
   text-align: left;
 }
+
 #logo {
   position: absolute;
   left: 42.5px;
 }
+
+#divSidebarCurrentSongInfo {
+  color: white;  
+  position: absolute;
+  left: 0; 
+  bottom: 0; 
+  text-align: center;
+  width: 100%;
+}
+
 #divSidebar {
   position: absolute;
   background-color: rgb(53, 50, 50);
   width: 170px;
   height: 100%;
   z-index: 0;
-  padding-top: 200px;
 }
+
 #divPlayerControls {
   position: absolute;
   background-color: white;
@@ -195,6 +231,22 @@ export default {
   bottom: 0;
   z-index: 0;
 }
+
+#audioPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 75%;
+  outline: none; 
+}
+
+#h3Library {
+  margin-top: 150px;
+}
+
 #divCenter {
   position: absolute;
   width: 100%;

@@ -28,7 +28,7 @@ export default {
     return {
       username: "",
       password: "",
-      apiURL: "https://furymusic.000webhostapp.com/scripts/"
+      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
   methods: {
@@ -44,6 +44,7 @@ export default {
           dataType: "json",
           data:{username:this.username,password:this.password},
           cache:false,
+          async: true,
           success: function (data) {
               console.log(data)
               if(data != "Wrong info")

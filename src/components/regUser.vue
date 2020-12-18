@@ -32,7 +32,7 @@ export default {
       username: "",
       password: "",
       email: "",
-      apiURL: "https://furymusic.000webhostapp.com/scripts/"
+      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
   methods: {
