@@ -60,7 +60,7 @@ export default {
     return {
       username: "",
       songs: [],
-      currentSong: undefined,
+      currentSong: null,
       currentSongID: "",
       currentSongName: "",
       currentArtistName: "",
