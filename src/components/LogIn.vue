@@ -126,7 +126,7 @@ export default {
   max-width: 400px;
   margin: auto;
   margin-top: 5%;
-  /* border-radius: 1%; */
+  border-radius: 1%; 
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Monsterrat";

@@ -1,19 +1,19 @@
 <template>
 <div id="divPlayerWrapper">
 
-    <div id="divTopbar">
+    <div id="divTopbar" class="animate__animated animate__fadeInDown">
       <img id="logo" src="/src/assets/fury music logo ferdig.png" height="80px">
 
     </div>
 
-    <div id="divSidebar">
+    <div id="divSidebar" class="animate__animated animate__fadeInLeft">
       <h3 id="h3Library">Your library</h3>
       <a>All public songs</a>
       <a>My uploaded songs</a>
 
       <h3>Playlists</h3>
       
-      <div id="divSidebarCurrentSongInfo" v-if="currentSongName != ''">
+      <div id="divSidebarCurrentSongInfo" v-if="currentSongName != ''" class="animate__animated animate__fadeInUp">
         <p style="font-weight: bold">{{currentSongName}}</p>
         <p>{{currentArtistName}}</p>
       </div>
@@ -21,8 +21,8 @@
 
     <div id="divCenter">
       <div v-if="loggedIn">
-        <div id="divSongPane" v-for="song in songs" :key="song.SongID">
-          <table id="tableSongs">
+        <div id="divSongPane" v-for="song in songs" :key="song.SongID" class="animate__animated animate__fadeInRight">
+          <table  id="tableSongs">
             <tr>
               <td id="tableSongsTdPlay">
                 <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName)" style="color: black" :icon="['fas', 'play']" />
@@ -34,20 +34,31 @@
               <td id="tableSongsTdArtistName">
                 {{song.ArtistName}}
               </td>
+              <td id="tableSongsTdSongLength">
+                {{song.Length}}
+              </td>
             </tr>
           </table>
         </div>
       </div>
     </div>
 
-    <div id="divPlayerControls">
-        <audio id="audioPlayer" controls />
+    <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
+        <!-- <audio id="audioPlayer" controls /> -->
+      <div id="divPlay" v-on:click="wavePlayPauseToggle('play')">
+        <font-awesome-icon id="playButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 12%" :icon="['fas', 'play']" />
+      </div>
+       <div id="divPause" v-on:click="wavePlayPauseToggle('pause')">
+        <font-awesome-icon id="pauseButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 2%;" :icon="['fas', 'pause']" />
+      </div>
+        <div id="waveform"></div>
     </div>
 
 </div>
 </template>
 
 <script>
+
 export default {
   name: 'player',
   props: {
@@ -59,6 +70,7 @@ export default {
   data () {
     return {
       username: "",
+      wavesurfer: null,
       songs: [],
       currentSong: null,
       currentSongID: "",
@@ -71,59 +83,90 @@ export default {
     loggedIn: Boolean
   },
   methods: {
-    playSong(SongURL, SongID, SongName, ArtistName) {
-
+    wavePlayPauseToggle (mode) {
+      this.wavesurfer.playPause()
+      if(mode == "play")
+      {
+        document.getElementById("divPlay").style.display = "none"
+        document.getElementById("divPause").style.display = "block"
+        document.getElementById("play" + this.currentSongID).style.display = "none"
+        document.getElementById("pause" + this.currentSongID).style.display = "block"
+      }
+      else
+      {
+        document.getElementById("divPause").style.display = "none";
+        document.getElementById("divPlay").style.display = "block"
+        document.getElementById("pause" + this.currentSongID).style.display = "none"
+        document.getElementById("play" + this.currentSongID).style.display = "block"
+      }
+    },
+    playSong (SongURL, SongID, SongName, ArtistName) {
+      
+      document.getElementById("divPlayerControls").style.display = "block"
+      
       // If no song is selected, play selected song
       if(this.currentSongID == "")
       {
-        this.currentSong = document.getElementById("audioPlayer")
+        // this.currentSong = document.getElementById("audioPlayer")
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
         this.currentSongID = SongID
-        this.currentSong.src = SongURL
-        this.currentSong.play()
-        document.getElementById("pause" + SongID).style.display = "block"
-        document.getElementById("play" + SongID).style.display = "none"
+        // this.currentSong.src = Song
+        
+        this.wavesurfer.load(SongURL) 
+        // this.wavesurfer.play()
+        // document.getElementById("pause" + SongID).style.display = "block"
+        // document.getElementById("play" + SongID).style.display = "none"
       }
       // Continues paused song
       else if(this.currentSongID == SongID)
       {
-        this.currentSong.play()
+        // this.currentSong.play()
+        this.wavesurfer.playPause()
         document.getElementById("pause" + SongID).style.display = "block"
         document.getElementById("play" + SongID).style.display = "none"
+        document.getElementById("divPlay").style.display = "none"
+        document.getElementById("divPause").style.display = "block"
       }
       // If a song has been selected before, but it's not the same song
       else
       {
         document.getElementById("play" + this.currentSongID).style.display = "block"
         document.getElementById("pause" + this.currentSongID).style.display = "none"
+        document.getElementById("divPlay").style.display = "block"
+        document.getElementById("divPause").style.display = "none"
         this.currentSongID = SongID
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
-        this.currentSong.src = SongURL
-        this.currentSong.play()
-        document.getElementById("play" + SongID).style.display = "none"
-        document.getElementById("pause" + SongID).style.display = "block"
+        // this.currentSong.src = SongURL
+        // this.currentSong.play()
+        this.wavesurfer.load(SongURL)
+      
+        // document.getElementById("play" + SongID).style.display = "none"
+        // document.getElementById("pause" + SongID).style.display = "block"
       }
     },
-    pauseSong(SongID) {
-      this.currentSong.pause()
+    pauseSong (SongID) {
+      // this.currentSong.pause()
+      // this.wavePlayPauseToggle("pause")
+      this.wavesurfer.pause()
       document.getElementById("play" + SongID).style.display = "block"
       document.getElementById("pause" + SongID).style.display = "none"
+      document.getElementById("divPlay").style.display = "block"
+      document.getElementById("divPause").style.display = "none"
     },
     populateSongList (songs) {
       for(var i = 0; i < songs.length; i+=4) 
       {
-        this.songs.push({SongID: songs[i], ArtistName: songs[i+1], SongName: songs[i+2]
-        , SongURL: songs[i+3]})
-      }
-      
+          this.songs.push({SongID: songs[i], ArtistName: songs[i+1], SongName: songs[i+2]
+            , SongURL: songs[i+3]})
+      } 
     }
   },
   watch: {
     loggedIn: function () {
       console.log("Fetching all songs...")
-      var self = this;
+      var self = this
       $.ajax(
           {
             type: "POST",
@@ -146,8 +189,15 @@ export default {
                 console.log(er)
               }
           })
-    }
-    
+    },
+  },
+  mounted () {
+    this.wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'white',
+            progressColor: 'lightblue',
+            barWidth: '2'
+          })
   }
   }
   
@@ -178,6 +228,10 @@ export default {
 
 #tableSongsTdArtistName {
   width: 150px; 
+}
+
+#tableSongsTdSongLength {
+  width: 50px;
 }
 
 #divSongPane {
@@ -224,28 +278,18 @@ export default {
 
 #divPlayerControls {
   position: absolute;
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0.75);
   width: 100%;
-  height: 80px;
+  height: 135px;
   left: 170px;
   bottom: 0;
   z-index: 0;
-}
-
-#audioPlayer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  margin: auto;
-  width: 75%;
-  outline: none; 
+  display: none; 
 }
 
 #h3Library {
-  margin-top: 150px;
-}
+  margin-top: 120px;
+} 
 
 #divCenter {
   position: absolute;
@@ -255,6 +299,39 @@ export default {
   bottom: 10%;
   top: 35px;
   z-index: 0;
+}
+#waveform {
+  
+  position: inline-block;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  /* margin-right: 17%; */
+  width: 75%;
+  outline: none; 
+}
+#divPlay {
+  position: absolute;
+  left: 4%;
+  top: 22%;
+  background-color: white; 
+  border-radius: 100%;
+  width: 75px;
+  height: 75px;
+  border: none; 
+}
+#divPause {
+  position: absolute;
+  left: 4%;
+  top: 22%;
+  background-color: white; 
+  border-radius: 100%;
+  width: 75px;
+  height: 75px;
+  border: none; 
+  display: none; 
 }
 h1, h2 {
   font-weight: normal;
