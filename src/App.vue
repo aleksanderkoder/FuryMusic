@@ -2,7 +2,7 @@
   <div id="app">
     <LogIn v-show="showLogInComp" @GoToPlayer="goToPlayer" @GoToSignUp="goToSignUp"/>
     <regUser v-show="showRegUserComp" @GoToSignIn="goToSignIn"/>
-    <player v-show="showPlayerComp" v-bind:loggedIn="loggedIn" />
+    <player v-show="showPlayerComp" v-bind:loggedIn="loggedIn" v-bind:username="username" />
   </div>
 </template>
 
@@ -23,7 +23,8 @@ export default {
       showLogInComp: true,
       showRegUserComp: false,
       showPlayerComp: false,
-      loggedIn: false
+      loggedIn: false,
+      username: ""
     }
   },
   methods: {
@@ -37,10 +38,12 @@ export default {
       this.showLogInComp = true
       console.log("Showing sign in form...")
     },
-    goToPlayer() {
+    goToPlayer(user) {
       this.showPlayerComp = true
       this.showLogInComp = false
       this.loggedIn = true
+      this.username = user
+      Ozone.fire("success","Signed in as " + user, "bottom-middle")
       console.log("Showing player...")
     }
   }

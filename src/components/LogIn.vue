@@ -51,7 +51,7 @@ export default {
               {
                 console.log("Logging in user...")
                 document.getElementById("error").style.display = "none"
-                self.$emit("GoToPlayer")
+                self.$emit("GoToPlayer",self.username)
               }
               else
               {

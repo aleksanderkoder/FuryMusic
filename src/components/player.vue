@@ -3,7 +3,10 @@
 
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
       <img id="logo" src="/src/assets/fury music logo ferdig.png" height="80px">
-
+      <button id="btnSignOut">
+        <font-awesome-icon style="color: white" :icon="['fas', 'times-circle']" />
+        Sign out
+        </button>
     </div>
 
     <div id="divSidebar" class="animate__animated animate__fadeInLeft">
@@ -13,7 +16,7 @@
 
       <h3>Playlists</h3>
       
-      <div id="divSidebarCurrentSongInfo" v-if="currentSongName != ''" class="animate__animated animate__fadeInUp">
+      <div id="divSidebarCurrentSongInfo" v-if="currentSongName != ''" class="animate__animated animate__fadeInLeft">
         <p style="font-weight: bold">{{currentSongName}}</p>
         <p>{{currentArtistName}}</p>
       </div>
@@ -34,7 +37,7 @@
               <td id="tableSongsTdArtistName">
                 {{song.ArtistName}}
               </td>
-              <td id="tableSongsTdSongLength">
+               <td id="tableSongsTdSongLength"> <!-- TODO: add song length -->
                 {{song.Length}}
               </td>
             </tr>
@@ -44,7 +47,6 @@
     </div>
 
     <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
-        <!-- <audio id="audioPlayer" controls /> -->
       <div id="divPlay" v-on:click="wavePlayPauseToggle('play')">
         <font-awesome-icon id="playButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 12%" :icon="['fas', 'play']" />
       </div>
@@ -65,14 +67,17 @@ export default {
     loggedIn: {
       type: Boolean,
       default: false
+    },
+    username: {
+      type: String,
+      default: ""
     }
   },
   data () {
     return {
-      username: "",
       wavesurfer: null,
       songs: [],
-      currentSong: null,
+      currentSong: null, // Not used for now
       currentSongID: "",
       currentSongName: "",
       currentArtistName: "",
@@ -80,7 +85,8 @@ export default {
     }
   },
   props: {
-    loggedIn: Boolean
+    loggedIn: Boolean,
+    username: String
   },
   methods: {
     wavePlayPauseToggle (mode) {
@@ -186,8 +192,7 @@ export default {
             barWidth: '2',
             fillParent: true
           })
-          Ozone.fire("success","hei","top-left")
-  }
+    }
   }
   
 </script>
@@ -259,15 +264,18 @@ export default {
 
 #divSidebar {
   position: absolute;
-  background-color: rgb(53, 50, 50);
+  /* background-color: rgb(53, 50, 50); */
+  background-color: rgba(0, 0, 0, 0.8);
   width: 170px;
   height: 100%;
   z-index: 0;
+  border-right: 1px solid white;
 }
 
 #divPlayerControls {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.8);
+  border-left: 1px solid white;
   width: 100%;
   height: 135px;
   left: 170px;
@@ -309,7 +317,8 @@ export default {
   border-radius: 100%;
   width: 75px;
   height: 75px;
-  border: none; 
+  border: none;
+  animation: playerpulse infinite 1.5s; 
 }
 #divPause {
   position: absolute;
@@ -322,6 +331,24 @@ export default {
   border: none; 
   display: none; 
 }
+
+#btnSignOut {
+  position: absolute;
+  right: 35px;
+  top: 7px; 
+  border: none;
+  padding: 5px; 
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  transition: 0.3s;
+}
+
+#btnSignOut:hover {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #8b0000;
+}
+
 h1, h2 {
   font-weight: normal;
 }
@@ -346,4 +373,19 @@ a {
   display: block;
   color: white;
 }
+
+@keyframes playerpulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
 </style>
