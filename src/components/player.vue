@@ -107,21 +107,15 @@ export default {
       // If no song is selected, play selected song
       if(this.currentSongID == "")
       {
-        // this.currentSong = document.getElementById("audioPlayer")
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
         this.currentSongID = SongID
-        // this.currentSong.src = Song
         
         this.wavesurfer.load(SongURL) 
-        // this.wavesurfer.play()
-        // document.getElementById("pause" + SongID).style.display = "block"
-        // document.getElementById("play" + SongID).style.display = "none"
       }
       // Continues paused song
       else if(this.currentSongID == SongID)
       {
-        // this.currentSong.play()
         this.wavesurfer.playPause()
         document.getElementById("pause" + SongID).style.display = "block"
         document.getElementById("play" + SongID).style.display = "none"
@@ -138,17 +132,10 @@ export default {
         this.currentSongID = SongID
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
-        // this.currentSong.src = SongURL
-        // this.currentSong.play()
         this.wavesurfer.load(SongURL)
-      
-        // document.getElementById("play" + SongID).style.display = "none"
-        // document.getElementById("pause" + SongID).style.display = "block"
       }
     },
     pauseSong (SongID) {
-      // this.currentSong.pause()
-      // this.wavePlayPauseToggle("pause")
       this.wavesurfer.pause()
       document.getElementById("play" + SongID).style.display = "block"
       document.getElementById("pause" + SongID).style.display = "none"
@@ -196,8 +183,10 @@ export default {
             container: '#waveform',
             waveColor: 'white',
             progressColor: 'lightblue',
-            barWidth: '2'
+            barWidth: '2',
+            fillParent: true
           })
+          Ozone.fire("success","hei","top-left")
   }
   }
   
