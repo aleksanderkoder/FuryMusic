@@ -176,6 +176,5 @@ class Ozone
               element.parentNode.removeChild(element);
             }, 500);
           }
-          
         }
       }
