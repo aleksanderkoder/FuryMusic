@@ -80,10 +80,12 @@ export default {
 </script>
 
 <style scoped>
+
 @font-face {
   font-family: "Monsterrat";
   src: url(/src/assets/fonts/Montserrat-Medium.ttf);
 }
+
 @font-face {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
@@ -104,6 +106,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: 'Monsterrat', sans-serif;
 }
+
 #regUsername, #regPassword, #regEmail {
   border: none;
   margin: 15px;
@@ -112,10 +115,12 @@ export default {
   height: 30px;
   font-family: 'Wals';
 }
+
 #error2 {
   color: red;
   display: none;
 }
+
 #btnRegUser {
   margin-top: 20px;
   background-color: black;
@@ -126,13 +131,17 @@ export default {
   height: 35px;
   min-width: 35%;
   border-radius: 4px;
-  font-weight: bold; 
   font-family: 'Wals';
+  transition: 0.3s; 
+  cursor: pointer;
 }
+
 #btnRegUser:hover {
-  background-color: #202225;
+  background-color: #383b3f;
+  color: black;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
 #regUserTittel {
   border-bottom: 2px solid;
   width: 85px;
@@ -140,23 +149,30 @@ export default {
   font-family: 'Wals';
   color: black;
 }
+
 #btnBack {
   margin-top: 20px;
   margin-bottom: 20px;
   background-color: darkgrey;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: white;
+  color: black;
   text-decoration: none;
   border: none;
   height: 35px;
   min-width: 35%;
   border-radius: 4px;
   font-family: "Wals";
+  transition: 0.3s; 
 }
+
 #btnBack:hover {
   background-color:#202225;
   color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+button {
+  cursor: pointer;
 }
 
 h1, h2 {
@@ -178,4 +194,5 @@ a {
   font-size: 15px;
   font-family: 'Monsterrat', sans-serif;
 }
+
 </style>

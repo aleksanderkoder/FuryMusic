@@ -2,7 +2,11 @@
 <div id="divPlayerWrapper">
 
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
-      <img id="logo" src="/src/assets/fury music logo ferdig.png" height="80px">
+      <img id="logo" src="/src/assets/fury music logo ferdig.png" width="80px">
+      <div id="divUser">
+        <font-awesome-icon style="color: black" :icon="['fas', 'user-circle']" />
+        {{username}}
+      </div>
       <button id="btnSignOut">
         <font-awesome-icon style="color: white" :icon="['fas', 'times-circle']" />
         Sign out
@@ -28,8 +32,8 @@
           <table  id="tableSongs">
             <tr>
               <td id="tableSongsTdPlay">
-                <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName)" style="color: black" :icon="['fas', 'play']" />
-                <font-awesome-icon v-bind:id="'pause' + song.SongID" v-on:click="pauseSong(song.SongID)" style="color: black; display: none" :icon="['fas', 'pause']" />
+                <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName)" style="color: black; cursor: pointer;" :icon="['fas', 'play']" />
+                <font-awesome-icon v-bind:id="'pause' + song.SongID" v-on:click="pauseSong(song.SongID)" style="color: black; cursor: pointer; display: none" :icon="['fas', 'pause']" />
               </td>
               <td id="tableSongsTdSongName">
                 {{song.SongName}}
@@ -185,23 +189,36 @@ export default {
     },
   },
   mounted () {
+    let self = this
+
+    // Initializes the WaveSurfer object
     this.wavesurfer = WaveSurfer.create({
             container: '#waveform',
             waveColor: 'white',
-            progressColor: 'lightblue',
+            progressColor: 'black',
             barWidth: '2',
             fillParent: true
           })
+          
+    // Prepares event for when song finishes
+    this.wavesurfer.on('finish', function () {
+          document.getElementById("play" + self.currentSongID).style.display = "block"
+          document.getElementById("pause" + self.currentSongID).style.display = "none"
+          document.getElementById("divPlay").style.display = "block"
+          document.getElementById("divPause").style.display = "none"
+        })
     }
   }
   
 </script>
 
 <style scoped>
+
 @font-face {
   font-family: "Monsterrat";
   src: url(/src/assets/fonts/Montserrat-Medium.ttf);
 }
+
 @font-face {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
@@ -275,10 +292,9 @@ export default {
 #divPlayerControls {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.8);
-  border-left: 1px solid white;
   width: 100%;
-  height: 135px;
-  left: 170px;
+  height: 130px;
+  left: 171px;
   bottom: 0;
   z-index: 0;
   display: none; 
@@ -297,6 +313,7 @@ export default {
   top: 35px;
   z-index: 0;
 }
+
 #waveform {
   
   position: inline-block;
@@ -309,6 +326,7 @@ export default {
   width: 75%;
   outline: none; 
 }
+
 #divPlay {
   position: absolute;
   left: 4%;
@@ -319,7 +337,9 @@ export default {
   height: 75px;
   border: none;
   animation: playerpulse infinite 1.5s; 
+  cursor: pointer;
 }
+
 #divPause {
   position: absolute;
   left: 4%;
@@ -330,6 +350,7 @@ export default {
   height: 75px;
   border: none; 
   display: none; 
+  cursor: pointer;
 }
 
 #btnSignOut {
@@ -349,6 +370,18 @@ export default {
   background-color: #8b0000;
 }
 
+#divUser {
+  position: absolute;
+  right: 165px;
+  top: 5px; 
+  border: none;
+  padding: 5px; 
+}
+
+button {
+  cursor: pointer; 
+}
+
 h1, h2 {
   font-weight: normal;
 }
@@ -357,10 +390,12 @@ ul {
   list-style-type: none;
   padding: 0;
 }
+
 h3 {
   color: white;
   text-decoration: underline;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;

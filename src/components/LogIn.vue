@@ -1,14 +1,14 @@
 <template>
   
-    <div class="animate__animated animate__backInLeft" id="divLogInWrapper">
-      <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
+    <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
+      <img width="250" class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
       <br>
       <h2 id="logInTittel">Sign in</h2>
       <form onSubmit="return false">
-        <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
+        <font-awesome-icon style="color: white" :icon="['fas', 'user']" />
         <input type="text" v-model="username" placeholder="Username" id="username"/>
         <br>
-        <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
+        <font-awesome-icon style="color: white" :icon="['fas', 'lock']" />
         <input type="password" v-model="password" placeholder="Password" id="password"/>
         <br>
         <p id="error" class="animate__animated animate__shakeX"></p>
@@ -96,18 +96,22 @@ export default {
 </script>
 
 <style scoped>
+
 @font-face {
   font-family: "Monsterrat";
   src: url(/src/assets/fonts/Montserrat-Medium.ttf);
 }
+
 @font-face {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
+
 @font-face {
   font-family: "Yellowtail";
   src: url(/src/assets/fonts/Yellowtail-Regular.ttf);
 }
+
 #music {
   font-family: "Yellowtail";
   color: #5c1c09; 
@@ -116,12 +120,13 @@ export default {
   left: 38%;
   top: 240px; 
 }
+
 #divLogInWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: white; 
+  background-color: rgba(0, 0, 0, 0.8); 
   min-width: 400px;
   max-width: 400px;
   margin: auto;
@@ -132,23 +137,27 @@ export default {
   font-family: "Monsterrat";
 
 }
+
 #username, #password {
   border: none;
   margin: 15px;
-  width: 150px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  width: 155px;
+  /* box-shadow: rgba(255, 255, 255, 0.24) 0px 2px 4px; */
   height: 30px;
   font-family: "Wals";
-
+  border-radius: 3px;
 }
+
 #error {
   color: red;
   display: none;
   font-family: "Monsterrat";
 }
+
 #btnLogIn {
   margin-top: 20px;
-  background-color: black;
+  background-color: white;
+  background-color:#3c3e41af;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: white;
   text-decoration: none;
@@ -157,35 +166,47 @@ export default {
   min-width: 35%;
   border-radius: 4px;
   font-family: "Wals";
+  transition: 0.3s; 
+  cursor: pointer;
 }
+
 #btnGoToSignUp {
   margin-top: 20px;
   margin-bottom: 20px;
-  background-color: darkgrey;
+  background-color:white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: white;
+  color: black;
   text-decoration: none;
   border: none;
   height: 35px;
   min-width: 35%;
   border-radius: 4px;
   font-family: "Wals";
+  transition: 0.3s;
 }
+
 #btnGoToSignUp:hover {
-  background-color:#202225;
-  color: white;
+  background-color: rgba(255, 255, 255, 0.575);
+  color: black;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
 #btnLogIn:hover {
   background-color: #202225;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: white;
 }
+
 #logInTittel {
-  border-bottom: 2px solid;
+  border-bottom: 1px solid;
   width: 75px;
   margin: 20px auto;
   font-family: "Wals";
-  color: black;
+  color: white;
+}
+
+button {
+  cursor: pointer;
 }
 
 h1, h2 {
@@ -203,8 +224,10 @@ li {
 }
 
 a {
-  color: #202225;
-  font-size: 15px;
+  display: block; 
+  color: white;
+  font-size: 12px;
   font-family: 'Monsterrat', sans-serif;
-}
+  margin-top: 25px;
+} 
 </style>

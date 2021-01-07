@@ -43,7 +43,10 @@ export default {
       this.showLogInComp = false
       this.loggedIn = true
       this.username = user
-      Ozone.fire("success","Signed in as " + user, "bottom-middle")
+      setTimeout(function() {
+        Ozone.fire("success","Signed in as " + user, "bottom-middle")
+      }, 1500)
+      
       console.log("Showing player...")
     }
   }
@@ -51,6 +54,7 @@ export default {
 </script>
 
 <style>
+
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -71,6 +75,7 @@ export default {
   -o-background-size: cover;
   background-size: cover;
 }
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
