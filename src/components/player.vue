@@ -5,7 +5,7 @@
       <img id="logo" src="/src/assets/fury music logo ferdig.png" width="80px">
       <div id="divUser">
         <font-awesome-icon style="color: black" :icon="['fas', 'user-circle']" />
-        {{username}}
+        {{this.$store.state.username}}
       </div>
       <button id="btnSignOut">
         <font-awesome-icon style="color: white" :icon="['fas', 'times-circle']" />
@@ -111,7 +111,6 @@ export default {
       }
     },
     playSong (SongURL, SongID, SongName, ArtistName) {
-      
       document.getElementById("divPlayerControls").style.display = "block"
       
       // If no song is selected, play selected song

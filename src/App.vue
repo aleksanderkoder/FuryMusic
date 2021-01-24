@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <LogIn v-show="showLogInComp" @GoToPlayer="goToPlayer" @GoToSignUp="goToSignUp"/>
-    <regUser v-show="showRegUserComp" @GoToSignIn="goToSignIn"/>
-    <player v-show="showPlayerComp" v-bind:loggedIn="loggedIn" v-bind:username="username" />
+    <LogIn v-show="this.$store.state.showLogIn" @fetchSongs="fetchSongs" />
+    <regUser v-show="this.$store.state.showRegUser" />
+    <player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn" />
   </div>
 </template>
 
@@ -28,26 +28,8 @@ export default {
     }
   },
   methods: {
-    goToSignUp() {
-      this.showRegUserComp = true
-      this.showLogInComp = false
-      console.log("Showing sign up form...")
-    },
-    goToSignIn() {
-      this.showRegUserComp = false
-      this.showLogInComp = true
-      console.log("Showing sign in form...")
-    },
-    goToPlayer(user) {
-      this.showPlayerComp = true
-      this.showLogInComp = false
+    fetchSongs() {
       this.loggedIn = true
-      this.username = user
-      setTimeout(function() {
-        Ozone.fire("success","Signed in as " + user, "bottom-middle")
-      }, 1500)
-      
-      console.log("Showing player...")
     }
   }
 }

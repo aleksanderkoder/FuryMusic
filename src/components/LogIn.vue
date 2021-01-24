@@ -51,7 +51,13 @@ export default {
               {
                 console.log("Logging in user...")
                 document.getElementById("error").style.display = "none"
-                self.$emit("GoToPlayer",self.username)
+                //self.$emit("GoToPlayer",self.username)
+                self.$store.commit("showPlayer")
+                self.$store.commit("updateUsername", self.username)
+                self.$emit("fetchSongs")
+                setTimeout(function() {
+                  Ozone.fire("success","Signed in as " + self.$store.state.username, "bottom-middle")
+                }, 1500)
               }
               else
               {
