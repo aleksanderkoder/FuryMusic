@@ -1,7 +1,5 @@
 <template>
-
   <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
-
     <img class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
     <br>
     <h2 id="regUserTittel">Sign up</h2>
@@ -19,9 +17,7 @@
       <input type="submit" v-on:click="registerUser()" value="Sign up" id="btnRegUser"/>
     </form>
     <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>
-    
   </div>
-
 </template>
 
 <script>
@@ -72,7 +68,7 @@ export default {
         document.getElementById("error2").innerHTML = "All fields must be filled!"
       }},
       goToSignIn() {
-      this.$emit("GoToSignIn")
+      this.$store.commit("showSignIn")
     }
     }
   }
@@ -111,6 +107,7 @@ export default {
   border: none;
   margin: 15px;
   width: 150px;
+  margin-right: 33px; 
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   height: 30px;
   font-family: 'Wals';

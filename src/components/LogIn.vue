@@ -1,5 +1,5 @@
 <template>
-  
+  <div>
     <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
       <img width="250" class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
       <br>
@@ -18,7 +18,8 @@
       <br>
       <a href="">Forgot password?</a>
     </div>
-
+    <p class="animate__animated animate__fadeInUpBig" style="position: absolute; display: block; text-align: center; width: 100%; bottom: 0; color: white;">© Aleksander Johansen 2021</p>
+  </div>
 </template>
 
 <script>
@@ -46,9 +47,12 @@ export default {
           cache:false,
           async: true,
           success: function (data) {
-              console.log(data)
+              console.log(data) 
+
               if(data != "Wrong info")
               {
+                document.getElementById("username").value = ""
+                document.getElementById("password").value = ""
                 console.log("Logging in user...")
                 document.getElementById("error").style.display = "none"
                 //self.$emit("GoToPlayer",self.username)
@@ -95,7 +99,7 @@ export default {
     },
     goToSignUp() {
       document.getElementById("error").style.display = "none"
-      this.$emit("GoToSignUp")
+      this.$store.commit("showSignUp")
     }
   }
   }
@@ -147,6 +151,7 @@ export default {
 #username, #password {
   border: none;
   margin: 15px;
+  margin-right: 33px;
   width: 155px;
   /* box-shadow: rgba(255, 255, 255, 0.24) 0px 2px 4px; */
   height: 30px;
@@ -162,7 +167,6 @@ export default {
 
 #btnLogIn {
   margin-top: 20px;
-  background-color: white;
   background-color:#3c3e41af;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: white;
@@ -179,16 +183,16 @@ export default {
 #btnGoToSignUp {
   margin-top: 20px;
   margin-bottom: 20px;
-  background-color:white;
+  background-color: rgba(255, 255, 255, 0.35);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: black;
+  color: white;
   text-decoration: none;
   border: none;
   height: 35px;
   min-width: 35%;
   border-radius: 4px;
   font-family: "Wals";
-  transition: 0.3s;
+  transition: 0.3s; 
 }
 
 #btnGoToSignUp:hover {

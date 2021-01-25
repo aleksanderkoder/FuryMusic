@@ -1,13 +1,12 @@
 <template>
 <div id="divPlayerWrapper">
-
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
       <img id="logo" src="/src/assets/fury music logo ferdig.png" width="80px">
       <div id="divUser">
         <font-awesome-icon style="color: black" :icon="['fas', 'user-circle']" />
         {{this.$store.state.username}}
       </div>
-      <button id="btnSignOut">
+      <button id="btnSignOut" v-on:click="signOut()">
         <font-awesome-icon style="color: white" :icon="['fas', 'times-circle']" />
         Sign out
         </button>
@@ -51,15 +50,17 @@
     </div>
 
     <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
+      <div id="controlsWrapper">
       <div id="divPlay" v-on:click="wavePlayPauseToggle('play')">
         <font-awesome-icon id="playButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 12%" :icon="['fas', 'play']" />
       </div>
        <div id="divPause" v-on:click="wavePlayPauseToggle('pause')">
         <font-awesome-icon id="pauseButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 2%;" :icon="['fas', 'pause']" />
       </div>
-        <div id="waveform"></div>
+      <input type="range" min="0" max="100" value="100" id="wavesurferVolume">
+      </div>
+      <div id="waveform" v-on:click="waveformInteraction()"></div>
     </div>
-
 </div>
 </template>
 
@@ -157,6 +158,19 @@ export default {
           this.songs.push({SongID: songs[i], ArtistName: songs[i+1], SongName: songs[i+2]
             , SongURL: songs[i+3]})
       } 
+    },
+    waveformInteraction () {
+      let self = this
+      if(this.wavesurfer.isPlaying())
+      {
+        setTimeout(function() {
+          self.wavesurfer.play()
+        }, 100)
+      }
+    },
+    signOut () {
+      this.$store.commit("showSignIn")
+      this.$store.commit("updateUsername","")
     }
   },
   watch: {
@@ -196,7 +210,8 @@ export default {
             waveColor: 'white',
             progressColor: 'black',
             barWidth: '2',
-            fillParent: true
+            fillParent: true,
+
           })
           
     // Prepares event for when song finishes
@@ -206,6 +221,13 @@ export default {
           document.getElementById("divPlay").style.display = "block"
           document.getElementById("divPause").style.display = "none"
         })
+
+    // Controls volume slider
+    let volumeSlider = document.getElementById("wavesurferVolume")
+    volumeSlider.oninput = function() {
+      self.wavesurfer.setVolume(volumeSlider.value / 100)
+    }
+
     }
   }
   
@@ -314,22 +336,67 @@ export default {
 }
 
 #waveform {
-  
-  position: inline-block;
+  position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
   margin: auto;
-  /* margin-right: 17%; */
+  margin-left: 200px; 
   width: 75%;
   outline: none; 
+  border: 1px solid green; 
+  cursor: pointer;
+}
+
+#controlsWrapper {
+  width: 200px;
+  height: 130px;
+  border: 1px solid red; 
+}
+
+#wavesurferVolume {
+  display: block; 
+  margin: auto;
+  margin-top: 15px; 
+  left: 55px; 
+  top: 100px;
+  -webkit-appearance: none;  
+  appearance: none;
+  background: rgb(92, 91, 91);
+  opacity: 0.5; 
+  height: 7px;
+  border-radius: 3px;
+  transition: opacity 0.3s;
+  cursor: pointer; 
+}
+
+#wavesurferVolume:hover {
+  opacity: 1; 
+}
+
+#wavesurferVolume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px; 
+  height: 15px;
+  background: #ffffff; 
+  border-radius: 100%; 
+  cursor: pointer;
+}
+
+#wavesurferVolume::-moz-range-thumb {
+  width: 15px; 
+  height: 15px; 
+  background: #ffffff; 
+  border-radius: 100%;
+  cursor: pointer; 
 }
 
 #divPlay {
-  position: absolute;
-  left: 4%;
-  top: 22%;
+  display: block;
+  margin: auto; 
+  margin-top: 15px; 
   background-color: white; 
   border-radius: 100%;
   width: 75px;
@@ -340,9 +407,9 @@ export default {
 }
 
 #divPause {
-  position: absolute;
-  left: 4%;
-  top: 22%;
+  display: block;
+  margin: auto; 
+  margin-top: 15px; 
   background-color: white; 
   border-radius: 100%;
   width: 75px;

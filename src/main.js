@@ -20,12 +20,12 @@ const store = new Vuex.Store({
       state.showLogIn = false
       state.showRegUser = false
     },
-    showLogIn (state) {
+    showSignIn (state) {
       state.showLogIn = true 
       state.showRegUser = false
       state.showPlayer = false
     },
-    showRegUser (state) {
+    showSignUp (state) {
       state.showRegUser = true
       state.showPlayer = false
       state.showLogIn = false 
