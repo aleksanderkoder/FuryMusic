@@ -19,6 +19,11 @@
 
       <h3>Playlists</h3>
       
+      <button id="btnUploadSong">
+        <font-awesome-icon style="color: grey" :icon="['fas', 'plus']" />
+        Upload song
+      </button>
+
       <div id="divSidebarCurrentSongInfo" v-if="currentSongName != ''" class="animate__animated animate__fadeInLeft">
         <p style="font-weight: bold">{{currentSongName}}</p>
         <p>{{currentArtistName}}</p>
@@ -27,20 +32,35 @@
 
     <div id="divCenter">
       <div v-if="loggedIn">
-        <div id="divSongPane" v-for="song in songs" :key="song.SongID" class="animate__animated animate__fadeInRight">
-          <table  id="tableSongs">
+        <div id="divCenterTableHeader" class="animate__animated animate__fadeInRight">
+          <table  class="tableSongsHeader">
             <tr>
-              <td id="tableSongsTdPlay">
+              <td class="tableSongsHeaderTitle">
+                <span>Title</span>
+              </td>
+              <td class="tableSongsHeaderArtist">
+                <span>Artist</span>
+              </td>
+               <td class="tableSongsHeaderLength">
+                <span>Length</span>
+              </td> 
+            </tr>
+          </table>
+        </div>
+        <div id="divSongPane" v-for="song in songs" :key="song.SongID" class="animate__animated animate__fadeInRight">
+          <table  class="tableSongs">
+            <tr>
+              <td class="tableSongsTdPlay">
                 <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName)" style="color: black; cursor: pointer;" :icon="['fas', 'play']" />
                 <font-awesome-icon v-bind:id="'pause' + song.SongID" v-on:click="pauseSong(song.SongID)" style="color: black; cursor: pointer; display: none" :icon="['fas', 'pause']" />
               </td>
-              <td id="tableSongsTdSongName">
+              <td class="tableSongsTdSongName">
                 {{song.SongName}}
               </td>
-              <td id="tableSongsTdArtistName">
+              <td class="tableSongsTdArtistName">
                 {{song.ArtistName}}
               </td>
-               <td id="tableSongsTdSongLength"> <!-- TODO: add song length -->
+               <td class="tableSongsTdSongLength"> <!-- TODO: add song length -->
                 {{song.Length}}
               </td>
             </tr>
@@ -72,10 +92,6 @@ export default {
     loggedIn: {
       type: Boolean,
       default: false
-    },
-    username: {
-      type: String,
-      default: ""
     }
   },
   data () {
@@ -90,8 +106,7 @@ export default {
     }
   },
   props: {
-    loggedIn: Boolean,
-    username: String
+    loggedIn: Boolean
   },
   methods: {
     wavePlayPauseToggle (mode) {
@@ -211,7 +226,6 @@ export default {
             progressColor: 'black',
             barWidth: '2',
             fillParent: true,
-
           })
           
     // Prepares event for when song finishes
@@ -225,8 +239,8 @@ export default {
     // Controls volume slider
     let volumeSlider = document.getElementById("wavesurferVolume")
     volumeSlider.oninput = function() {
-      self.wavesurfer.setVolume(volumeSlider.value / 100)
-    }
+          self.wavesurfer.setVolume(volumeSlider.value / 100)
+        }
 
     }
   }
@@ -245,25 +259,51 @@ export default {
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
 
-#tableSongs {
+.tableSongs {
   width: 100%;
   text-align: left;
 }
 
-#tableSongsTdPlay {
+.tableSongsTdPlay {
   width: 50px;
 }
 
-#tableSongsTdSongName {
+.tableSongsTdSongName {
   width: 500px; 
 }
 
-#tableSongsTdArtistName {
+.tableSongsTdArtistName {
   width: 150px; 
 }
 
-#tableSongsTdSongLength {
+.tableSongsTdSongLength {
   width: 50px;
+}
+
+#divCenterTableHeader {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px;
+  margin-left: 1px; 
+  color: white; 
+}
+
+.tableSongsHeader {
+  /* width: 100%; */
+  text-align: left; 
+}
+
+.tableSongsHeaderTitle {
+  padding-left: 75px;
+  width: 500px;
+}
+
+.tableSongsHeaderLength {
+  width: 50px; 
+}
+
+.tableSongsHeaderArtist {
+  width: 150px; 
+  padding-left: 55px; 
 }
 
 #divSongPane {
@@ -324,6 +364,33 @@ export default {
 #h3Library {
   margin-top: 120px;
 } 
+
+.playIcon:hover {
+  color: red; 
+}
+
+#btnUploadSong {
+  position: absolute;
+  bottom: 250px; 
+  left: 0;
+  background-color: transparent;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+  border-left: none;
+  border-right: none;
+  color: grey; 
+  width: 170px; 
+  padding: 10px; 
+  font-family: 'Monsterrat', sans-serif;
+  transition: 0.3s;
+}
+
+#btnUploadSong:hover {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  color: white; 
+
+}
 
 #divCenter {
   position: absolute;

@@ -3,7 +3,7 @@ import App from './App.vue'
 import Vuex from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faUser,faLock,faUserSecret,faAt,faPlay,faPause,faTimesCircle,faUserCircle} from '@fortawesome/free-solid-svg-icons'
+import { faUser,faLock,faUserSecret,faAt,faPlay,faPause,faTimesCircle,faUserCircle,faPlus} from '@fortawesome/free-solid-svg-icons'
 
 Vue.use(Vuex)
 
@@ -12,13 +12,13 @@ const store = new Vuex.Store({
     showLogIn: true,
     showPlayer: false,
     showRegUser: false,
-    username: "hei"
+    showUploadSong: false,
+    username: "",
   },
   mutations: {
     showPlayer (state) {
       state.showPlayer = true 
       state.showLogIn = false
-      state.showRegUser = false
     },
     showSignIn (state) {
       state.showLogIn = true 
@@ -27,8 +27,10 @@ const store = new Vuex.Store({
     },
     showSignUp (state) {
       state.showRegUser = true
-      state.showPlayer = false
       state.showLogIn = false 
+    },
+    showUploadSong (state) {
+      state.showUploadSong = true
     },
     updateUsername (state, inUsername) {
       state.username = inUsername
@@ -36,7 +38,7 @@ const store = new Vuex.Store({
   }
 })
 
-library.add(faUser,faLock,faUserSecret,faAt,faPlay,faPause,faTimesCircle,faUserCircle)
+library.add(faUser,faLock,faUserSecret,faAt,faPlay,faPause,faTimesCircle,faUserCircle,faPlus)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false

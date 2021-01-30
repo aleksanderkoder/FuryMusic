@@ -18,7 +18,7 @@
       <br>
       <a href="">Forgot password?</a>
     </div>
-    <p class="animate__animated animate__fadeInUpBig" style="position: absolute; display: block; text-align: center; width: 100%; bottom: 0; color: white;">© Aleksander Johansen 2021</p>
+    <p class="animate__animated animate__fadeInUpBig" style="position: absolute; display: block; text-align: center; width: 100%; bottom: 0; color: white;">© Aleksander Johansen</p>
   </div>
 </template>
 

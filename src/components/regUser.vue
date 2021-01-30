@@ -13,7 +13,10 @@
       <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
       <input type="password" v-model="password" placeholder="Choose a password" id="regPassword"/>
       <br>
-      <p id="error2" class="animate__animated animate__shakeX">Wrong username or password!</p>
+      <p id="errors" v-for="error in errors" :key="error" class="animate__animated animate__shakeX">
+        {{error}}
+      </p>
+      <p id="error2" class="animate__animated animate__fadeInRight"></p>
       <input type="submit" v-on:click="registerUser()" value="Sign up" id="btnRegUser"/>
     </form>
     <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>
@@ -28,12 +31,13 @@ export default {
       username: "",
       password: "",
       email: "",
+      errors: [],
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
   methods: {
     registerUser() {
-      if(this.username != "" && this.password != "" && this.email != "")
+      if(this.regExSignUp())
       {
         $.ajax(
           {
@@ -44,13 +48,17 @@ export default {
             cache:false,
             success:function (data) {
                 
-                if(data == "Error")
+                if(data == "Username taken")
                 {
                   document.getElementById("error2").style.display = "block"
                   document.getElementById("error2").innerHTML = "Username or email has already been taken!"
                 }
-                else
+                else if(data == "OK")
                 {
+                  document.getElementById("regUsername").value = ""
+                  document.getElementById("regEmail").value = ""
+                  document.getElementById("regPassword").value = ""
+
                   document.getElementById("error2").style.display = "block"
                   document.getElementById("error2").style.color = "green"
                   document.getElementById("error2").innerHTML = "You have been registered!"
@@ -61,14 +69,42 @@ export default {
                 console.log(er)
               }
           })
-      }
-      else
-      {
-        document.getElementById("error2").style.display = "block";
-        document.getElementById("error2").innerHTML = "All fields must be filled!"
       }},
+      regExSignUp () {
+        this.errors = []
+        let regExUsername = /^[0-9a-zæøåA-ZÆØÅ]{3,99}$/ 
+        let regExEmail = /^[^@]+@\w+(\.\w+)+\w$/
+        let regExPassword = /^[0-9a-zæøåA-ZÆØÅ!?,.-]{6,99}$/
+        
+        let testUsername = regExUsername.test(this.username)
+        let testEmail = regExEmail.test(this.email)
+        let testPassword = regExPassword.test(this.password)
+
+        let errorCounter = 0
+        if(!testUsername) {
+          this.errors.push("Your username is not valid!")
+          errorCounter++
+        }
+        if(!testEmail) {
+          this.errors.push("Your e-mail is not valid!")
+          errorCounter++
+        }
+        if(!testPassword) {
+          this.errors.push("Your password is not valid!")
+          errorCounter++
+        }
+
+        if(errorCounter == 0) {
+          return true
+        }
+        else {
+          return false
+        }
+      },
       goToSignIn() {
-      this.$store.commit("showSignIn")
+        this.errors = []
+        document.getElementById("error2").style.display = "none"
+        this.$store.commit("showSignIn")
     }
     }
   }
@@ -113,9 +149,13 @@ export default {
   font-family: 'Wals';
 }
 
+#errors {
+  color: red;
+}
+
 #error2 {
   color: red;
-  display: none;
+  display: none; 
 }
 
 #btnRegUser {
