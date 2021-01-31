@@ -1,3 +1,4 @@
+/* Styles the main div element  */
 #Ozone {
   position: absolute;
   width: 310px;
@@ -20,24 +21,23 @@
   z-index: 100;
 }
 
+/* Styles the table used within the main div  */
 #OzoneTable {
   width: 100%;
   margin: auto; 
 }
 
-#OzoneTable button { 
+/* Styles the buttons used for the dialog type */
+#OzoneBtnConfirm {
+  margin-right: 30px; 
+  transition: 0.3s;
   border-radius: 2px;
   border: none; 
   padding: 8px;
   padding-left: 15px; 
   padding-right: 15px;
   outline: none;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;;
-}
-
-#OzoneBtnConfirm {
-  margin-right: 30px; 
-  transition: 0.3s;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 #OzoneBtnConfirm:hover {
@@ -49,6 +49,13 @@
 #OzoneBtnCancel {
   margin-left: 30px;
   transition: 0.3s;
+  border-radius: 2px;
+  border: none; 
+  padding: 8px;
+  padding-left: 15px; 
+  padding-right: 15px;
+  outline: none;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 #OzoneBtnCancel:hover {
@@ -62,6 +69,7 @@
   src: url(fonts/Roboto-Light.ttf);
 }
 
+/* Specifies animations used upon initial appearance, persisting and deletion of alert */
 @keyframes ozfadeIn {
   0% {
     opacity: 0;

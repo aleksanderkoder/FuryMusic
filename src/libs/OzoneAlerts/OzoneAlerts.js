@@ -9,6 +9,7 @@ class Ozone
           {
             expired.parentNode.removeChild(expired); 
           }
+          
 
           console.log("Firing Ozone..."); 
 
@@ -149,7 +150,8 @@ class Ozone
 
             setTimeout(function () 
             {
-              el.parentNode.removeChild(el);
+              if(expired != null)
+                el.parentNode.removeChild(el);
             }, 8000); 
           }
           else if (type == "dialog")
@@ -172,8 +174,8 @@ class Ozone
           {
             element.style.animation = "ozfadeOut ease 0.5s";
             setTimeout(function () 
-            {
-              element.parentNode.removeChild(element);
+            {            
+                element.parentNode.removeChild(element);
             }, 500);
           }
         }
