@@ -2,22 +2,13 @@ class Ozone
       {
         static fire(icon, message, position, type = "notification", confirmButtonText = "Confirm", cancelButtonText = "Cancel", onConfirm = function() {}, onCancel = function () {}) 
         {
-
-          // Destroys already existing Ozone instance when new instance is created
-          let expired; 
-          if(expired = document.getElementById("Ozone"))
-          {
-            expired.parentNode.removeChild(expired); 
-          }
-          
-
           console.log("Firing Ozone..."); 
 
           // Creates essential elements
           const el = document.createElement("div");
-          el.id = "Ozone";
+          el.className = "Ozone";
           const content = document.createElement("table");
-          content.id = "OzoneTable"; 
+          content.className = "OzoneTable"; 
           const contentRow1 = document.createElement("tr");
           const contentData1 = document.createElement("td");
           const contentData2 = document.createElement("td");
@@ -150,7 +141,6 @@ class Ozone
 
             setTimeout(function () 
             {
-              if(expired != null)
                 el.parentNode.removeChild(el);
             }, 8000); 
           }

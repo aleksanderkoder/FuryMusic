@@ -1,5 +1,5 @@
 /* Styles the main div element  */
-#Ozone {
+.Ozone {
   position: absolute;
   width: 310px;
   height: auto;
@@ -22,7 +22,7 @@
 }
 
 /* Styles the table used within the main div  */
-#OzoneTable {
+.OzoneTable {
   width: 100%;
   margin: auto; 
 }
