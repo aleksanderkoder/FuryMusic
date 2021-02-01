@@ -16,6 +16,7 @@
       </form>
       <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
       <br>
+      <font-awesome-icon id="loadingSpinner" :icon="['fas', 'spinner']" spin />
       <a href="">Forgot password?</a>
     </div>
     <p class="animate__animated animate__fadeInUpBig" style="position: absolute; display: block; text-align: center; width: 100%; bottom: 0; color: white;">© Aleksander Johansen</p>
@@ -34,8 +35,12 @@ export default {
   },
   methods: {
     logIn() {
-
       let self = this;
+      document.getElementById("loadingSpinner").style.display = "block"
+      document.getElementById("btnLogIn").style.display = "none"
+      document.getElementById("btnGoToSignUp").style.display = "none"
+      document.getElementById("error").style.display = "none"
+
       if(this.regExLogIn()) 
       {
         $.ajax(
@@ -48,20 +53,23 @@ export default {
           async: true,
           success: function (data) {
               console.log(data) 
+              document.getElementById("loadingSpinner").style.display = "none"
+              document.getElementById("btnLogIn").style.display = "inline-block"
+              document.getElementById("btnGoToSignUp").style.display = "inline-block"
 
               if(data != "Wrong info")
               {
+                console.log("Logging in user...")
                 document.getElementById("username").value = ""
                 document.getElementById("password").value = ""
-                console.log("Logging in user...")
                 document.getElementById("error").style.display = "none"
-                //self.$emit("GoToPlayer",self.username)
                 self.$store.commit("showPlayer")
                 self.$store.commit("updateUsername", self.username)
                 self.$emit("fetchSongs")
+
                 setTimeout(function() {
                   Ozone.fire("success","Signed in as " + self.$store.state.username, "bottom-middle")
-                }, 1500)
+                }, 2000)
               }
               else
               {
@@ -70,16 +78,24 @@ export default {
                 console.log("feil")
                 
               }
+              self.username = ""
+              self.password = ""
             },
             error:function(er){
               console.log(er)
+              document.getElementById("loadingSpinner").style.display = "none"
+              document.getElementById("btnLogIn").style.display = "inline-block"
+              document.getElementById("btnGoToSignUp").style.display = "inline-block"
             }
           })
       }
       else
       {
         document.getElementById("error").style.display = "block"
+        document.getElementById("loadingSpinner").style.display = "none"
         document.getElementById("error").innerHTML = "Please provide a valid username and password!"
+        document.getElementById("btnLogIn").style.display = "inline-block"
+        document.getElementById("btnGoToSignUp").style.display = "inline-block"
       }
       
     },
@@ -145,7 +161,13 @@ export default {
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Monsterrat";
+}
 
+#loadingSpinner {
+  color: white; 
+  font-size: 40px;
+  display: none;
+  margin: auto;  
 }
 
 #username, #password {

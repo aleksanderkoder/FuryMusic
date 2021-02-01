@@ -79,7 +79,9 @@
       </div>
       <input type="range" min="0" max="100" value="100" id="wavesurferVolume">
       </div>
-      <div id="waveform" v-on:click="waveformInteraction()"></div>
+      <div id="waveform" v-on:click="waveformInteraction()">
+          <font-awesome-icon id="songLoader" :icon="['fas', 'spinner']" spin />
+      </div>
     </div>
 </div>
 </template>
@@ -225,6 +227,7 @@ export default {
             waveColor: 'white',
             progressColor: 'black',
             barWidth: '2',
+            normalize: true,
             fillParent: true,
           })
           
@@ -234,6 +237,20 @@ export default {
           document.getElementById("pause" + self.currentSongID).style.display = "none"
           document.getElementById("divPlay").style.display = "block"
           document.getElementById("divPause").style.display = "none"
+        })
+
+    this.wavesurfer.on('loading', function (progress) {
+          console.log("Loading progress: " + progress)
+
+          if(progress < 100)
+          {
+            document.getElementById("songLoader").style.display = "block"
+          }
+          else
+          {
+            document.getElementById("songLoader").style.display = "none"
+          }
+
         })
 
     // Controls volume slider
@@ -365,8 +382,11 @@ export default {
   margin-top: 120px;
 } 
 
-.playIcon:hover {
-  color: red; 
+#songLoader {
+  color: white; 
+  font-size: 50px;
+  margin: auto; 
+  margin-top: 45px;
 }
 
 #btnUploadSong {
@@ -374,10 +394,9 @@ export default {
   bottom: 250px; 
   left: 0;
   background-color: transparent;
+  border: none;
   border-top: 1px solid grey;
   border-bottom: 1px solid grey;
-  border-left: none;
-  border-right: none;
   color: grey; 
   width: 170px; 
   padding: 10px; 
