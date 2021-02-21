@@ -1,5 +1,6 @@
 <template>
   <div>
+    <uploadBackImg/>
     <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
       <img width="250" class="animate__animated animate__pulse animate__slow animate__infinite" src="/src/assets/fury music logo ferdig.png">
       <br>
@@ -24,8 +25,13 @@
 </template>
 
 <script>
+import uploadBackImg from "./uploadBackImg.vue"
+
 export default {
   name: 'LogIn',
+  components: {
+    uploadBackImg
+  },
   data () {
     return {
       username: "",
