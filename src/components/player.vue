@@ -1,7 +1,7 @@
 <template>
 <div id="divPlayerWrapper">
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
-      <img id="logo" src="/src/assets/fury music logo ferdig.png" width="80px">
+      <img id="logo" src="/src/assets/fury music logo round small.png" width="80px">
       <div id="divUser">
         <font-awesome-icon style="color: black" :icon="['fas', 'user-circle']" />
         {{this.$store.state.username}}
