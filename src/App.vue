@@ -31,6 +31,12 @@ export default {
     fetchSongs() {
       this.loggedIn = true
     }
+  },
+  mounted () {
+    if(localStorage.getItem("custom_background_image"))
+    {
+      document.getElementById("app").style.backgroundImage = "url(" + localStorage.getItem('custom_background_image') + ")"
+    }
   }
 }
 </script>
