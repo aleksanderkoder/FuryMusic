@@ -67,6 +67,9 @@
           </table>
         </div>
       </div>
+      <div id="customBackgroundImagePanel" v-on:click="showBackgroundImagePanel()">
+        Change background image
+      </div>
     </div>
 
     <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
@@ -83,13 +86,19 @@
           <font-awesome-icon id="songLoader" :icon="['fas', 'spinner']" spin />
       </div>
     </div>
+    <uploadBackImg v-if="showCustomBackImg" 
+    @hideCustomBackgroundImagePanel="hideCustomBackgroundImagePanel"/>
 </div>
 </template>
 
 <script>
+import uploadBackImg from "./uploadBackImg.vue"
 
 export default {
   name: 'player',
+  components: {
+    uploadBackImg
+  },
   props: {
     loggedIn: {
       type: Boolean,
@@ -104,6 +113,7 @@ export default {
       currentSongID: "",
       currentSongName: "",
       currentArtistName: "",
+      showCustomBackImg: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
@@ -188,6 +198,12 @@ export default {
     signOut () {
       this.$store.commit("showSignIn")
       this.$store.commit("updateUsername","")
+    },
+    showBackgroundImagePanel() {
+      this.showCustomBackImg = true 
+    },
+    hideCustomBackgroundImagePanel () {
+      this.showCustomBackImg = false 
     }
   },
   watch: {
@@ -274,6 +290,17 @@ export default {
 @font-face {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
+}
+
+#customBackgroundImagePanel {
+  position: absolute;
+  right: 200px;
+  bottom: 200px; 
+  color: white; 
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .tableSongs {

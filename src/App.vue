@@ -2,7 +2,8 @@
   <div id="app">
     <LogIn v-show="this.$store.state.showLogIn" @fetchSongs="fetchSongs" />
     <regUser v-show="this.$store.state.showRegUser" />
-    <player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn" />
+    <player v-show="this.$store.state.showPlayer" 
+    @updateBackgroundImage="updateBackgroundImage" v-bind:loggedIn="loggedIn" />
   </div>
 </template>
 
@@ -28,15 +29,21 @@ export default {
     }
   },
   methods: {
-    fetchSongs() {
+    fetchSongs () {
       this.loggedIn = true
+    },
+    updateBackgroundImage () {
+      document.getElementById("app").style.backgroundImage = "url(" + localStorage.getItem('custom_background_image') + ")"
     }
   },
   mounted () {
+
+    // Loads custom background image if it exists
     if(localStorage.getItem("custom_background_image"))
     {
       document.getElementById("app").style.backgroundImage = "url(" + localStorage.getItem('custom_background_image') + ")"
     }
+
   }
 }
 </script>

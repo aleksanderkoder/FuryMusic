@@ -11,6 +11,7 @@
           <h2>Do you want to use this image?</h2>
           <button id="btnConfirmUpload" v-on:click="useImage()">Use this image</button>
         </div>
+        <button id="btnCancel" v-on:click="cancel()">Cancel</button>
         <button id="btnRevert" v-on:click="revertToDefault()">Revert to default</button>
     </div>
 </template>
@@ -24,18 +25,29 @@ export default {
     }
   },
   methods: {
-    uploadImage() {
+    uploadImage () {
       this.objectURL = URL.createObjectURL(document.getElementById("file").files[0])
       document.getElementById("imageShowcase").src = this.objectURL
       document.getElementById("divConfirm").style.display = "block"
     },
-    useImage() {
-      localStorage.setItem("custom_background_image", this.objectURL)
-      Ozone.fire("success", "Background image has been changed!", "bottom-middle")
+    useImage () {
+      const image = document.getElementById("file").files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(image)
+      reader.addEventListener("loadend", function () {
+              console.log(reader.result)
+              localStorage.setItem("custom_background_image", reader.result)
+              Ozone.fire("success", "Background image has been changed!", "bottom-middle")
+      })
+      URL.revokeObjectURL(this.objectURL)
+      document.getElementById("divCustomBackImgWrapper").style.display = "none"
     }, 
-    revertToDefault() {
+    revertToDefault () {
       localStorage.removeItem("custom_background_image")
-      Ozone.fire("success", "Background image has been reverted to default!", "bottom-middle")
+      Ozone.fire("info", "Background image has been reverted to default!", "bottom-middle")
+    }, 
+    cancel () {
+      this.$emit("hideCustomBackgroundImagePanel")
     }
   }
   }
@@ -88,8 +100,26 @@ export default {
   right: 10px;
   border: none;
   background-color: transparent;
-  transition: 0.3s;
   color: white;
+}
+
+#btnCancel {
+  bottom: 10px;
+  margin: 20px;
+  background-color:#8b0000;
+  color: white;
+  text-decoration: none;
+  border: none;
+  height: 35px;
+  border-radius: 4px;
+  font-family: "Wals";
+  padding: 10px;
+  transition: 0.3s; 
+  cursor: pointer;
+}
+
+#btnCancel:hover {
+  background-color: #741010;
 }
 
 #btnRevert:hover {
@@ -102,7 +132,6 @@ export default {
 
 #divCustomBackImgWrapper {
   position: absolute;
-  display: none; 
   width: 600px;
   min-height: 450px; 
   margin-left: auto;
@@ -110,8 +139,8 @@ export default {
   left: 0;
   right: 0;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.65); 
-  margin-top: 3%;
+  background-color: rgba(0, 0, 0, 0.85); 
+  margin-top: 8%;
   border-radius: 1%; 
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

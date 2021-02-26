@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     showPlayer: false,
     showRegUser: false,
     showUploadSong: false,
+    showCustomImagePanel: false,
     username: "",
   },
   mutations: {
@@ -34,7 +35,8 @@ const store = new Vuex.Store({
     },
     updateUsername (state, inUsername) {
       state.username = inUsername
-    }
+    },
+
   }
 })
 
