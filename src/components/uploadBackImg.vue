@@ -35,9 +35,8 @@ export default {
       const reader = new FileReader()
       reader.readAsDataURL(image)
       reader.addEventListener("loadend", function () {
-              console.log(reader.result)
               localStorage.setItem("custom_background_image", reader.result)
-              Ozone.fire("success", "Background image has been changed!", "bottom-middle")
+              Ozone.fire("info", "Background image changed, please refresh!", "bottom-middle")
       })
       URL.revokeObjectURL(this.objectURL)
       document.getElementById("divCustomBackImgWrapper").style.display = "none"

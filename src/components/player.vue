@@ -67,8 +67,10 @@
           </table>
         </div>
       </div>
-      <div id="customBackgroundImagePanel" v-on:click="showBackgroundImagePanel()">
-        Change background image
+      <div id="customBackgroundImagePanel" @mouseover="uploadImgLabel = true"
+      @mouseleave="uploadImgLabel = false" v-on:click="showCustomBackImg = true">
+        <font-awesome-icon :icon="['fas', 'image']" />
+        <span v-show="uploadImgLabel" class="animate__animated animate__bounceIn">Change background image</span>
       </div>
     </div>
 
@@ -86,8 +88,8 @@
           <font-awesome-icon id="songLoader" :icon="['fas', 'spinner']" spin />
       </div>
     </div>
-    <uploadBackImg v-if="showCustomBackImg" 
-    @hideCustomBackgroundImagePanel="hideCustomBackgroundImagePanel"/>
+    <uploadBackImg v-show="showCustomBackImg" 
+    @hideCustomBackgroundImagePanel="showCustomBackImg = false" />
 </div>
 </template>
 
@@ -114,6 +116,7 @@ export default {
       currentSongName: "",
       currentArtistName: "",
       showCustomBackImg: false,
+      uploadImgLabel: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
@@ -198,12 +201,6 @@ export default {
     signOut () {
       this.$store.commit("showSignIn")
       this.$store.commit("updateUsername","")
-    },
-    showBackgroundImagePanel() {
-      this.showCustomBackImg = true 
-    },
-    hideCustomBackgroundImagePanel () {
-      this.showCustomBackImg = false 
     }
   },
   watch: {
@@ -297,7 +294,7 @@ export default {
   right: 200px;
   bottom: 200px; 
   color: white; 
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
   padding: 5px;
   border-radius: 3px;
   cursor: pointer;

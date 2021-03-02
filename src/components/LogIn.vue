@@ -5,10 +5,10 @@
       <br>
       <h2 id="logInTittel">Sign in</h2>
       <form onSubmit="return false">
-        <font-awesome-icon style="color: white" :icon="['fas', 'user']" />
+        <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
         <input type="text" v-model="username" placeholder="Username" id="username"/>
         <br>
-        <font-awesome-icon style="color: white" :icon="['fas', 'lock']" />
+        <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
         <input type="password" v-model="password" placeholder="Password" id="password"/>
         <br>
         <p id="error" class="animate__animated animate__shakeX"></p>
@@ -139,33 +139,25 @@ export default {
   src: url(/src/assets/fonts/Yellowtail-Regular.ttf);
 }
 
-#music {
-  font-family: "Yellowtail";
-  color: #5c1c09; 
-  font-size: 45px;
-  position: absolute;
-  left: 38%;
-  top: 240px; 
-}
-
 #divLogInWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: rgba(0, 0, 0, 0.8); 
-  min-width: 400px;
-  max-width: 400px;
+  background-color: rgba(255, 255, 255, 1); 
+  width: 400px;
+  min-height: 700px;
   margin: auto;
-  margin-top: 5%;
+  margin-top: 8%;
   border-radius: 1%; 
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Monsterrat";
+  
 }
 
 #loadingSpinner {
-  color: white; 
+  color: black; 
   font-size: 40px;
   display: none;
   margin: auto;  
@@ -176,7 +168,7 @@ export default {
   margin: 15px;
   margin-right: 33px;
   width: 155px;
-  /* box-shadow: rgba(255, 255, 255, 0.24) 0px 2px 4px; */
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; 
   height: 30px;
   font-family: "Wals";
   border-radius: 3px;
@@ -190,7 +182,7 @@ export default {
 
 #btnLogIn {
   margin-top: 20px;
-  background-color:#3c3e41af;
+  background-color: black;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: white;
   text-decoration: none;
@@ -206,9 +198,9 @@ export default {
 #btnGoToSignUp {
   margin-top: 20px;
   margin-bottom: 20px;
-  background-color: rgba(255, 255, 255, 0.35);
+  background-color: white; 
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: white;
+  color: black;
   text-decoration: none;
   border: none;
   height: 35px;
@@ -219,15 +211,13 @@ export default {
 }
 
 #btnGoToSignUp:hover {
-  background-color: rgba(255, 255, 255, 0.575);
-  color: black;
+  background-color: lightgrey; 
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 #btnLogIn:hover {
-  background-color: #202225;
+  background-color: #2022259f;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: white;
 }
 
 #logInTittel {
@@ -235,7 +225,7 @@ export default {
   width: 75px;
   margin: 20px auto;
   font-family: "Wals";
-  color: white;
+  color: black;
 }
 
 button {
@@ -258,7 +248,7 @@ li {
 
 a {
   display: block; 
-  color: white;
+  color: black;
   font-size: 12px;
   font-family: 'Monsterrat', sans-serif;
   margin-top: 25px;

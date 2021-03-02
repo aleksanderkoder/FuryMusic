@@ -174,8 +174,7 @@ export default {
 }
 
 #btnRegUser:hover {
-  background-color: #383b3f;
-  color: black;
+  background-color: #2022259f;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
@@ -190,7 +189,7 @@ export default {
 #btnBack {
   margin-top: 20px;
   margin-bottom: 20px;
-  background-color: darkgrey;
+  background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: black;
   text-decoration: none;
@@ -203,8 +202,7 @@ export default {
 }
 
 #btnBack:hover {
-  background-color:#202225;
-  color: white;
+  background-color: lightgrey;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
