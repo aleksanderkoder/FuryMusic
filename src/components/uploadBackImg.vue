@@ -26,9 +26,18 @@ export default {
   },
   methods: {
     uploadImage () {
-      this.objectURL = URL.createObjectURL(document.getElementById("file").files[0])
-      document.getElementById("imageShowcase").src = this.objectURL
-      document.getElementById("divConfirm").style.display = "block"
+      let file = document.getElementById("file").files[0]
+      if(file.type == "image/png" || file.type == "image/gif" || file.type == "image/jpeg")
+      {
+        this.objectURL = URL.createObjectURL(document.getElementById("file").files[0])
+        document.getElementById("imageShowcase").src = this.objectURL
+        document.getElementById("divConfirm").style.display = "block"
+      }
+      else
+      {
+        Ozone.fire("error", "Invalid file type selected", "bottom-middle")
+      }
+      
     },
     useImage () {
       const image = document.getElementById("file").files[0]
