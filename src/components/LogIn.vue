@@ -6,13 +6,16 @@
       <h2 id="logInTittel">Sign in</h2>
       <form onSubmit="return false">
         <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
-        <input type="text" v-model="username" placeholder="Username" id="username"/>
+        <input type="text" v-model="username" placeholder="Username" id="username">
         <br>
         <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
-        <input type="password" v-model="password" placeholder="Password" id="password"/>
+        <input type="password" v-model="password" placeholder="Password" id="password">
+        <br />
+        <label for="checkRememberMe">Remember me</label>
+        <input id="checkRememberMe" type="checkbox" v-model="rememberMe">
         <br>
         <p id="error" class="animate__animated animate__shakeX"></p>
-        <input type="submit" v-on:click="logIn()" value="Sign in" id="btnLogIn"/>
+        <input type="submit" v-on:click="logIn()" value="Sign in" id="btnLogIn">
       </form>
       <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
       <br>
@@ -31,6 +34,7 @@ export default {
     return {
       username: "",
       password: "",
+      rememberMe: false, 
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
@@ -42,7 +46,7 @@ export default {
       document.getElementById("btnGoToSignUp").style.display = "none"
       document.getElementById("error").style.display = "none"
 
-      if(this.regExLogIn()) 
+      if (this.regExLogIn()) 
       {
         $.ajax(
         {

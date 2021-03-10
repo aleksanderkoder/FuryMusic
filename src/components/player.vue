@@ -283,6 +283,7 @@ export default {
           {
             document.getElementById("songLoader").style.display = "block"
             document.getElementById("songLoaderProgress").innerHTML = progress + "%"
+            alert(this.wavesurfer.getDuration())
           }
           else
           {
@@ -294,8 +295,8 @@ export default {
     // Controls volume slider
     let volumeSlider = document.getElementById("wavesurferVolume")
     volumeSlider.oninput = function() {
-          self.wavesurfer.setVolume(volumeSlider.value / 100)
-        }
+        self.wavesurfer.setVolume(volumeSlider.value / 100)
+      }
 
     }
   }
@@ -432,7 +433,7 @@ export default {
 
 #songLoader {
   color: white; 
-  font-size: 50px;
+  font-size: 40px;
   margin: auto; 
   margin-top: 45px;
 }
@@ -441,7 +442,7 @@ export default {
   position: absolute;
   font-size: 20px;
   padding-left: 15px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 #btnUploadSong {
@@ -486,14 +487,14 @@ export default {
   margin-left: 200px; 
   width: 75%;
   outline: none; 
-  border: 1px solid green; 
+  /* border: 1px solid green;  */
   cursor: pointer;
 }
 
 #controlsWrapper {
   width: 200px;
   height: 130px;
-  border: 1px solid red; 
+  /* border: 1px solid red;  */
 }
 
 #divSongDuration {
