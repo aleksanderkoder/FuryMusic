@@ -1,24 +1,22 @@
 <template>
-    <div class="animate__animated animate__fadeInDownBig" id="divCustomBackImgWrapper">
-        <h1>Upload custom background image</h1>
+    <div class="animate__animated animate__fadeInDownBig" id="divWrapper">
+        <h1>Upload song</h1>
         <label for="file" id="btnChooseImage">
-          Select image 
+          Select song 
         </label>
-        <input id="file" type="file" accept=".jpg,.png,.gif" v-on:change="uploadImage()">
+        <input id="file" type="file" accept=".mp3" v-on:change="uploadImage()">
         <br />
-        <img src="" id="imageShowcase" width="350px">
         <div id="divConfirm">
           <h2>Do you want to use this image?</h2>
           <button id="btnConfirmUpload" v-on:click="useImage()">Use this image</button>
         </div>
         <button id="btnCancel" v-on:click="cancel()">Cancel</button>
-        <button id="btnRevert" v-on:click="revertToDefault()">Revert to default</button>
     </div>
 </template>
 
 <script>
 export default {
-  name: 'uploadBackImg',
+  name: 'uploadSong',
   data () {
     return {
       objectURL: ""
@@ -54,13 +52,9 @@ export default {
           console.log("Error: " + e)
         }     
       })
-    }, 
-    revertToDefault () {
-      localStorage.removeItem("custom_background_image")
-      Ozone.fire("info", "Background image has been reverted to default!", "bottom-middle")
-    }, 
+    },
     cancel () {
-      this.$emit("hideCustomBackgroundImagePanel")
+      this.$emit("hideUploadSongPanel")
     }
   }
   }
@@ -83,7 +77,7 @@ export default {
   src: url(/src/assets/fonts/Yellowtail-Regular.ttf);
 }
 
-#btnConfirmUpload, #btnChooseImage {
+#btnConfirmUpload, #btnChooseSong {
   margin: 20px;
   background-color:#3c3e41af;
   color: white;
@@ -97,7 +91,7 @@ export default {
   cursor: pointer;
 }
 
-#btnChooseImage:hover {
+#btnChooseSong:hover {
   background-color: #202225;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -105,15 +99,6 @@ export default {
 #btnConfirmUpload:hover {
   background-color: #107421;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-#btnRevert {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  border: none;
-  background-color: transparent;
-  color: white;
 }
 
 #btnCancel {
@@ -135,15 +120,7 @@ export default {
   background-color: #741010;
 }
 
-#btnRevert:hover {
-  text-decoration: underline;
-}
-
-#imageShowcase {
-  margin-top: 35px;
-}
-
-#divCustomBackImgWrapper {
+#divWrapper {
   position: absolute;
   width: 600px;
   min-height: 450px; 

@@ -69,8 +69,8 @@
       </div>
       <div id="customBackgroundImagePanel" @mouseover="uploadImgLabel = true"
       @mouseleave="uploadImgLabel = false" v-on:click="showCustomBackImg = true">
-        <font-awesome-icon :icon="['fas', 'image']" />
         <span v-show="uploadImgLabel" class="animate__animated animate__bounceIn">Change background image</span>
+        <font-awesome-icon :icon="['fas', 'image']" />
       </div>
     </div>
 
@@ -88,8 +88,10 @@
           <font-awesome-icon id="songLoader" :icon="['fas', 'spinner']" spin />
       </div>
     </div>
+
     <uploadBackImg v-show="showCustomBackImg" 
     @hideCustomBackgroundImagePanel="showCustomBackImg = false" />
+
 </div>
 </template>
 

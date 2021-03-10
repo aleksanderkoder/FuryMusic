@@ -10,13 +10,15 @@
 import LogIn from "./components/LogIn.vue"
 import regUser from "./components/regUser.vue"
 import player from "./components/player.vue"
+import upload from "./components/uploadSong.vue"
 
 export default {
   name: 'app',
   components: {
     LogIn, 
     regUser, 
-    player
+    player, 
+    upload
   },
   data () {
     return {
