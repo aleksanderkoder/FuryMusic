@@ -55,8 +55,8 @@ export default {
           success: function (data) {
               console.log(data) 
               document.getElementById("loadingSpinner").style.display = "none"
-              document.getElementById("btnLogIn").style.display = "inline-block"
-              document.getElementById("btnGoToSignUp").style.display = "inline-block"
+              document.getElementById("btnLogIn").style.display = "block"
+              document.getElementById("btnGoToSignUp").style.display = "block"
 
               if(data != "Wrong info")
               {
@@ -66,7 +66,7 @@ export default {
                 document.getElementById("error").style.display = "none"
                 self.$store.commit("showPlayer")
                 self.$store.commit("updateUsername", self.username)
-                self.$emit("fetchSongs")
+                self.$emit("fetchSongsGrant")
 
                 setTimeout(function() {
                   Ozone.fire("success","Signed in as " + self.$store.state.username, "bottom-middle")
@@ -85,8 +85,8 @@ export default {
             error:function(er){
               console.log(er)
               document.getElementById("loadingSpinner").style.display = "none"
-              document.getElementById("btnLogIn").style.display = "inline-block"
-              document.getElementById("btnGoToSignUp").style.display = "inline-block"
+              document.getElementById("btnLogIn").style.display = "block"
+              document.getElementById("btnGoToSignUp").style.display = "block"
             }
           })
       }
@@ -95,21 +95,24 @@ export default {
         document.getElementById("error").style.display = "block"
         document.getElementById("loadingSpinner").style.display = "none"
         document.getElementById("error").innerHTML = "Please provide a valid username and password!"
-        document.getElementById("btnLogIn").style.display = "inline-block"
-        document.getElementById("btnGoToSignUp").style.display = "inline-block"
+        document.getElementById("btnLogIn").style.display = "block"
+        document.getElementById("btnGoToSignUp").style.display = "block"
       }
       
     },
     regExLogIn() {
-      let regEx1=/^[0-9a-zæøåA-ZÆØÅ]{3,99}$/ 
-      let regEx2=/^[0-9a-zæøåA-ZÆØÅ!?,.-]{6,99}$/
+      let regEx1 = /^[0-9a-zæøåA-ZÆØÅ]{3,99}$/ 
+      let regEx2 = /^[0-9a-zæøåA-ZÆØÅ!?,.-]{6,99}$/
       
       let ok1 = regEx1.test(this.username)
       let ok2 = regEx2.test(this.password)
-      if(!ok1 || !ok2) {
+
+      if (!ok1 || !ok2) 
+      {
         return false
       }
-      else {
+      else 
+      {
         return true
       }
 
@@ -146,9 +149,9 @@ export default {
   color: #2c3e50;
   background-color: rgba(255, 255, 255, 1); 
   width: 400px;
-  min-height: 700px;
+  min-height: 670px;
   margin: auto;
-  margin-top: 8%;
+  margin-top: 6.5%;
   border-radius: 1%; 
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -181,6 +184,7 @@ export default {
 }
 
 #btnLogIn {
+  margin: auto;
   margin-top: 20px;
   background-color: black;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -196,6 +200,7 @@ export default {
 }
 
 #btnGoToSignUp {
+  margin: auto; 
   margin-top: 20px;
   margin-bottom: 20px;
   background-color: white; 

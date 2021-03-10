@@ -14,7 +14,9 @@
 
     <div id="divSidebar" class="animate__animated animate__fadeInLeft">
       <h3 id="h3Library">Your library</h3>
+      
       <a>All public songs</a>
+      <br />
       <a>My uploaded songs</a>
 
       <h3>Playlists</h3>
@@ -48,7 +50,7 @@
           </table>
         </div>
         <div id="divSongPane" v-for="song in songs" :key="song.SongID" class="animate__animated animate__fadeInRight">
-          <table  class="tableSongs">
+          <table class="tableSongs">
             <tr>
               <td class="tableSongsTdPlay">
                 <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName)" style="color: black; cursor: pointer;" :icon="['fas', 'play']" />
@@ -72,6 +74,11 @@
         <span v-show="uploadImgLabel" class="animate__animated animate__bounceIn">Change background image</span>
         <font-awesome-icon :icon="['fas', 'image']" />
       </div>
+
+      <div id="divSongDuration">
+        <span id="spanSongDuation">Do here</span>
+      </div>
+
     </div>
 
     <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
@@ -85,7 +92,10 @@
       <input type="range" min="0" max="100" value="100" id="wavesurferVolume">
       </div>
       <div id="waveform" v-on:click="waveformInteraction()">
-          <font-awesome-icon id="songLoader" :icon="['fas', 'spinner']" spin />
+        <div id="songLoader">
+          <font-awesome-icon :icon="['fas', 'spinner']" spin />
+          <span id="songLoaderProgress"></span>
+        </div>
       </div>
     </div>
 
@@ -128,7 +138,7 @@ export default {
   methods: {
     wavePlayPauseToggle (mode) {
       this.wavesurfer.playPause()
-      if(mode == "play")
+      if (mode == "play")
       {
         document.getElementById("divPlay").style.display = "none"
         document.getElementById("divPause").style.display = "block"
@@ -137,7 +147,7 @@ export default {
       }
       else
       {
-        document.getElementById("divPause").style.display = "none";
+        document.getElementById("divPause").style.display = "none"
         document.getElementById("divPlay").style.display = "block"
         document.getElementById("pause" + this.currentSongID).style.display = "none"
         document.getElementById("play" + this.currentSongID).style.display = "block"
@@ -147,7 +157,7 @@ export default {
       document.getElementById("divPlayerControls").style.display = "block"
       
       // If no song is selected, play selected song
-      if(this.currentSongID == "")
+      if (this.currentSongID == "")
       {
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
@@ -156,7 +166,7 @@ export default {
         this.wavesurfer.load(SongURL) 
       }
       // Continues paused song
-      else if(this.currentSongID == SongID)
+      else if (this.currentSongID == SongID)
       {
         this.wavesurfer.playPause()
         document.getElementById("pause" + SongID).style.display = "block"
@@ -185,7 +195,7 @@ export default {
       document.getElementById("divPause").style.display = "none"
     },
     populateSongList (songs) {
-      for(var i = 0; i < songs.length; i+=4) 
+      for (var i = 0; i < songs.length; i+=4) 
       {
           this.songs.push({SongID: songs[i], ArtistName: songs[i+1], SongName: songs[i+2]
             , SongURL: songs[i+3]})
@@ -193,7 +203,7 @@ export default {
     },
     waveformInteraction () {
       let self = this
-      if(this.wavesurfer.isPlaying())
+      if (this.wavesurfer.isPlaying())
       {
         setTimeout(function() {
           self.wavesurfer.play()
@@ -218,7 +228,7 @@ export default {
             async: true,
             success:function (data) {
                 console.log(data)
-                if(data != "Error occurred when fetching all songs")
+                if (data != "Error occurred when fetching all songs")
                 {
                   self.populateSongList(data)
                 }
@@ -257,9 +267,10 @@ export default {
     this.wavesurfer.on('loading', function (progress) {
           console.log("Loading progress: " + progress)
 
-          if(progress < 100)
+          if (progress < 100)
           {
             document.getElementById("songLoader").style.display = "block"
+            document.getElementById("songLoaderProgress").innerHTML = progress + "%"
           }
           else
           {
@@ -385,7 +396,6 @@ export default {
 
 #divSidebar {
   position: absolute;
-  /* background-color: rgb(53, 50, 50); */
   background-color: rgba(0, 0, 0, 0.8);
   width: 170px;
   height: 100%;
@@ -413,6 +423,13 @@ export default {
   font-size: 50px;
   margin: auto; 
   margin-top: 45px;
+}
+
+#songLoaderProgress {
+  position: absolute;
+  font-size: 20px;
+  padding-left: 15px;
+  margin-top: 15px;
 }
 
 #btnUploadSong {
@@ -465,6 +482,20 @@ export default {
   width: 200px;
   height: 130px;
   border: 1px solid red; 
+}
+
+#divSongDuration {
+  position: absolute;
+  text-align: center;
+  bottom: 165px;
+  left: 40%;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 5px;
+  padding-left: 10px; 
+  padding-right: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 #wavesurferVolume {

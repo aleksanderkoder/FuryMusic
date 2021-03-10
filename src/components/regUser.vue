@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     registerUser() {
-      if(this.regExSignUp())
+      if (this.regExSignUp())
       {
         $.ajax(
           {
@@ -46,7 +46,7 @@ export default {
             dataType: "json",
             data:{username:this.username,password:this.password,email:this.email},
             cache:false,
-            success:function (data) {
+            success: function (data) {
                 
                 if(data == "Username taken")
                 {
@@ -65,40 +65,43 @@ export default {
                   
                 }
               },
-              error:function(er){
+              error: function (er){
                 console.log(er)
               }
           })
       }},
       regExSignUp () {
         this.errors = []
-        let regExUsername = /^[0-9a-zæøåA-ZÆØÅ]{3,99}$/ 
-        let regExEmail = /^[^@]+@\w+(\.\w+)+\w$/
-        let regExPassword = /^[0-9a-zæøåA-ZÆØÅ!?,.-]{6,99}$/
-        
-        let testUsername = regExUsername.test(this.username)
-        let testEmail = regExEmail.test(this.email)
-        let testPassword = regExPassword.test(this.password)
+        if (this.username != "" && this.password != "" && this.email != "")
+        {
+          let regExUsername = /^[0-9a-zæøåA-ZÆØÅ]{3,99}$/ 
+          let regExEmail = /^[^@]+@\w+(\.\w+)+\w$/
+          let regExPassword = /^[0-9a-zæøåA-ZÆØÅ!?,.-]{6,99}$/
+          
+          let errorCounter = 0
+          if (!regExUsername.test(this.username)) {
+            this.errors.push("Your username is not valid!")
+            errorCounter++
+          }
+          if (!regExEmail.test(this.email)) {
+            this.errors.push("Your e-mail is not valid!")
+            errorCounter++
+          }
+          if (!regExPassword.test(this.password)) {
+            this.errors.push("Your password is not valid!")
+            errorCounter++
+          }
 
-        let errorCounter = 0
-        if(!testUsername) {
-          this.errors.push("Your username is not valid!")
-          errorCounter++
+          if (errorCounter == 0) {
+            return true
+          }
+          else {
+            return false
+          }
         }
-        if(!testEmail) {
-          this.errors.push("Your e-mail is not valid!")
-          errorCounter++
-        }
-        if(!testPassword) {
-          this.errors.push("Your password is not valid!")
-          errorCounter++
-        }
-
-        if(errorCounter == 0) {
-          return true
-        }
-        else {
-          return false
+        else
+        {
+          this.errors.push("Please enter your information above!")
         }
       },
       goToSignIn() {

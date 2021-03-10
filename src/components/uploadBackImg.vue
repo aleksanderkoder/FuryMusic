@@ -27,7 +27,7 @@ export default {
   methods: {
     uploadImage () {
       let file = document.getElementById("file").files[0]
-      if(file.type == "image/png" || file.type == "image/gif" || file.type == "image/jpeg")
+      if (file.type == "image/png" || file.type == "image/gif" || file.type == "image/jpeg")
       {
         this.objectURL = URL.createObjectURL(document.getElementById("file").files[0])
         document.getElementById("imageShowcase").src = this.objectURL

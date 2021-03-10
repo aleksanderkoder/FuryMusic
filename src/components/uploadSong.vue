@@ -1,7 +1,7 @@
 <template>
     <div class="animate__animated animate__fadeInDownBig" id="divWrapper">
         <h1>Upload song</h1>
-        <label for="file" id="btnChooseImage">
+        <label for="file" id="btnChooseSong">
           Select song 
         </label>
         <input id="file" type="file" accept=".mp3" v-on:change="uploadImage()">
@@ -25,7 +25,7 @@ export default {
   methods: {
     uploadImage () {
       let file = document.getElementById("file").files[0]
-      if(file.type == "image/png" || file.type == "image/gif" || file.type == "image/jpeg")
+      if (file.type == "image/png" || file.type == "image/gif" || file.type == "image/jpeg")
       {
         this.objectURL = URL.createObjectURL(document.getElementById("file").files[0])
         document.getElementById("imageShowcase").src = this.objectURL
