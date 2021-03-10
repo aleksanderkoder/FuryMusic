@@ -209,8 +209,20 @@ export default {
           self.wavesurfer.play()
         }, 100)
       }
-    },
+    }, // TO DO: Dette her under!!!!!!!!!!!!!!!!!!!!!!!!
+    // resetPlayer () {
+    //   if(this.wavesurfer.isPlaying())
+    //     this.wavesurfer.stop()
+
+    //   this.wavesurfer = null
+    //   this.songs = []
+    //   this.currentSongID = ""
+    //   this.currentSongArtist = ""
+    //   this.currentSongName = ""
+    //   this.wavePlayPauseToggle("pause")
+    // },
     signOut () {
+      this.wavesurfer.stop()
       this.$store.commit("showSignIn")
       this.$store.commit("updateUsername","")
     }
@@ -488,7 +500,7 @@ export default {
   position: absolute;
   text-align: center;
   bottom: 165px;
-  left: 40%;
+  left: 42%;
   color: white;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 5px;
