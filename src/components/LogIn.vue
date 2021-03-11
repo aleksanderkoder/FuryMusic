@@ -11,18 +11,18 @@
         <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
         <input type="password" v-model="password" placeholder="Password" id="password">
         <br />
-        <label for="checkRememberMe">Remember me</label>
-        <input id="checkRememberMe" type="checkbox" v-model="rememberMe">
-        <br>
         <p id="error" class="animate__animated animate__shakeX"></p>
         <input type="submit" v-on:click="logIn()" value="Sign in" id="btnLogIn">
       </form>
       <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
       <br>
+      <!-- <input id="checkRememberMe" type="checkbox" v-model="rememberMe">  LIKER JEG DETTE???? HMMMMMMM
+      <label for="checkRememberMe" style="font-size: 13px">Stay signed in</label> -->
+      <br />
       <font-awesome-icon id="loadingSpinner" :icon="['fas', 'spinner']" spin />
       <a href="">Forgot password?</a>
     </div>
-    <p class="animate__animated animate__fadeInUpBig" style="position: absolute; display: block; text-align: center; width: 100%; bottom: 0; color: white;">© Aleksander Johansen</p>
+    <p id="makersMark" class="animate__animated animate__fadeInUpBig">© Aleksander Johansen</p>
   </div>
 </template>
 
@@ -227,6 +227,15 @@ export default {
 #btnLogIn:hover {
   background-color: #2022259f;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+#makersMark {
+  position: absolute; 
+  display: block; 
+  text-align: center; 
+  width: 100%; 
+  bottom: 0; 
+  color: white;
 }
 
 #logInTittel {
