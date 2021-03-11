@@ -10,7 +10,7 @@
         <br>
         <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
         <input type="password" v-model="password" placeholder="Password" id="password">
-        <br />
+        <br>
         <p id="error" class="animate__animated animate__shakeX"></p>
         <input type="submit" v-on:click="logIn()" value="Sign in" id="btnLogIn">
       </form>
@@ -18,7 +18,7 @@
       <br>
       <!-- <input id="checkRememberMe" type="checkbox" v-model="rememberMe">  LIKER JEG DETTE???? HMMMMMMM
       <label for="checkRememberMe" style="font-size: 13px">Stay signed in</label> -->
-      <br />
+      <br>
       <font-awesome-icon id="loadingSpinner" :icon="['fas', 'spinner']" spin />
       <a href="">Forgot password?</a>
     </div>

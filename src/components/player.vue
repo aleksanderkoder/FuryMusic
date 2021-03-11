@@ -16,7 +16,7 @@
       <h3 id="h3Library">Your library</h3>
       
       <a>All public songs</a>
-      <br />
+      <br>
       <a>My uploaded songs</a>
 
       <h3>Playlists</h3>
@@ -69,6 +69,7 @@
           </table>
         </div>
       </div>
+
       <div id="customBackgroundImagePanel" @mouseover="uploadImgLabel = true"
       @mouseleave="uploadImgLabel = false" v-on:click="showCustomBackImg = true">
         <span v-show="uploadImgLabel" class="animate__animated animate__bounceIn">Change background image</span>
@@ -138,6 +139,7 @@ export default {
   methods: {
     wavePlayPauseToggle (mode) {
       this.wavesurfer.playPause()
+
       if (mode == "play")
       {
         document.getElementById("divPlay").style.display = "none"
@@ -156,23 +158,24 @@ export default {
     playSong (SongURL, SongID, SongName, ArtistName) {
       document.getElementById("divPlayerControls").style.display = "block"
       
-      // If no song is selected, play selected song
+      // If no song is selected, load selected song
       if (this.currentSongID == "")
       {
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
         this.currentSongID = SongID
-        
-        this.wavesurfer.load(SongURL) 
+        this.wavesurfer.load(SongURL)
+        //alert("first")
       }
-      // Continues paused song
+      // Continues paused/plays loaded song
       else if (this.currentSongID == SongID)
       {
-        this.wavesurfer.playPause()
-        document.getElementById("pause" + SongID).style.display = "block"
-        document.getElementById("play" + SongID).style.display = "none"
-        document.getElementById("divPlay").style.display = "none"
-        document.getElementById("divPause").style.display = "block"
+          this.wavesurfer.playPause()
+          document.getElementById("pause" + SongID).style.display = "block"
+          document.getElementById("play" + SongID).style.display = "none"
+          document.getElementById("divPlay").style.display = "none"
+          document.getElementById("divPause").style.display = "block"
+        //alert("cont")
       }
       // If a song has been selected before, but it's not the same song
       else
@@ -185,6 +188,7 @@ export default {
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
         this.wavesurfer.load(SongURL)
+        //alert("new")
       }
     },
     pauseSong (SongID) {
@@ -193,6 +197,7 @@ export default {
       document.getElementById("pause" + SongID).style.display = "none"
       document.getElementById("divPlay").style.display = "block"
       document.getElementById("divPause").style.display = "none"
+      
     },
     populateSongList (songs) {
       for (var i = 0; i < songs.length; i+=4) 
@@ -209,22 +214,9 @@ export default {
           self.wavesurfer.play()
         }, 100)
       }
-    }, // TO DO: Dette her under!!!!!!!!!!!!!!!!!!!!!!!!
-    // resetPlayer () {
-    //   if(this.wavesurfer.isPlaying())
-    //     this.wavesurfer.stop()
-
-    //   this.wavesurfer = null
-    //   this.songs = []
-    //   this.currentSongID = ""
-    //   this.currentSongArtist = ""
-    //   this.currentSongName = ""
-    //   this.wavePlayPauseToggle("pause")
-    // },
+    },
     signOut () {
-      this.wavesurfer.stop()
-      this.$store.commit("showSignIn")
-      this.$store.commit("updateUsername","")
+      location.reload() 
     }
   },
   watch: {
@@ -257,17 +249,17 @@ export default {
   },
   mounted () {
     let self = this
-
+    
     // Initializes the WaveSurfer object
-    this.wavesurfer = WaveSurfer.create({
-            container: '#waveform',
-            waveColor: 'white',
-            progressColor: 'black',
-            barWidth: '2',
-            normalize: true,
-            fillParent: true,
-          })
-          
+      this.wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: 'white',
+        progressColor: 'black',
+        barWidth: '2',
+        normalize: true,
+        fillParent: true,
+      })
+
     // Prepares event for when song finishes
     this.wavesurfer.on('finish', function () {
           document.getElementById("play" + self.currentSongID).style.display = "block"
@@ -283,7 +275,7 @@ export default {
           {
             document.getElementById("songLoader").style.display = "block"
             document.getElementById("songLoaderProgress").innerHTML = progress + "%"
-            alert(this.wavesurfer.getDuration())
+            
           }
           else
           {

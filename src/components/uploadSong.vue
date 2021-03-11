@@ -1,16 +1,13 @@
 <template>
-    <div class="animate__animated animate__fadeInDownBig" id="divWrapper">
+    <div class="animate__animated animate__fadeInDownBig" id="divUploadSongWrapper">
         <h1>Upload song</h1>
-        <label for="file" id="btnChooseSong">
+        <label for="fileSong" id="btnChooseSong">
           Select song 
         </label>
-        <input id="file" type="file" accept=".mp3" v-on:change="uploadImage()">
-        <br />
-        <div id="divConfirm">
-          <h2>Do you want to use this image?</h2>
-          <button id="btnConfirmUpload" v-on:click="useImage()">Use this image</button>
-        </div>
-        <button id="btnCancel" v-on:click="cancel()">Cancel</button>
+        <input id="fileSong" type="file" accept=".mp3">
+        <br>
+        
+        <button id="btnCancel">Cancel</button>
     </div>
 </template>
 
@@ -19,43 +16,10 @@ export default {
   name: 'uploadSong',
   data () {
     return {
-      objectURL: ""
     }
   },
   methods: {
-    uploadImage () {
-      let file = document.getElementById("file").files[0]
-      if (file.type == "image/png" || file.type == "image/gif" || file.type == "image/jpeg")
-      {
-        this.objectURL = URL.createObjectURL(document.getElementById("file").files[0])
-        document.getElementById("imageShowcase").src = this.objectURL
-        document.getElementById("divConfirm").style.display = "block"
-      }
-      else
-      {
-        Ozone.fire("error", "Invalid file type selected", "bottom-middle")
-      }
-      
-    },
-    useImage () {
-      const image = document.getElementById("file").files[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(image)
-      reader.addEventListener("loadend", function () {
-      try {
-          localStorage.setItem("custom_background_image", reader.result)
-          Ozone.fire("info", "Background image changed, please refresh!", "bottom-middle")
-          URL.revokeObjectURL(this.objectURL)
-          document.getElementById("divCustomBackImgWrapper").style.display = "none"
-        }
-        catch (e) {
-          console.log("Error: " + e)
-        }     
-      })
-    },
-    cancel () {
-      this.$emit("hideUploadSongPanel")
-    }
+    
   }
   }
 </script>
@@ -120,7 +84,7 @@ export default {
   background-color: #741010;
 }
 
-#divWrapper {
+#divUploadSongWrapper {
   position: absolute;
   width: 600px;
   min-height: 450px; 

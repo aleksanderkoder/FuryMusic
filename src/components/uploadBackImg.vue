@@ -5,7 +5,7 @@
           Select image 
         </label>
         <input id="file" type="file" accept=".jpg,.png,.gif" v-on:change="uploadImage()">
-        <br />
+        <br>
         <img src="" id="imageShowcase" width="350px">
         <div id="divConfirm">
           <h2>Do you want to use this image?</h2>

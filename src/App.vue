@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <upload v-show="false"/>
+    <!-- <upload v-show="false"/> -->
     <LogIn v-show="this.$store.state.showLogIn" @fetchSongsGrant="fetchSongsGrant" />
     <regUser v-show="this.$store.state.showRegUser" />
     <player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn" />
@@ -33,7 +33,7 @@ export default {
   methods: {
     fetchSongsGrant () {
       this.loggedIn = true
-    }
+    },
   },
   mounted () {
     // Loads custom background image if it exists
