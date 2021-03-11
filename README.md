@@ -1,4 +1,4 @@
-# Fury Music Player
+# Fury Music
 
 > A music player application built for the web.
 
