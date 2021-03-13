@@ -52,6 +52,7 @@ export default {
         }
         catch (e) {
           console.log("Error: " + e)
+          Ozone.fire("error", "Image file size is too large", "bottom-middle")
         }     
       })
     }, 

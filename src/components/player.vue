@@ -2,6 +2,10 @@
 <div id="divPlayerWrapper">
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
       <img id="logo" src="/src/assets/fury music logo round small.png" width="80px">
+      <div id="divSearchSong">
+        <font-awesome-icon style="color: black" :icon="['fas', 'search']" />
+        <input type="text" id="searchSong" @change="searchSong()" placeholder="Search">
+      </div>
       <div id="divUser">
         <font-awesome-icon style="color: black" :icon="['fas', 'user-circle']" />
         {{this.$store.state.username}}
@@ -76,8 +80,9 @@
         <font-awesome-icon :icon="['fas', 'image']" />
       </div>
 
-      <div id="divSongDuration">
-        <span id="spanSongDuation">Do here</span>
+      <div id="divPlayerMinimize" v-on:click="minimizePlayer()" class="animate__animated animate__fadeInUpBig">
+        <span id="spanPlayerMinimize">Minimize</span>
+        <font-awesome-icon :icon="['fas', 'sort-down']" />
       </div>
 
     </div>
@@ -157,6 +162,7 @@ export default {
     },
     playSong (SongURL, SongID, SongName, ArtistName) {
       document.getElementById("divPlayerControls").style.display = "block"
+      document.getElementById("divPlayerMinimize").style.display = "block"
       
       // If no song is selected, load selected song
       if (this.currentSongID == "")
@@ -214,6 +220,16 @@ export default {
           self.wavesurfer.play()
         }, 100)
       }
+    },
+    searchSong () {
+      let searchQuery = document.getElementById("searchSong").value
+      
+      // AJAX here 
+
+    },
+    minimizePlayer () {
+      document.getElementById("divPlayerControls").style.display = "none"
+      document.getElementById("divPlayerMinimize").style.display = "none"
     },
     signOut () {
       localStorage.removeItem("username")
@@ -318,6 +334,19 @@ export default {
   padding: 5px;
   border-radius: 3px;
   cursor: pointer;
+}
+
+#divSearchSong {
+  position: absolute;
+  right: 530px;
+  top: 5px;
+}
+
+#searchSong {
+  border: none;
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; 
+  height: 25px; 
 }
 
 .tableSongs {
@@ -491,7 +520,8 @@ export default {
   /* border: 1px solid red;  */
 }
 
-#divSongDuration {
+#divPlayerMinimize {
+  display: none; 
   position: absolute;
   text-align: center;
   bottom: 165px;
@@ -503,6 +533,7 @@ export default {
   padding-right: 10px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  cursor: pointer;
 }
 
 #wavesurferVolume {

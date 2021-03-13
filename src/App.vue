@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import SignIn from "./components/LogIn.vue"
+import SignIn from "./components/SignIn.vue"
 import SignUp from "./components/SignUp.vue"
 import Player from "./components/Player.vue"
 import UploadSong from "./components/UploadSong.vue"
@@ -33,7 +33,7 @@ export default {
   methods: {
     fetchSongsGrant () {
       this.loggedIn = true
-    },
+    }
   },
   mounted () {
     // Loads custom background image if it exists
