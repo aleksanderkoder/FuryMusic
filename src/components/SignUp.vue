@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: 'regUser',
+  name: 'SignUp',
   data () {
     return {
       username: "",

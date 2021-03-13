@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'uploadSong',
+  name: 'UploadSong',
   data () {
     return {
     }

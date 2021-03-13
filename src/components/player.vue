@@ -100,19 +100,19 @@
       </div>
     </div>
 
-    <uploadBackImg v-show="showCustomBackImg" 
+    <UploadBackImg v-show="showCustomBackImg" 
     @hideCustomBackgroundImagePanel="showCustomBackImg = false" />
 
 </div>
 </template>
 
 <script>
-import uploadBackImg from "./UploadBackImg.vue"
+import UploadBackImg from "./UploadBackImg.vue"
 
 export default {
-  name: 'player',
+  name: 'Player',
   components: {
-    uploadBackImg
+    UploadBackImg
   },
   props: {
     loggedIn: {

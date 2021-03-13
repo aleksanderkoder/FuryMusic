@@ -1,25 +1,25 @@
 <template>
   <div id="app">
     <!-- <upload v-show="false"/> -->
-    <LogIn v-show="this.$store.state.showLogIn" @fetchSongsGrant="fetchSongsGrant" />
-    <regUser v-show="this.$store.state.showRegUser" />
-    <player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn" />
+    <SignIn v-show="this.$store.state.showLogIn" @fetchSongsGrant="fetchSongsGrant" />
+    <SignUp v-show="this.$store.state.showRegUser" />
+    <Player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn" />
   </div>
 </template>
 
 <script>
-import LogIn from "./components/LogIn.vue"
-import regUser from "./components/SignUp.vue"
-import player from "./components/Player.vue"
-import upload from "./components/UploadSong.vue"
+import SignIn from "./components/LogIn.vue"
+import SignUp from "./components/SignUp.vue"
+import Player from "./components/Player.vue"
+import UploadSong from "./components/UploadSong.vue"
 
 export default {
   name: 'app',
   components: {
-    LogIn, 
-    regUser, 
-    player, 
-    upload
+    SignIn, 
+    SignUp, 
+    Player, 
+    UploadSong
   },
   data () {
     return {
