@@ -138,10 +138,9 @@ export default {
   },
   methods: {
     wavePlayPauseToggle (mode) {
-      this.wavesurfer.playPause()
-
       if (mode == "play")
       {
+        this.wavesurfer.play()
         document.getElementById("divPlay").style.display = "none"
         document.getElementById("divPause").style.display = "block"
         document.getElementById("play" + this.currentSongID).style.display = "none"
@@ -149,6 +148,7 @@ export default {
       }
       else
       {
+        this.wavesurfer.pause()
         document.getElementById("divPause").style.display = "none"
         document.getElementById("divPlay").style.display = "block"
         document.getElementById("pause" + this.currentSongID).style.display = "none"
@@ -170,7 +170,7 @@ export default {
       // Continues paused/plays loaded song
       else if (this.currentSongID == SongID)
       {
-          this.wavesurfer.playPause()
+          this.wavesurfer.play()
           document.getElementById("pause" + SongID).style.display = "block"
           document.getElementById("play" + SongID).style.display = "none"
           document.getElementById("divPlay").style.display = "none"
@@ -216,7 +216,8 @@ export default {
       }
     },
     signOut () {
-      location.reload() 
+      window.location.replace(location + "?signedout=true") 
+      //location.reload() 
     }
   },
   watch: {
@@ -270,7 +271,7 @@ export default {
 
     this.wavesurfer.on('loading', function (progress) {
           console.log("Loading progress: " + progress)
-
+          
           if (progress < 100)
           {
             document.getElementById("songLoader").style.display = "block"

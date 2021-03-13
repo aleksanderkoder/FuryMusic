@@ -41,6 +41,15 @@ export default {
     {
       document.getElementById("app").style.backgroundImage = "url(" + localStorage.getItem('custom_background_image') + ")"
     }
+
+    // Shows confirmation of successful sign out 
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("signedout"))
+    {
+      setTimeout(function () {
+        Ozone.fire("success","You have been signed out","top-right")
+      }, 1500)
+    }
   }
 }
 </script>
