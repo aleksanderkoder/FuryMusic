@@ -1,7 +1,7 @@
 # Fury Music
 
 > A music player application built for the web.
-
+<img src="https://i.ibb.co/g9M3T9V/fury-signin-showcase.jpg" align="center"> 
 ## Build Setup
 
 ``` bash
