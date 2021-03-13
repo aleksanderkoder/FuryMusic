@@ -216,8 +216,9 @@ export default {
       }
     },
     signOut () {
-      window.location.replace(location + "?signedout=true") 
-      //location.reload() 
+      localStorage.removeItem("username")
+      localStorage.removeItem("password")
+      window.location.replace(location + "?signedout=true")
     }
   },
   watch: {

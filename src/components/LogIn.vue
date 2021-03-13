@@ -65,6 +65,10 @@ export default {
               if(data != "Wrong info")
               {
                 console.log("Logging in user...")
+
+                localStorage.setItem("username", self.username)
+                localStorage.setItem("password", self.password)
+
                 document.getElementById("username").value = ""
                 document.getElementById("password").value = ""
                 document.getElementById("error").style.display = "none"
@@ -127,7 +131,13 @@ export default {
     }
   },
   mounted () {
-      
+      // Checks if user information has been already entered, and logs user in if true otherwise
+      if (localStorage.getItem("username") && localStorage.getItem("password"))
+      {
+        this.username = localStorage.getItem("username")
+        this.password = localStorage.getItem("password")
+        this.logIn() 
+      }
     }
   }
   

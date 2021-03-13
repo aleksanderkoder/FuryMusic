@@ -43,7 +43,7 @@ export default {
     }
 
     // Shows confirmation alert of successful sign out 
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search)
     if (urlParams.get("signedout"))
     {
       window.history.pushState("", "", "/")
