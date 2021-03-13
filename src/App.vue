@@ -9,9 +9,9 @@
 
 <script>
 import LogIn from "./components/LogIn.vue"
-import regUser from "./components/regUser.vue"
-import player from "./components/player.vue"
-import upload from "./components/uploadSong.vue"
+import regUser from "./components/SignUp.vue"
+import player from "./components/Player.vue"
+import upload from "./components/UploadSong.vue"
 
 export default {
   name: 'app',
@@ -42,10 +42,11 @@ export default {
       document.getElementById("app").style.backgroundImage = "url(" + localStorage.getItem('custom_background_image') + ")"
     }
 
-    // Shows confirmation of successful sign out 
+    // Shows confirmation alert of successful sign out 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("signedout"))
     {
+      window.history.pushState("", "", "/")
       setTimeout(function () {
         Ozone.fire("success","You have been signed out","top-right")
       }, 1500)
@@ -70,7 +71,7 @@ export default {
   width: 100%;
   height: 100%; 
   margin: auto;
-  background: url(/src/assets/bak.jpg) no-repeat center center fixed; 
+  background: url(/src/assets/wolfgang-hasselmann-opti.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import uploadBackImg from "./uploadBackImg.vue"
+import uploadBackImg from "./UploadBackImg.vue"
 
 export default {
   name: 'player',

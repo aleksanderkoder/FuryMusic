@@ -72,7 +72,7 @@ export default {
                 self.$store.commit("updateUsername", self.username)
                 self.$emit("fetchSongsGrant")
 
-                setTimeout(function() {
+                setTimeout( function () {
                   Ozone.fire("success","Signed in as " + self.$store.state.username, "bottom-middle")
                 }, 2000)
               }
@@ -125,8 +125,12 @@ export default {
       document.getElementById("error").style.display = "none"
       this.$store.commit("showSignUp")
     }
+  },
+  mounted () {
+      
+    }
   }
-  }
+  
 </script>
 
 <style scoped>
