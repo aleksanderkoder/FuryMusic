@@ -3,7 +3,7 @@
 > A music player application built for the web.
  
 ## Screenshots
-<img src="https://i.ibb.co/g9M3T9V/fury-signin-showcase.jpg" width="400" align="center"> 
+<img src="https://i.ibb.co/g9M3T9V/fury-signin-showcase.jpg" width="600" style="margin: auto"> 
 The sign in page. 
 
 <img src="" width="400" align="center">
