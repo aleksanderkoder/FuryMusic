@@ -5,13 +5,14 @@
 ## Screenshots
 <p align="center">
   <img src="https://i.ibb.co/g9M3T9V/fury-signin-showcase.jpg" width="600" style="margin: auto"> 
-</p>
+
 The sign in page where users can sign into their personal accounts. 
 
-<p align="center">
-  <img src="https://i.ibb.co/T01Fwbk/fury-player-showcase.jpg" width="400" align="center">
-</p>
+
+  <img src="https://i.ibb.co/T01Fwbk/fury-player-showcase.jpg" width="600" align="center">
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
+</p>
+
 
 ## Build Setup
 
