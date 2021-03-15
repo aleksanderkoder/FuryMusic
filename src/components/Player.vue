@@ -80,34 +80,34 @@
         <font-awesome-icon :icon="['fas', 'image']" />
       </div>
 
+    </div>
+
+    <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
+        <div id="controlsWrapper">
+        <div id="divPlay" v-on:click="wavePlayPauseToggle('play')">
+          <font-awesome-icon id="playButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 12%" :icon="['fas', 'play']" />
+        </div>
+        <div id="divPause" v-on:click="wavePlayPauseToggle('pause')">
+          <font-awesome-icon id="pauseButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 2%;" :icon="['fas', 'pause']" />
+        </div>
+        <input type="range" min="0" max="100" value="100" id="wavesurferVolume">
+        </div>
+        <div id="waveform" v-on:click="waveformInteraction()">
+          <div id="songLoader">
+            <font-awesome-icon :icon="['fas', 'spinner']" spin />
+            <span id="songLoaderProgress"></span>
+          </div>
+        </div>
+    </div>
+
       <div id="divPlayerMinimize" v-on:click="minimizePlayer()" class="animate__animated animate__fadeInUpBig">
         <span id="spanPlayerMinimize">Minimize</span>
         <font-awesome-icon :icon="['fas', 'sort-down']" />
       </div>
 
-    </div>
-
-    <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
-      <div id="controlsWrapper">
-      <div id="divPlay" v-on:click="wavePlayPauseToggle('play')">
-        <font-awesome-icon id="playButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 12%" :icon="['fas', 'play']" />
-      </div>
-       <div id="divPause" v-on:click="wavePlayPauseToggle('pause')">
-        <font-awesome-icon id="pauseButton" style="font-size: 35px; color: black; margin-top: 27%; margin-left: 2%;" :icon="['fas', 'pause']" />
-      </div>
-      <input type="range" min="0" max="100" value="100" id="wavesurferVolume">
-      </div>
-      <div id="waveform" v-on:click="waveformInteraction()">
-        <div id="songLoader">
-          <font-awesome-icon :icon="['fas', 'spinner']" spin />
-          <span id="songLoaderProgress"></span>
-        </div>
-      </div>
-    </div>
-
-    <UploadBackImg v-show="showCustomBackImg" 
-    @hideCustomBackgroundImagePanel="showCustomBackImg = false" />
-
+      <UploadBackImg v-show="showCustomBackImg" 
+      @hideCustomBackgroundImagePanel="showCustomBackImg = false" />
+    
 </div>
 </template>
 
@@ -327,8 +327,8 @@ export default {
 
 #customBackgroundImagePanel {
   position: absolute;
-  right: 200px;
-  bottom: 200px; 
+  right: 15px;
+  bottom: 25px; 
   color: white; 
   background-color: rgba(0, 0, 0, 0.6);
   padding: 5px;
@@ -440,11 +440,12 @@ export default {
 }
 
 #divPlayerControls {
-  position: absolute;
+  position: absolute; 
   background-color: rgba(0, 0, 0, 0.8);
-  width: 100%;
   height: 130px;
-  left: 171px;
+  margin-left: 171px;
+  left: 0; 
+  right: 0; 
   bottom: 0;
   z-index: 0;
   display: none; 
@@ -457,8 +458,8 @@ export default {
 #songLoader {
   color: white; 
   font-size: 40px;
-  margin: auto; 
   margin-top: 45px;
+  margin-right: 55vm;
 }
 
 #songLoaderProgress {
@@ -492,23 +493,20 @@ export default {
 
 #divCenter {
   position: absolute;
-  width: 100%;
-  height: 100%;
   left: 170px;
-  bottom: 10%;
-  top: 35px;
+  right: 0px;  
+  bottom: 160px;
+  top: 39px;
   z-index: 0;
 }
 
 #waveform {
   position: absolute;
   top: 0;
-  left: 0;
   bottom: 0;
   right: 0;
-  margin: auto;
+  left: 0; 
   margin-left: 200px; 
-  width: 75%;
   outline: none; 
   /* border: 1px solid green;  */
   cursor: pointer;
@@ -516,16 +514,16 @@ export default {
 
 #controlsWrapper {
   width: 200px;
-  height: 130px;
   /* border: 1px solid red;  */
+   
 }
 
 #divPlayerMinimize {
   display: none; 
   position: absolute;
   text-align: center;
-  bottom: 165px;
-  left: 42%;
+  bottom: 130px;
+  left: 48.5%;
   color: white;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 5px;
@@ -623,6 +621,11 @@ export default {
   top: 5px; 
   border: none;
   padding: 5px; 
+}
+
+#divPlayerWrapper {
+  width: 100%;
+  height: 100%;
 }
 
 button {

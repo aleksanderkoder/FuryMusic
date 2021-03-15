@@ -88,7 +88,7 @@ body {
   background-size: cover; */
   background-color: black;
   font-family: "Wals";
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 input:focus {
