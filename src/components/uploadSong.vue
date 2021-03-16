@@ -4,10 +4,15 @@
         <label for="fileSong" id="btnChooseSong">
           Select song 
         </label>
-        <input id="fileSong" type="file" accept=".mp3">
+        <input id="fileSong" type="file" accept=".mp3" v-on:change="showForm = true">
         <br>
-        
-        <button id="btnCancel">Cancel</button>
+        <div v-show="showForm">
+          <input type="text" placeholder="Song name" v-model="songName">
+          <input type="text" placeholder="Artist name" v-model="songArtist">
+          <input type="text" placeholder="Album name" v-model="songAlbum">
+          <button id="btnConfirmUpload" v-on:click="uploadSong()">Upload</button>
+        </div>
+        <button id="btnCancel" v-on:click="cancel()">Cancel</button>
     </div>
 </template>
 
@@ -16,10 +21,40 @@ export default {
   name: 'UploadSong',
   data () {
     return {
+      songName: "",
+      songArtist: "",
+      songAlbum: "",
+      showForm: false,
+      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
   methods: {
-    
+    uploadSong() {
+      let fd = new FormData()
+      let files = document.getElementById("fileSong").files[0]
+      fd.append("songName",this.songName)
+      fd.append("songArtist",this.songArtist)
+      fd.append("songAlbum",this.songAlbum)
+      fd.append("file",files)
+      alert(fd.get("songArtist"))
+
+      $.ajax({
+        url: this.apiURL + "uploadSong.php",
+        type: 'POST',
+        cache: false,
+        async: true,
+        data: fd,
+        success: function (data) {
+            alert(data)
+        },
+        error: function () {
+
+        }
+      })
+    },
+    cancel () {
+      this.$emit("hideUploadSongComponent")
+    }
   }
   }
 </script>
@@ -88,8 +123,7 @@ export default {
   position: absolute;
   width: 600px;
   min-height: 450px; 
-  margin-left: auto;
-  margin-right: auto; 
+  margin: 0 auto;  
   left: 0;
   right: 0;
   text-align: center;
@@ -102,8 +136,17 @@ export default {
   z-index: 9999;
 }
 
-#divConfirm {
-  display: none; 
+input[type="text"] {
+  border: none;
+  margin: auto;
+  margin-top: 15px;
+  margin-right: 33px;
+  width: 155px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; 
+  height: 30px;
+  font-family: "Wals";
+  border-radius: 3px;
+  display: block; 
 }
 
 input[type="file"] {

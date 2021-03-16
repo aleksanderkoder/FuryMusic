@@ -107,7 +107,7 @@
       </div>
 
       <UploadBackImg v-show="showCustomBackImg" 
-      @hideCustomBackgroundImagePanel="showCustomBackImg = false" />
+      @hideCustomBackgroundImageComponent="showCustomBackImg = false" />
     
 </div>
 </template>
@@ -287,7 +287,7 @@ export default {
       })
 
       // Prepares event for when song finishes
-      this.wavesurfer.on('finish', function () {
+      this.wavesurfer.on("finish", function () {
         document.title = "Fury Music"
         document.getElementById("play" + self.currentSongID).style.display = "block"
         document.getElementById("pause" + self.currentSongID).style.display = "none"
@@ -295,7 +295,7 @@ export default {
         document.getElementById("divPause").style.display = "none"
       })
 
-      this.wavesurfer.on('loading', function (progress) {
+      this.wavesurfer.on("loading", function (progress) {
         console.log("Loading progress: " + progress)
             
         if (progress < 100)

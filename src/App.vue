@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <!-- <upload v-show="false"/> -->
-    <SignIn v-show="this.$store.state.showLogIn" @fetchSongsGrant="fetchSongsGrant" />
-    <SignUp v-show="this.$store.state.showRegUser" />
-    <Player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn" />
+    <UploadSong v-show="true"/>
+    <SignIn v-show="this.$store.state.showLogIn" @fetchSongsGrant="fetchSongsGrant"/>
+    <SignUp v-show="this.$store.state.showRegUser"/>
+    <Player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn"/>
   </div>
 </template>
 

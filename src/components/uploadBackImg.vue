@@ -7,7 +7,7 @@
         <input id="file" type="file" accept=".jpg,.png,.gif" v-on:change="uploadImage()">
         <br>
         <img src="" id="imageShowcase" width="350px">
-        <div id="divConfirm">
+        <div v-show="showConfirm">
           <h2>Do you want to use this image?</h2>
           <button id="btnConfirmUpload" v-on:click="useImage()">Use this image</button>
         </div>
@@ -21,7 +21,8 @@ export default {
   name: 'uploadBackImg',
   data () {
     return {
-      objectURL: ""
+      objectURL: "",
+      showConfirm: false
     }
   },
   methods: {
@@ -31,7 +32,7 @@ export default {
       {
         this.objectURL = URL.createObjectURL(document.getElementById("file").files[0])
         document.getElementById("imageShowcase").src = this.objectURL
-        document.getElementById("divConfirm").style.display = "block"
+        this.showConfirm = true
       }
       else
       {
@@ -50,8 +51,8 @@ export default {
           Ozone.fire("info", "Background image changed, please refresh!", "bottom-middle")
           URL.revokeObjectURL(this.objectURL)
           document.getElementById("imageShowcase").src = ""
-          document.getElementById("divConfirm").style.display = "none"
-          self.$emit("hideCustomBackgroundImagePanel")
+          self.showConfirm = false
+          self.$emit("hideCustomBackgroundImageComponent")
         }
         catch (e) {
           console.log("Error: " + e)
@@ -61,11 +62,14 @@ export default {
     }, 
     revertToDefault () {
       localStorage.removeItem("custom_background_image")
+      document.getElementById("imageShowcase").src = ""
       Ozone.fire("info", "Background image has been reverted to default!", "bottom-middle")
-      this.$emit("hideCustomBackgroundImagePanel")
+      this.$emit("hideCustomBackgroundImageComponent")
     }, 
     cancel () {
-      this.$emit("hideCustomBackgroundImagePanel")
+      this.showConfirm = false
+      document.getElementById("imageShowcase").src = ""
+      this.$emit("hideCustomBackgroundImageComponent")
     }
   }
   }
@@ -152,8 +156,7 @@ export default {
   position: absolute;
   width: 600px;
   min-height: 450px; 
-  margin-left: auto;
-  margin-right: auto; 
+  margin: 0 auto; 
   left: 0;
   right: 0;
   text-align: center;
