@@ -93,14 +93,15 @@
         <input type="range" min="0" max="100" value="100" id="wavesurferVolume">
         </div>
         <div id="waveform" v-on:click="waveformInteraction()">
-          <div id="songLoader">
-            <font-awesome-icon :icon="['fas', 'spinner']" spin />
-            <span id="songLoaderProgress"></span>
-          </div>
         </div>
     </div>
 
-      <div id="divPlayerMinimize" v-on:click="minimizePlayer()" class="animate__animated animate__fadeInUpBig">
+    <div id="songLoader">
+      <font-awesome-icon :icon="['fas', 'spinner']" spin />
+      <span id="songLoaderProgress"></span>
+    </div>
+
+      <div id="divPlayerMinimize" v-on:click="minimizePlayer()" class="animate__animated animate__flipInY">
         <span id="spanPlayerMinimize">Minimize</span>
         <font-awesome-icon :icon="['fas', 'sort-down']" />
       </div>
@@ -162,7 +163,9 @@ export default {
     },
     playSong (SongURL, SongID, SongName, ArtistName) {
       document.getElementById("divPlayerControls").style.display = "block"
-      document.getElementById("divPlayerMinimize").style.display = "block"
+      setTimeout( function () {
+        document.getElementById("divPlayerMinimize").style.display = "block"
+      }, 1000)
       
       // If no song is selected, load selected song
       if (this.currentSongID == "")
@@ -408,8 +411,9 @@ export default {
 #divTopbar {
   position: absolute;
   background-color: white;
-  width: 100%;
   height: 35px;
+  left: 0; 
+  right: 0;  
   /* box-shadow: 0 4px 2px -2px gray; */
   z-index: 1;
   padding: 2px;
@@ -456,10 +460,12 @@ export default {
 } 
 
 #songLoader {
+  display: none;
+  position: absolute;
   color: white; 
   font-size: 40px;
-  margin-top: 45px;
-  margin-right: 55vm;
+  bottom: 40px; 
+  margin-left: 49%; 
 }
 
 #songLoaderProgress {

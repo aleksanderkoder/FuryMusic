@@ -40,6 +40,7 @@ export default {
       
     },
     useImage () {
+      let self = this
       const image = document.getElementById("file").files[0]
       const reader = new FileReader()
       reader.readAsDataURL(image)
@@ -48,7 +49,9 @@ export default {
           localStorage.setItem("custom_background_image", reader.result)
           Ozone.fire("info", "Background image changed, please refresh!", "bottom-middle")
           URL.revokeObjectURL(this.objectURL)
-          document.getElementById("divCustomBackImgWrapper").style.display = "none"
+          document.getElementById("imageShowcase").src = ""
+          document.getElementById("divConfirm").style.display = "none"
+          self.$emit("hideCustomBackgroundImagePanel")
         }
         catch (e) {
           console.log("Error: " + e)
@@ -59,6 +62,7 @@ export default {
     revertToDefault () {
       localStorage.removeItem("custom_background_image")
       Ozone.fire("info", "Background image has been reverted to default!", "bottom-middle")
+      this.$emit("hideCustomBackgroundImagePanel")
     }, 
     cancel () {
       this.$emit("hideCustomBackgroundImagePanel")

@@ -131,15 +131,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: white;
-  min-width: 400px;
-  max-width: 400px;
+  background-color: rgba(255, 255, 255, 1); 
+  width: 400px;
+  min-height: 670px;
   margin: auto;
-  margin-top: 5%;
-  border-radius: 1%;
+  margin-top: 6.5%;
+  border-radius: 1%; 
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  font-family: 'Monsterrat', sans-serif;
+  font-family: "Monsterrat";
 }
 
 #regUsername, #regPassword, #regEmail {

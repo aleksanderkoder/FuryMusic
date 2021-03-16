@@ -62,14 +62,13 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: black;
-  margin-top: 60px;
+  /* margin-top: 60px; */
   position: absolute;
   background-color: black;
   top: 0;
   left: 0;
   right: 0;
-  width: 100%;
-  height: 100%; 
+  bottom: 0;  
   margin: auto;
   background: url(/src/assets/wolfgang-hasselmann-opti.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -79,16 +78,9 @@ export default {
 }
 
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* background: url(/src/assets/bak.jpg) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover; */
   background-color: black;
   font-family: "Wals";
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 input:focus {
