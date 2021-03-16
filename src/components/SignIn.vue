@@ -261,6 +261,7 @@ export default {
 }
 
 button {
+  outline: none;
   cursor: pointer;
 }
 

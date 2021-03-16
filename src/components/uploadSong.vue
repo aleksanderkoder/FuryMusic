@@ -29,28 +29,31 @@ export default {
     }
   },
   methods: {
-    uploadSong() {
+    uploadSong () {
       let fd = new FormData()
       let files = document.getElementById("fileSong").files[0]
-      fd.append("songName",this.songName)
-      fd.append("songArtist",this.songArtist)
-      fd.append("songAlbum",this.songAlbum)
-      fd.append("file",files)
+      alert(files)
+      fd.append("songName", this.songName)
+      fd.append("songArtist", this.songArtist)
+      fd.append("songAlbum", this.songAlbum)
+      fd.append("file", files)
       alert(fd.get("songArtist"))
 
-      $.ajax({
-        url: this.apiURL + "uploadSong.php",
-        type: 'POST',
-        cache: false,
-        async: true,
-        data: fd,
-        success: function (data) {
-            alert(data)
-        },
-        error: function () {
-
-        }
-      })
+      $.ajax(
+          {
+            type: "POST",
+            url: this.apiURL + "uploadSong.php",
+            dataType: "json",
+            cache: false,
+            async: true,
+            success:function (data) {
+                console.log(data)
+                
+              },
+              error:function(er){
+                console.log(er)
+              }
+          })
     },
     cancel () {
       this.$emit("hideUploadSongComponent")
@@ -139,8 +142,7 @@ export default {
 input[type="text"] {
   border: none;
   margin: auto;
-  margin-top: 15px;
-  margin-right: 33px;
+  margin-top: 20px;
   width: 155px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; 
   height: 30px;
@@ -154,6 +156,7 @@ input[type="file"] {
 }
 
 button {
+  outline: none; 
   cursor: pointer;
 }
 

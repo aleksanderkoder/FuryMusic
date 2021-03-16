@@ -25,7 +25,7 @@
 
       <h3>Playlists</h3>
       
-      <button id="btnUploadSong">
+      <button id="btnUploadSong" v-on:click="showUploadSong = true">
         <font-awesome-icon style="color: grey" :icon="['fas', 'plus']" />
         Upload song
       </button>
@@ -101,24 +101,30 @@
       <span id="songLoaderProgress"></span>
     </div>
 
-      <div id="divPlayerMinimize" v-on:click="minimizePlayer()" class="animate__animated animate__flipInY">
-        <span id="spanPlayerMinimize">Minimize</span>
-        <font-awesome-icon :icon="['fas', 'sort-down']" />
-      </div>
+    <div id="divPlayerMinimize" v-on:click="minimizePlayer()" class="animate__animated animate__flipInY">
+      <span id="spanPlayerMinimize">Minimize</span>
+      <font-awesome-icon :icon="['fas', 'sort-down']" />
+    </div>
 
-      <UploadBackImg v-show="showCustomBackImg" 
-      @hideCustomBackgroundImageComponent="showCustomBackImg = false" />
+    <UploadBackImg v-show="showCustomBackImg" 
+    @hideCustomBackgroundImageComponent="showCustomBackImg = false"/>
+
+    <UploadSong v-show="showUploadSong" @hideUploadSongComponent="showUploadSong = false"/>
+
     
 </div>
 </template>
 
 <script>
 import UploadBackImg from "./UploadBackImg.vue"
+import UploadSong from "./UploadSong.vue"
+
 
 export default {
   name: 'Player',
   components: {
-    UploadBackImg
+    UploadBackImg, 
+    UploadSong
   },
   props: {
     loggedIn: {
@@ -136,6 +142,7 @@ export default {
       currentArtistName: "",
       showCustomBackImg: false,
       uploadImgLabel: false,
+      showUploadSong: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
@@ -147,7 +154,7 @@ export default {
       if (mode == "play")
       {
         this.wavesurfer.play()
-        document.title = 'Playing "' + this.currentSongName + '" by ' + this.currentArtistName
+        document.title = "Playing " + this.currentSongName + " by " + this.currentArtistName
         document.getElementById("divPlay").style.display = "none"
         document.getElementById("divPause").style.display = "block"
         document.getElementById("play" + this.currentSongID).style.display = "none"
@@ -182,7 +189,7 @@ export default {
       else if (this.currentSongID == SongID)
       {
           this.wavesurfer.play()
-          document.title = 'Playing "' + this.currentSongName + '" by ' + this.currentArtistName
+          document.title = "Playing " + this.currentSongName + " by " + this.currentArtistName
           document.getElementById("pause" + SongID).style.display = "block"
           document.getElementById("play" + SongID).style.display = "none"
           document.getElementById("divPlay").style.display = "none"
@@ -427,7 +434,7 @@ export default {
 
 #logo {
   position: absolute;
-  left: 42.5px;
+  left: 45px;
 }
 
 #divSidebarCurrentSongInfo {
@@ -640,6 +647,7 @@ export default {
 }
 
 button {
+  outline: none;
   cursor: pointer; 
 }
 

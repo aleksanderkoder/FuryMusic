@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <UploadSong v-show="true"/>
     <SignIn v-show="this.$store.state.showLogIn" @fetchSongsGrant="fetchSongsGrant"/>
     <SignUp v-show="this.$store.state.showRegUser"/>
     <Player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn"/>
@@ -11,15 +10,13 @@
 import SignIn from "./components/SignIn.vue"
 import SignUp from "./components/SignUp.vue"
 import Player from "./components/Player.vue"
-import UploadSong from "./components/UploadSong.vue"
 
 export default {
   name: 'app',
   components: {
     SignIn, 
     SignUp, 
-    Player, 
-    UploadSong
+    Player
   },
   data () {
     return {
