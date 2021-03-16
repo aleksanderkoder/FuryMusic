@@ -147,6 +147,7 @@ export default {
       if (mode == "play")
       {
         this.wavesurfer.play()
+        document.title = 'Playing "' + this.currentSongName + '" by ' + this.currentArtistName
         document.getElementById("divPlay").style.display = "none"
         document.getElementById("divPause").style.display = "block"
         document.getElementById("play" + this.currentSongID).style.display = "none"
@@ -155,6 +156,7 @@ export default {
       else
       {
         this.wavesurfer.pause()
+        document.title = "Paused"
         document.getElementById("divPause").style.display = "none"
         document.getElementById("divPlay").style.display = "block"
         document.getElementById("pause" + this.currentSongID).style.display = "none"
@@ -180,6 +182,7 @@ export default {
       else if (this.currentSongID == SongID)
       {
           this.wavesurfer.play()
+          document.title = 'Playing "' + this.currentSongName + '" by ' + this.currentArtistName
           document.getElementById("pause" + SongID).style.display = "block"
           document.getElementById("play" + SongID).style.display = "none"
           document.getElementById("divPlay").style.display = "none"
@@ -189,6 +192,7 @@ export default {
       // If a song has been selected before, but it's not the same song
       else
       {
+        document.title = "Fury Music"
         document.getElementById("play" + this.currentSongID).style.display = "block"
         document.getElementById("pause" + this.currentSongID).style.display = "none"
         document.getElementById("divPlay").style.display = "block"
@@ -206,6 +210,7 @@ export default {
       document.getElementById("pause" + SongID).style.display = "none"
       document.getElementById("divPlay").style.display = "block"
       document.getElementById("divPause").style.display = "none"
+      document.title = "Paused"
       
     },
     populateSongList (songs) {
@@ -281,34 +286,34 @@ export default {
         fillParent: true,
       })
 
-    // Prepares event for when song finishes
-    this.wavesurfer.on('finish', function () {
-          document.getElementById("play" + self.currentSongID).style.display = "block"
-          document.getElementById("pause" + self.currentSongID).style.display = "none"
-          document.getElementById("divPlay").style.display = "block"
-          document.getElementById("divPause").style.display = "none"
-        })
+      // Prepares event for when song finishes
+      this.wavesurfer.on('finish', function () {
+        document.title = "Fury Music"
+        document.getElementById("play" + self.currentSongID).style.display = "block"
+        document.getElementById("pause" + self.currentSongID).style.display = "none"
+        document.getElementById("divPlay").style.display = "block"
+        document.getElementById("divPause").style.display = "none"
+      })
 
-    this.wavesurfer.on('loading', function (progress) {
-          console.log("Loading progress: " + progress)
-          
-          if (progress < 100)
-          {
-            document.getElementById("songLoader").style.display = "block"
-            document.getElementById("songLoaderProgress").innerHTML = progress + "%"
+      this.wavesurfer.on('loading', function (progress) {
+        console.log("Loading progress: " + progress)
             
-          }
-          else
-          {
-            document.getElementById("songLoader").style.display = "none"
-          }
+        if (progress < 100)
+        {
+          document.getElementById("songLoader").style.display = "block"
+          document.getElementById("songLoaderProgress").innerHTML = progress + "%" 
+        }
+        else
+        {
+          document.getElementById("songLoader").style.display = "none"
+        }
 
-        })
+      })
 
-    // Controls volume slider
-    let volumeSlider = document.getElementById("wavesurferVolume")
-    volumeSlider.oninput = function() {
-        self.wavesurfer.setVolume(volumeSlider.value / 100)
+      // Controls volume slider
+      let volumeSlider = document.getElementById("wavesurferVolume")
+      volumeSlider.oninput = function() {
+          self.wavesurfer.setVolume(volumeSlider.value / 100)
       }
 
     }
@@ -465,7 +470,7 @@ export default {
   color: white; 
   font-size: 40px;
   bottom: 40px; 
-  margin-left: 49%; 
+  margin-left: 48.5%; 
 }
 
 #songLoaderProgress {
