@@ -51,30 +51,31 @@ export default {
       document.getElementById("pSelected").innerHTML = "Selected: " + song.name
     },
     uploadSong () {
-      let fd = new FormData()
+      var fd = new FormData()
       let files = document.getElementById("fileSong").files[0]
       alert(files)
       fd.append("songName", this.songName)
       fd.append("songArtist", this.songArtist)
       fd.append("songAlbum", this.songAlbum)
       fd.append("file", files)
-      alert(fd.get("songArtist"))
 
-      $.ajax(
+      $.ajax({
+        url: this.apiURL + "uploadSong.php",
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (data){
+          if (data.status == 1)
           {
-            type: "POST",
-            url: this.apiURL + "uploadSong.php",
-            dataType: "json",
-            cache: false,
-            async: true,
-            success:function (data) {
-                console.log(data)
-                
-              },
-              error:function(er){
-                console.log(er)
-              }
-          })
+            Ozone.fire("success", data.message, "bottom-middle")
+          }
+          else
+          {
+            Ozone.fire("error", data.message, "bottom-middle")
+          }
+        }
+      })
     },
     cancel () {
       this.$emit("hideUploadSongComponent")

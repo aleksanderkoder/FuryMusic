@@ -53,7 +53,7 @@ export default {
           type:"POST",
           url: this.apiURL + "userLogIn.php",
           dataType: "json",
-          data:{username:this.username,password:this.password},
+          data:{username: this.username, password: this.password},
           cache:false,
           async: true,
           success: function (data) {
