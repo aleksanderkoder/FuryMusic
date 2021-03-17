@@ -67,7 +67,7 @@ export default {
   right: 0;
   bottom: 0;  
   margin: auto;
-  background: url(/src/assets/wolfgang-hasselmann-opti.jpg) no-repeat center center fixed; 
+  background: url(/src/assets/default_background.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

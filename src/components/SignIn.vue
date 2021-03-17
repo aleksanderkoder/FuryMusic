@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     logIn() {
-      let self = this;
+      let self = this
       document.getElementById("loadingSpinner").style.display = "block"
       document.getElementById("btnLogIn").style.display = "none"
       document.getElementById("btnGoToSignUp").style.display = "none"
@@ -95,6 +95,7 @@ export default {
               document.getElementById("loadingSpinner").style.display = "none"
               document.getElementById("btnLogIn").style.display = "block"
               document.getElementById("btnGoToSignUp").style.display = "block"
+              Ozone.fire("error","Server offline","top-right")
             }
           })
       }
@@ -210,7 +211,7 @@ export default {
   text-decoration: none;
   border: none;
   height: 35px;
-  min-width: 35%;
+  width: 140px;
   border-radius: 4px;
   font-family: "Wals";
   transition: 0.3s; 
@@ -227,7 +228,7 @@ export default {
   text-decoration: none;
   border: none;
   height: 35px;
-  min-width: 35%;
+  width: 140px;
   border-radius: 4px;
   font-family: "Wals";
   transition: 0.3s; 

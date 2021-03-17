@@ -4,12 +4,18 @@
         <label for="fileSong" id="btnChooseSong">
           Select song 
         </label>
-        <input id="fileSong" type="file" accept=".mp3" v-on:change="showForm = true">
+        <input id="fileSong" type="file" accept=".mp3" v-on:change="showSongForm()">
         <br>
         <div v-show="showForm">
+          <p id="pSelected"></p>
           <input type="text" placeholder="Song name" v-model="songName">
+          <br>
+          
           <input type="text" placeholder="Artist name" v-model="songArtist">
+          <br>
+          
           <input type="text" placeholder="Album name" v-model="songAlbum">
+          <br>
           <button id="btnConfirmUpload" v-on:click="uploadSong()">Upload</button>
         </div>
         <button id="btnCancel" v-on:click="cancel()">Cancel</button>
@@ -29,6 +35,21 @@ export default {
     }
   },
   methods: {
+    showSongForm () {
+      this.showForm = true
+      let song = document.getElementById("fileSong").files[0]
+      let reader = new FileReader()
+      var audio = document.createElement("audio") 
+      reader.readAsDataURL(song)
+      reader.addEventListener("loadend", function () {
+        audio.src = reader.result
+        audio.addEventListener("loadedmetadata", function () {
+          alert(audio.duration) 
+        })
+          
+      })
+      document.getElementById("pSelected").innerHTML = "Selected: " + song.name
+    },
     uploadSong () {
       let fd = new FormData()
       let files = document.getElementById("fileSong").files[0]
@@ -81,7 +102,8 @@ export default {
 
 #btnConfirmUpload, #btnChooseSong {
   margin: 20px;
-  background-color:#3c3e41af;
+  background-color: black;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: white;
   text-decoration: none;
   border: none;
@@ -89,8 +111,8 @@ export default {
   border-radius: 4px;
   font-family: "Wals";
   padding: 10px;
-  transition: 0.3s; 
   cursor: pointer;
+  transition: 0.3s; 
 }
 
 #btnChooseSong:hover {
@@ -99,7 +121,7 @@ export default {
 }
 
 #btnConfirmUpload:hover {
-  background-color: #107421;
+  background-color: #2a8638;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
@@ -107,6 +129,7 @@ export default {
   bottom: 10px;
   margin: 20px;
   background-color:#8b0000;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: white;
   text-decoration: none;
   border: none;
@@ -130,7 +153,7 @@ export default {
   left: 0;
   right: 0;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.85); 
+  background-color: white; 
   margin-top: 8%;
   border-radius: 1%; 
   padding: 20px;
@@ -142,13 +165,13 @@ export default {
 input[type="text"] {
   border: none;
   margin: auto;
-  margin-top: 20px;
+  margin-top: 25px;
   width: 155px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; 
   height: 30px;
   font-family: "Wals";
   border-radius: 3px;
-  display: block; 
+  display: inline-block; 
 }
 
 input[type="file"] {
@@ -160,9 +183,14 @@ button {
   cursor: pointer;
 }
 
+p {
+  margin-top: 40px; 
+}
+
 h1, h2 {
   font-weight: normal;
-  color: white;
+  color: black;
+  margin-bottom: 45px; 
 }
 
 ul {

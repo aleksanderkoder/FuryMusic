@@ -169,7 +169,7 @@ export default {
   text-decoration: none;
   border: none;
   height: 35px;
-  min-width: 35%;
+  width: 140px;
   border-radius: 4px;
   font-family: 'Wals';
   transition: 0.3s; 
@@ -198,7 +198,7 @@ export default {
   text-decoration: none;
   border: none;
   height: 35px;
-  min-width: 35%;
+  width: 140px;
   border-radius: 4px;
   font-family: "Wals";
   transition: 0.3s; 
