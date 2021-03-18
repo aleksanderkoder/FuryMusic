@@ -90,8 +90,8 @@ export default {
               self.username = ""
               self.password = ""
             },
-            error:function(er){
-              console.log(er)
+            error: function (error){
+              console.log(error)
               document.getElementById("loadingSpinner").style.display = "none"
               document.getElementById("btnLogIn").style.display = "block"
               document.getElementById("btnGoToSignUp").style.display = "block"

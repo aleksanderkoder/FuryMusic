@@ -31,6 +31,7 @@
       </button>
 
       <div id="divSidebarCurrentSongInfo" v-if="currentSongName != ''" class="animate__animated animate__fadeInLeft">
+         <!-- Song cover image here maybe?  -->
         <p style="font-weight: bold">{{currentSongName}}</p>
         <p>{{currentArtistName}}</p>
       </div>
@@ -50,6 +51,9 @@
                <td class="tableSongsHeaderLength">
                 <span>Length</span>
               </td> 
+              <td class="tableSongsHeaderAlbum">
+                <span>Album</span>
+              </td> 
             </tr>
           </table>
         </div>
@@ -57,7 +61,7 @@
           <table class="tableSongs">
             <tr>
               <td class="tableSongsTdPlay">
-                <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName)" style="color: black; cursor: pointer;" :icon="['fas', 'play']" />
+                <font-awesome-icon v-bind:id="'play' + song.SongID" v-on:click="playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName, song.Length, song.Album)" style="color: black; cursor: pointer;" :icon="['fas', 'play']" />
                 <font-awesome-icon v-bind:id="'pause' + song.SongID" v-on:click="pauseSong(song.SongID)" style="color: black; cursor: pointer; display: none" :icon="['fas', 'pause']" />
               </td>
               <td class="tableSongsTdSongName">
@@ -66,8 +70,11 @@
               <td class="tableSongsTdArtistName">
                 {{song.ArtistName}}
               </td>
-               <td class="tableSongsTdSongLength"> <!-- TODO: add song length -->
+              <td class="tableSongsTdSongLength">
                 {{song.Length}}
+              </td>
+              <td class="tableSongsTdSongAlbum">
+                {{song.Album}}
               </td>
             </tr>
           </table>
@@ -136,10 +143,11 @@ export default {
     return {
       wavesurfer: null,
       songs: [],
-      currentSong: null, // Not used for now
       currentSongID: "",
       currentSongName: "",
       currentArtistName: "",
+      currentSongAlbum: "",
+      currentSongLength: 0,
       showCustomBackImg: false,
       uploadImgLabel: false,
       showUploadSong: false,
@@ -170,7 +178,7 @@ export default {
         document.getElementById("play" + this.currentSongID).style.display = "block"
       }
     },
-    playSong (SongURL, SongID, SongName, ArtistName) {
+    playSong (SongURL, SongID, SongName, ArtistName, Length, Album) {
       document.getElementById("divPlayerControls").style.display = "block"
       setTimeout( function () {
         document.getElementById("divPlayerMinimize").style.display = "block"
@@ -182,6 +190,8 @@ export default {
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
         this.currentSongID = SongID
+        this.currentSongAlbum = Album
+        this.currentSongLength = Length
         this.wavesurfer.load(SongURL)
         //alert("first")
       }
@@ -207,6 +217,8 @@ export default {
         this.currentSongID = SongID
         this.currentSongName = SongName
         this.currentArtistName = ArtistName
+        this.currentSongAlbum = Album
+        this.currentSongLength = Length
         this.wavesurfer.load(SongURL)
         //alert("new")
       }
@@ -221,10 +233,10 @@ export default {
       
     },
     populateSongList (songs) {
-      for (var i = 0; i < songs.length; i+=4) 
+      for (var i = 0; i < songs.length; i+=5) 
       {
           this.songs.push({SongID: songs[i], ArtistName: songs[i+1], SongName: songs[i+2]
-            , SongURL: songs[i+3]})
+            , SongURL: songs[i+3], Length: songs[i+4], Album: songs[i+5]})
       } 
     },
     waveformInteraction () {
@@ -265,7 +277,7 @@ export default {
             async: true,
             success:function (data) {
                 console.log(data)
-                if (data != "Error occurred when fetching all songs")
+                if (data != "Error")
                 {
                   self.populateSongList(data)
                 }
@@ -370,18 +382,22 @@ export default {
 }
 
 .tableSongsTdPlay {
-  width: 50px;
+  width: 15px;
 }
 
 .tableSongsTdSongName {
-  width: 500px; 
-}
-
-.tableSongsTdArtistName {
   width: 150px; 
 }
 
+.tableSongsTdArtistName {
+  width: 100px; 
+}
+
 .tableSongsTdSongLength {
+  width: 50px;
+}
+
+.tableSongsTdSongAlbum {
   width: 50px;
 }
 
@@ -398,24 +414,30 @@ export default {
 }
 
 .tableSongsHeaderTitle {
-  padding-left: 75px;
+  padding-left: 80px;
   width: 500px;
 }
 
 .tableSongsHeaderLength {
+  padding-left: 205px;
   width: 50px; 
 }
 
 .tableSongsHeaderArtist {
   width: 150px; 
-  padding-left: 55px; 
+  padding-left: 35px; 
+}
+
+.tableSongsHeaderAlbum {
+  width: 150px; 
+  padding-left: 80px; 
 }
 
 #divSongPane {
   background-color: white; 
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 10px;
-  width: 850px;
+  width: 1150px;
   margin-top: 15px;
   margin-left: 15px; 
 }

@@ -1,24 +1,24 @@
 <template>
     <div class="animate__animated animate__fadeInDownBig" id="divUploadSongWrapper">
         <h1>Upload song</h1>
-        <label for="fileSong" id="btnChooseSong">
-          Select song 
-        </label>
-        <input id="fileSong" type="file" accept=".mp3" v-on:change="showSongForm()">
-        <br>
-        <div v-show="showForm">
-          <p id="pSelected"></p>
-          <input type="text" placeholder="Song name" v-model="songName">
+        <form onSubmit="return false">
+          <label for="fileSong" id="btnChooseSong">
+            Select song 
+          </label>
+          <input id="fileSong" type="file" accept=".mp3" v-on:change="showSongForm()">
           <br>
-          
-          <input type="text" placeholder="Artist name" v-model="songArtist">
-          <br>
-          
-          <input type="text" placeholder="Album name" v-model="songAlbum">
-          <br>
-          <button id="btnConfirmUpload" v-on:click="uploadSong()">Upload</button>
-        </div>
-        <button id="btnCancel" v-on:click="cancel()">Cancel</button>
+          <div v-show="showForm">
+            <p id="pSelected"></p>
+            <input type="text" placeholder="Song name" v-model="songName">
+            <br>
+            <input type="text" placeholder="Artist name" v-model="songArtist">
+            <br>
+            <input type="text" placeholder="Album name" v-model="songAlbum">
+            <br>
+            <button id="btnConfirmUpload" type="submit" v-on:click="uploadSong()">Upload</button>
+          </div>
+          <button id="btnCancel" v-on:click="cancel()">Cancel</button>
+        </form>
     </div>
 </template>
 
@@ -30,33 +30,43 @@ export default {
       songName: "",
       songArtist: "",
       songAlbum: "",
+      songDuration: 0,
       showForm: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     }
   },
   methods: {
     showSongForm () {
-      this.showForm = true
+      let self = this
       let song = document.getElementById("fileSong").files[0]
-      let reader = new FileReader()
-      var audio = document.createElement("audio") 
-      reader.readAsDataURL(song)
-      reader.addEventListener("loadend", function () {
-        audio.src = reader.result
-        audio.addEventListener("loadedmetadata", function () {
-          alert(audio.duration) 
+      if (song.type == "audio/mpeg")
+      {
+        let reader = new FileReader()
+        var audio = document.createElement("audio") 
+        reader.readAsDataURL(song)
+        reader.addEventListener("loadend", function () {
+          audio.src = reader.result
+          audio.addEventListener("loadedmetadata", function () {
+            self.songDuration = audio.duration
+          })
         })
-          
-      })
-      document.getElementById("pSelected").innerHTML = "Selected: " + song.name
+        document.getElementById("pSelected").innerHTML = song.name
+        this.showForm = true
+      }
+      else
+      {
+        Ozone.fire("info","Only mp3 files can be uploaded","bottom-middle")
+      }
     },
     uploadSong () {
-      var fd = new FormData()
+      let self = this
+      let fd = new FormData()
       let files = document.getElementById("fileSong").files[0]
-      alert(files)
+
       fd.append("songName", this.songName)
       fd.append("songArtist", this.songArtist)
       fd.append("songAlbum", this.songAlbum)
+      fd.append("songLength", this.songDuration)
       fd.append("file", files)
 
       $.ajax({
@@ -66,13 +76,15 @@ export default {
         contentType: false,
         type: 'POST',
         success: function (data){
-          if (data.status == 1)
+          let response = JSON.parse(data)
+          if (response.status == 1)
           {
-            Ozone.fire("success", data.message, "bottom-middle")
+            Ozone.fire("success", response.message, "top-right")
+            self.$emit("hideUploadSongComponent")
           }
           else
           {
-            Ozone.fire("error", data.message, "bottom-middle")
+            Ozone.fire("error", response.message, "bottom-middle")
           }
         }
       })
@@ -155,7 +167,7 @@ export default {
   right: 0;
   text-align: center;
   background-color: white; 
-  margin-top: 8%;
+  margin-top: 10%;
   border-radius: 1%; 
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

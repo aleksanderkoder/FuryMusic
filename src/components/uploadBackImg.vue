@@ -48,7 +48,7 @@ export default {
       reader.addEventListener("loadend", function () {
       try {
           localStorage.setItem("custom_background_image", reader.result)
-          Ozone.fire("info", "Background image changed, please refresh!", "bottom-middle")
+          Ozone.fire("info", "Background image changed, please refresh", "bottom-middle")
           URL.revokeObjectURL(this.objectURL)
           document.getElementById("imageShowcase").src = ""
           self.showConfirm = false
@@ -63,7 +63,7 @@ export default {
     revertToDefault () {
       localStorage.removeItem("custom_background_image")
       document.getElementById("imageShowcase").src = ""
-      Ozone.fire("info", "Background image has been reverted to default!", "bottom-middle")
+      Ozone.fire("info", "Background image has been reverted to default, please refresh", "bottom-middle")
       this.$emit("hideCustomBackgroundImageComponent")
     }, 
     cancel () {
@@ -161,7 +161,7 @@ export default {
   right: 0;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.85); 
-  margin-top: 8%;
+  margin-top: 10%;
   border-radius: 1%; 
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
