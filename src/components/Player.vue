@@ -233,7 +233,7 @@ export default {
       
     },
     populateSongList (songs) {
-      for (var i = 0; i < songs.length; i+=5) 
+      for (var i = 0; i < songs.length; i+=6) 
       {
           this.songs.push({SongID: songs[i], ArtistName: songs[i+1], SongName: songs[i+2]
             , SongURL: songs[i+3], Length: songs[i+4], Album: songs[i+5]})
@@ -386,11 +386,13 @@ export default {
 }
 
 .tableSongsTdSongName {
-  width: 150px; 
+  width: 80px;
+  padding-right: 70px; 
 }
 
 .tableSongsTdArtistName {
-  width: 100px; 
+  width: 80px;
+  padding-right: 70px; 
 }
 
 .tableSongsTdSongLength {
@@ -409,17 +411,16 @@ export default {
 }
 
 .tableSongsHeader {
-  /* width: 100%; */
   text-align: left; 
 }
 
 .tableSongsHeaderTitle {
-  padding-left: 80px;
-  width: 500px;
+  padding-left: 60px;
+  width: 348px;
 }
 
 .tableSongsHeaderLength {
-  padding-left: 205px;
+  padding-left: 200px;
   width: 50px; 
 }
 
@@ -430,7 +431,7 @@ export default {
 
 .tableSongsHeaderAlbum {
   width: 150px; 
-  padding-left: 80px; 
+  padding-left: 75px; 
 }
 
 #divSongPane {
