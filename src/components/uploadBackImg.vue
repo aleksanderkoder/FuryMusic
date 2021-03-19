@@ -3,6 +3,11 @@
     class="animate__animated animate__fadeInDownBig"
     id="divCustomBackImgWrapper"
   >
+    <font-awesome-icon
+      style="color: #8b0000; font-size: 25px; position: absolute; right: 25px; top: 15px; cursor: pointer;"
+      :icon="['fas', 'times']"
+      v-on:click="cancel()"
+    />
     <h1>Upload custom background image</h1>
     <label for="file" id="btnChooseImage"> Select image </label>
     <input
@@ -19,7 +24,6 @@
         Use this image
       </button>
     </div>
-    <button id="btnCancel" v-on:click="cancel()">Cancel</button>
     <button id="btnRevert" v-on:click="revertToDefault()">
       Revert to default
     </button>
@@ -142,25 +146,6 @@ export default {
   border: none;
   background-color: transparent;
   color: white;
-}
-
-#btnCancel {
-  bottom: 10px;
-  margin: 20px;
-  background-color: #8b0000;
-  color: white;
-  text-decoration: none;
-  border: none;
-  height: 35px;
-  border-radius: 4px;
-  font-family: "Wals";
-  padding: 10px;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-#btnCancel:hover {
-  background-color: #741010;
 }
 
 #btnRevert:hover {

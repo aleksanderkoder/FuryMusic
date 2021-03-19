@@ -3,6 +3,11 @@
     class="animate__animated animate__fadeInDownBig"
     id="divUploadSongWrapper"
   >
+    <font-awesome-icon
+        style="color: #8b0000; font-size: 25px; position: absolute; right: 25px; top: 15px; cursor: pointer;"
+        :icon="['fas', 'times']"
+        v-on:click="cancel()"
+      />
     <h1>Upload song</h1>
     <form onSubmit="return false">
       <label for="fileSong" id="btnChooseSong"> Select song </label>
@@ -21,12 +26,12 @@
         <br />
         <input type="text" placeholder="Album name" v-model="songAlbum" />
         <br />
-        <button id="btnConfirmUpload" type="submit" v-on:click="uploadSong()">
+        <button id="btnConfirmUploadUS" type="submit" v-on:click="uploadSong()">
           Upload
         </button>
       </div>
-      <button id="btnCancel" v-on:click="cancel()">Cancel</button>
     </form>
+    <font-awesome-icon id="loadingSpinnerUS" :icon="['fas', 'spinner']" spin />
   </div>
 </template>
 
@@ -60,11 +65,13 @@ export default {
         document.getElementById("pSelected").innerHTML = song.name;
         this.showForm = true;
       } else {
-        Ozone.fire("info", "Only mp3 files can be uploaded", "bottom-middle");
+        Ozone.fire("info", "Only mp3 files can be uploaded", "center");
       }
     },
     uploadSong() {
       let self = this;
+      document.getElementById("loadingSpinnerUS").style.display = "block";
+      document.getElementById("btnConfirmUploadUS").style.display = "none";
       let fd = new FormData();
       let files = document.getElementById("fileSong").files[0];
 
@@ -81,14 +88,20 @@ export default {
         contentType: false,
         type: "POST",
         success: function (data) {
+          document.getElementById("loadingSpinnerUS").style.display = "none";
+          document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
           let response = JSON.parse(data);
           if (response.status == 1) {
-            Ozone.fire("success", response.message, "top-right");
+            Ozone.fire("success", response.message, "center");
             self.$emit("hideUploadSongComponent");
           } else {
-            Ozone.fire("error", response.message, "bottom-middle");
+            Ozone.fire("error", response.message, "center");
           }
-        },
+        },error: function (error) {
+          document.getElementById("loadingSpinnerUS").style.display = "none";
+          document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
+          Ozone.fire("error", "Server out of reach", "center");
+        }
       });
     },
     cancel() {
@@ -114,7 +127,7 @@ export default {
   src: url(/src/assets/fonts/Yellowtail-Regular.ttf);
 }
 
-#btnConfirmUpload,
+#btnConfirmUploadUS,
 #btnChooseSong {
   margin: 20px;
   background-color: black;
@@ -135,29 +148,9 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-#btnConfirmUpload:hover {
+#btnConfirmUploadUS:hover {
   background-color: #2a8638;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-#btnCancel {
-  bottom: 10px;
-  margin: 20px;
-  background-color: #8b0000;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: white;
-  text-decoration: none;
-  border: none;
-  height: 35px;
-  border-radius: 4px;
-  font-family: "Wals";
-  padding: 10px;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-#btnCancel:hover {
-  background-color: #741010;
 }
 
 #divUploadSongWrapper {
@@ -175,6 +168,13 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Wals";
   z-index: 9999;
+}
+
+#loadingSpinnerUS {
+  display: none;   
+  font-size: 40px; 
+  margin: auto;
+  margin-top: 30px; 
 }
 
 input[type="text"] {

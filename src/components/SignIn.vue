@@ -2,8 +2,9 @@
   <div>
     <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
       <img
+        id="logo"
         width="250"
-        class="animate__animated animate__pulse animate__slow animate__infinite"
+        class="animate__animated animate__jackInTheBox animate__slow"
         src="/src/assets/fury music logo ferdig.png"
       />
       <br />
@@ -35,8 +36,6 @@
       </form>
       <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
       <br />
-      <!-- <input id="checkRememberMe" type="checkbox" v-model="rememberMe">  LIKER JEG DETTE???? HMMMMMMM
-      <label for="checkRememberMe" style="font-size: 13px">Stay signed in</label> -->
       <br />
       <font-awesome-icon id="loadingSpinner" :icon="['fas', 'spinner']" spin />
       <a href="">Forgot password?</a>
@@ -54,7 +53,6 @@ export default {
     return {
       username: "",
       password: "",
-      rememberMe: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/",
     };
   },
@@ -114,8 +112,8 @@ export default {
             document.getElementById("loadingSpinner").style.display = "none";
             document.getElementById("btnLogIn").style.display = "block";
             document.getElementById("btnGoToSignUp").style.display = "block";
-            Ozone.fire("error", "Server offline", "top-right");
-          },
+            Ozone.fire("error", "Server out of reach", "top-right");
+          }
         });
       } else {
         document.getElementById("error").style.display = "block";
@@ -145,12 +143,18 @@ export default {
     },
   },
   mounted() {
-    // Checks if user information has been already entered, and logs user in if true otherwise
+    // Checks if user information has been already entered, and logs user in if true
     if (localStorage.getItem("username") && localStorage.getItem("password")) {
       this.username = localStorage.getItem("username");
       this.password = localStorage.getItem("password");
       this.logIn();
     }
+
+    // Logo start animation toggling
+    setTimeout(function () {
+      document.getElementById("logo").setAttribute("class","animate__animated animate__pulse animate__slow animate__infinite")
+    }, 2000); 
+    
   },
 };
 </script>

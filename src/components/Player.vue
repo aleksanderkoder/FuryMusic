@@ -85,9 +85,7 @@
           :key="song.SongID"
           class="animate__animated animate__fadeInRight"
         >
-          <table class="tableSongs">
-            <tr>
-              <td class="tableSongsTdPlay">
+              <div class="divSongsPlay">
                 <font-awesome-icon
                   v-bind:id="'play' + song.SongID"
                   v-on:click="
@@ -109,23 +107,21 @@
                   style="color: black; cursor: pointer; display: none"
                   :icon="['fas', 'pause']"
                 />
-              </td>
-              <td class="tableSongsTdSongName">
+              </div>
+              <div class="divSongsSongName">
                 {{ song.SongName }}
-              </td>
-              <td class="tableSongsTdArtistName">
+              </div>
+              <div class="divSongsArtistName">
                 {{ song.ArtistName }}
-              </td>
-              <td class="tableSongsTdSongLength">
+              </div>
+              <div class="divSongsSongLength">
                 {{ song.Length }}
-              </td>
-              <td class="tableSongsTdSongAlbum">
+              </div>
+              <div class="divSongsSongAlbum">
                 {{ song.Album }}
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+              </div>
+            </div>
+        </div>   
 
       <div
         id="customBackgroundImagePanel"
@@ -203,6 +199,7 @@
       @hideUploadSongComponent="showUploadSong = false"
     />
   </div>
+  
 </template>
 
 <script>
@@ -317,12 +314,15 @@ export default {
     },
     populateSongList(songs) {
       for (var i = 0; i < songs.length; i += 6) {
+        let minutes = parseInt(songs[i + 4] / 60); 
+        let seconds = parseInt(songs[i + 4] - minutes * 60); 
+
         this.songs.push({
           SongID: songs[i],
           ArtistName: songs[i + 1],
           SongName: songs[i + 2],
           SongURL: songs[i + 3],
-          Length: songs[i + 4],
+          Length: minutes + ":" + seconds,
           Album: songs[i + 5],
         });
       }
@@ -455,31 +455,24 @@ export default {
   height: 25px;
 }
 
-.tableSongs {
-  width: 100%;
-  text-align: left;
+.divSongsPlay {
+  flex: 0 0 45px;
 }
 
-.tableSongsTdPlay {
-  width: 15px;
+.divSongsSongName {
+  flex: 0 0 385px;
 }
 
-.tableSongsTdSongName {
-  width: 80px;
-  padding-right: 70px;
+.divSongsArtistName {
+  flex: 0 0 355px;
 }
 
-.tableSongsTdArtistName {
-  width: 80px;
-  padding-right: 70px;
+.divSongsSongLength {
+  flex: 0 0 125px;
 }
 
-.tableSongsTdSongLength {
-  width: 50px;
-}
-
-.tableSongsTdSongAlbum {
-  width: 50px;
+.divSongsSongAlbum {
+  flex: 0 0 240px;
 }
 
 #divCenterTableHeader {
@@ -514,6 +507,8 @@ export default {
 }
 
 #divSongPane {
+  display: flex; 
+  text-align: left;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 10px;
