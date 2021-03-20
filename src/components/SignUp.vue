@@ -68,7 +68,7 @@ export default {
       if (this.regExSignUp()) {
         $.ajax({
           type: "POST",
-          url: this.apiURL + "userRegister.php",
+          url: this.apiURL + "userSignUp.php",
           dataType: "json",
           data: {
             username: this.username,

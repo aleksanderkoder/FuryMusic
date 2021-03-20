@@ -67,7 +67,7 @@ export default {
       if (this.regExLogIn()) {
         $.ajax({
           type: "POST",
-          url: this.apiURL + "userLogIn.php",
+          url: this.apiURL + "userSignIn.php",
           dataType: "json",
           data: { username: this.username, password: this.password },
           cache: false,
