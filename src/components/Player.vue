@@ -3,7 +3,7 @@
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
       <img
         id="logo"
-        src="/src/assets/fury music logo round small.png"
+        src="../assets/fury music logo round small.png"
         width="80px"
       />
       <div id="divSearchSong">

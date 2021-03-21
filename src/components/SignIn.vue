@@ -5,7 +5,7 @@
         id="logo"
         width="250"
         class="animate__animated animate__jackInTheBox animate__slow"
-        src="/src/assets/fury music logo ferdig.png"
+        src="../assets/fury music logo ferdig.png"
       />
       <br />
       <h2 id="logInTittel">Sign in</h2>
@@ -162,17 +162,17 @@ export default {
 <style scoped>
 @font-face {
   font-family: "Monsterrat";
-  src: url(/src/assets/fonts/Montserrat-Medium.ttf);
+  src: url("/src/assets/Montserrat-Medium.ttf");
 }
 
 @font-face {
   font-family: "Wals";
-  src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
-}
+  src: url("/src/assets/fonts/GTWalsheimPro-Regular.ttf");
+} 
 
 @font-face {
   font-family: "Yellowtail";
-  src: url(/src/assets/fonts/Yellowtail-Regular.ttf);
+  src: url("/src/assets/fonts/Yellowtail-Regular.ttf");
 }
 
 #divLogInWrapper {

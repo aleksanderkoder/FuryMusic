@@ -2,7 +2,7 @@
   <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
     <img
       class="animate__animated animate__pulse animate__slow animate__infinite"
-      src="/src/assets/fury music logo ferdig.png"
+      src="../assets/fury music logo ferdig.png"
     />
     <br />
     <h2 id="regUserTittel">Sign up</h2>
