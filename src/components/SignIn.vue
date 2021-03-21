@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="pageWrapper">
     <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
       <img
         id="logo"
@@ -161,6 +161,15 @@ export default {
 
 <style scoped>
 
+#pageWrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+}
+
+
 #divLogInWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -170,7 +179,7 @@ export default {
   width: 400px;
   min-height: 670px;
   margin: auto;
-  margin-top: 6.5%;
+  /* margin-top: 6.5%; */
   border-radius: 1%;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

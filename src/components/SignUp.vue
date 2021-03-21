@@ -1,53 +1,55 @@
 <template>
-  <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
-    <img
-      class="animate__animated animate__pulse animate__slow animate__infinite"
-      src="../assets/fury music logo ferdig.png"
-    />
-    <br />
-    <h2 id="regUserTittel">Sign up</h2>
-    <form onSubmit="return false">
-      <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
-      <input
-        type="text"
-        v-model="username"
-        placeholder="Choose a username"
-        id="regUsername"
+  <div id="pageWrapper">
+    <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
+      <img
+        class="animate__animated animate__pulse animate__slow animate__infinite"
+        src="../assets/fury music logo ferdig.png"
       />
       <br />
-      <font-awesome-icon style="color: black" :icon="['fas', 'at']" />
-      <input
-        type="text"
-        v-model="email"
-        placeholder="Your email address"
-        id="regEmail"
-      />
-      <br />
-      <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
-      <input
-        type="password"
-        v-model="password"
-        placeholder="Choose a password"
-        id="regPassword"
-      />
-      <br />
-      <p
-        id="errors"
-        v-for="error in errors"
-        :key="error"
-        class="animate__animated animate__shakeX"
-      >
-        {{ error }}
-      </p>
-      <p id="error2" class="animate__animated animate__fadeInRight"></p>
-      <input
-        type="submit"
-        v-on:click="registerUser()"
-        value="Sign up"
-        id="btnRegUser"
-      />
-    </form>
-    <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>
+      <h2 id="regUserTittel">Sign up</h2>
+      <form onSubmit="return false">
+        <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
+        <input
+          type="text"
+          v-model="username"
+          placeholder="Choose a username"
+          id="regUsername"
+        />
+        <br />
+        <font-awesome-icon style="color: black" :icon="['fas', 'at']" />
+        <input
+          type="text"
+          v-model="email"
+          placeholder="Your email address"
+          id="regEmail"
+        />
+        <br />
+        <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
+        <input
+          type="password"
+          v-model="password"
+          placeholder="Choose a password"
+          id="regPassword"
+        />
+        <br />
+        <p
+          id="errors"
+          v-for="error in errors"
+          :key="error"
+          class="animate__animated animate__shakeX"
+        >
+          {{ error }}
+        </p>
+        <p id="error2" class="animate__animated animate__fadeInRight"></p>
+        <input
+          type="submit"
+          v-on:click="registerUser()"
+          value="Sign up"
+          id="btnRegUser"
+        />
+      </form>
+      <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>
+    </div>
   </div>
 </template>
 
@@ -139,6 +141,13 @@ export default {
 
 <style scoped>
 
+#pageWrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 #divSignUpWrapper {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -148,7 +157,6 @@ export default {
   width: 400px;
   min-height: 670px;
   margin: auto;
-  margin-top: 6.5%;
   border-radius: 1%;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
