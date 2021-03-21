@@ -68,7 +68,7 @@ export default {
   right: 0;
   bottom: 0;
   margin: auto;
-  background: url(src/assets/default_background.jpg) no-repeat center center
+  background: url("./assets/default_background.jpg") no-repeat center center
     fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -105,4 +105,20 @@ li {
 a {
   color: #42b983;
 }
+
+@font-face {
+  font-family: "Yellowtail";
+  src: url(/src/assets/fonts/Yellowtail-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Monsterrat";
+  src: url(/src/assets/fonts/Montserrat-Medium.ttf);
+}
+
+@font-face {
+  font-family: "Wals";
+  src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
+}
+
 </style>

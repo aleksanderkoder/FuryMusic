@@ -138,15 +138,6 @@ export default {
 </script>
 
 <style scoped>
-@font-face {
-  font-family: "Monsterrat";
-  src: url(/src/assets/fonts/Montserrat-Medium.ttf);
-}
-
-@font-face {
-  font-family: "Wals";
-  src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
-}
 
 #divSignUpWrapper {
   -webkit-font-smoothing: antialiased;

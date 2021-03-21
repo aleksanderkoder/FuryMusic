@@ -160,20 +160,6 @@ export default {
 </script>
 
 <style scoped>
-@font-face {
-  font-family: "Monsterrat";
-  src: url("/src/assets/Montserrat-Medium.ttf");
-}
-
-@font-face {
-  font-family: "Wals";
-  src: url("/src/assets/fonts/GTWalsheimPro-Regular.ttf");
-} 
-
-@font-face {
-  font-family: "Yellowtail";
-  src: url("/src/assets/fonts/Yellowtail-Regular.ttf");
-}
 
 #divLogInWrapper {
   -webkit-font-smoothing: antialiased;

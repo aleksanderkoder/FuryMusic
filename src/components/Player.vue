@@ -421,15 +421,6 @@ export default {
 </script>
 
 <style scoped>
-@font-face {
-  font-family: "Monsterrat";
-  src: url(/src/assets/fonts/Montserrat-Medium.ttf);
-}
-
-@font-face {
-  font-family: "Wals";
-  src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
-}
 
 #customBackgroundImagePanel {
   position: absolute;
@@ -636,7 +627,7 @@ export default {
   position: absolute;
   text-align: center;
   bottom: 130px;
-  left: 48.5%;
+  left: 48%;
   color: white;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 5px;
