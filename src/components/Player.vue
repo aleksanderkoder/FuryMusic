@@ -462,9 +462,9 @@ export default {
 <style scoped>
 
 #customBackgroundImagePanel {
-  position: absolute;
+  position: fixed;
   right: 15px;
-  bottom: 25px;
+  bottom: 150px;
   color: white;
   background-color: rgba(0, 0, 0, 0.6);
   padding: 5px;
