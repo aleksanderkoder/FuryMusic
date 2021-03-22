@@ -109,7 +109,7 @@
                 />
                 <font-awesome-icon
                   v-bind:id="'load' + song.SongID"
-                  style="color: black; cursor: pointer; display: none"
+                  style="color: black; display: none"
                   :icon="['fas', 'spinner']"
                   spin
                 />
@@ -168,6 +168,17 @@
               margin-left: 2%;
             "
             :icon="['fas', 'pause']"
+          />
+        </div>
+        <div id="divLoad">
+          <font-awesome-icon
+            style="
+              font-size: 35px;
+              color: white;
+              margin-top: 27%;
+              margin-left: 2%;"
+            :icon="['fas', 'spinner']"
+            spin
           />
         </div>
         <input
@@ -289,7 +300,7 @@ export default {
         document.title =
           "▶ " + this.currentSongName + " by " + this.currentArtistName;
         //document.getElementById("pause" + SongID).style.display = "block";
-        document.getElementById("load" + SongID).style.display = "block";
+        document.getElementById("pause" + SongID).style.display = "block";
         document.getElementById("play" + SongID).style.display = "none";
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
@@ -418,13 +429,21 @@ export default {
       //console.log("Loading progress: " + progress);
 
       if (progress < 100) {
-        document.getElementById("play" + SongID).style.display = "none";
-        document.getElementById("load" + SongID).style.display = "block";
+        document.getElementById("play" + self.currentSongID).style.display = "none";
+        document.getElementById("divPlay").style.opacity = "0.25"; 
+        document.getElementById("divPlay").style.animation = "none";
+        document.getElementById("wavesurferVolume").style.opacity = "0.25" 
+        document.getElementById("load" + self.currentSongID).style.display = "block"; 
         document.getElementById("songLoader").style.display = "block";
         document.getElementById("songLoaderProgress").innerHTML =
           progress + "%";
       } else {
         document.getElementById("songLoader").style.display = "none";
+        document.getElementById("divPlay").style.opacity = "1";
+        document.getElementById("divPlay").style.animation = "playerpulse";
+        document.getElementById("wavesurferVolume").style.opacity = "1" 
+        document.getElementById("play" + self.currentSongID).style.display = "block";
+        document.getElementById("load" + self.currentSongID).style.display = "none";
       }
     });
 
@@ -432,14 +451,9 @@ export default {
     let volumeSlider = document.getElementById("wavesurferVolume");
     volumeSlider.oninput = function () {
       //let logaritmicVolume = 0.13 * (1 - (Math.log(volumeSlider.value) / Math.log(0.5)));
-      let logaritmicVolume = 0.215 * Math.log(volumeSlider.value)
-      console.log(logaritmicVolume.toString());
-      if (logaritmicVolume > 0.85) {
-        self.wavesurfer.setVolume(logaritmicVolume);
-      } else {
-        self.wavesurfer.setVolume(volumeSlider.value / 85);
-      }
-      
+      let vol = (volumeSlider.value * volumeSlider.value) / 10000
+      console.log(vol.toString());
+      self.wavesurfer.setVolume(vol);
     };
   },
 };
@@ -729,6 +743,17 @@ export default {
   border: none;
   display: none;
   cursor: pointer;
+}
+
+#divLoad {
+  display: none;
+  margin: auto;
+  margin-top: 15px;
+  /* background-color: rgba(255, 255, 255, 0.15); */
+  border-radius: 100%;
+  width: 75px;
+  height: 75px;
+  border: none;
 }
 
 #btnSignOut {
