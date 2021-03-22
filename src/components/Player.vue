@@ -114,16 +114,16 @@
                   spin
                 />
               </div>
-              <div class="divSongsSongName">
+              <div class="divSongsSongName ellipsis">
                 {{ song.SongName }}
               </div>
-              <div class="divSongsArtistName">
+              <div class="divSongsArtistName ellipsis">
                 {{ song.ArtistName }}
               </div>
               <div class="divSongsSongLength">
                 {{ song.Length }}
               </div>
-              <div class="divSongsSongAlbum">
+              <div class="divSongsSongAlbum ellipsis">
                 {{ song.Album }}
               </div>
             </div>
@@ -490,11 +490,13 @@ export default {
 }
 
 .divSongsSongName {
-  flex: 0 0 385px;
+  flex: 0 0 335px;
+  padding-right: 50px; 
 }
 
 .divSongsArtistName {
-  flex: 0 0 355px;
+  flex: 0 0 305px;
+  padding-right: 50px; 
 }
 
 .divSongsSongLength {
@@ -547,6 +549,12 @@ export default {
   width: 1150px;
   margin-top: 15px;
   margin-left: 15px;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #divTopbar {
