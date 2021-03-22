@@ -68,7 +68,7 @@ export default {
   right: 0;
   bottom: 0;
   margin: auto;
-  background: url("./assets/default_background.jpg") no-repeat center center
+  background: url("./assets/def back.jpg") no-repeat center center
     fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -139,6 +139,10 @@ a {
 @font-face {
   font-family: "Wals";
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
+}
+
+img[src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"] {
+  display: none; 
 }
 
 </style>
