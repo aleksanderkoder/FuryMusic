@@ -7,11 +7,11 @@
 
 ***This project is still work-in-progress*** 
 
-  <img src="https://i.ibb.co/g9M3T9V/fury-signin-showcase.jpg" width="600"> 
+  <img src="https://i.ibb.co/82dVv5H/fury-login-JPG.jpg" width="600"> 
 
 The sign in page where users can sign into their personal accounts. 
 
-  <img src="https://i.ibb.co/T01Fwbk/fury-player-showcase.jpg" width="600">
+  <img src="https://i.ibb.co/LCkvs6H/fury-player.jpg" width="600">
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
