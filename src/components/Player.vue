@@ -107,6 +107,12 @@
                   style="color: black; cursor: pointer; display: none"
                   :icon="['fas', 'pause']"
                 />
+                <font-awesome-icon
+                  v-bind:id="'load' + song.SongID"
+                  style="color: black; cursor: pointer; display: none"
+                  :icon="['fas', 'spinner']"
+                  spin
+                />
               </div>
               <div class="divSongsSongName">
                 {{ song.SongName }}
@@ -145,7 +151,7 @@
             id="playButton"
             style="
               font-size: 35px;
-              color: black;
+              color: white;
               margin-top: 27%;
               margin-left: 12%;
             "
@@ -157,7 +163,7 @@
             id="pauseButton"
             style="
               font-size: 35px;
-              color: black;
+              color: white;
               margin-top: 27%;
               margin-left: 2%;
             "
@@ -241,7 +247,7 @@ export default {
       if (mode == "play") {
         this.wavesurfer.play();
         document.title =
-          "Playing " + this.currentSongName + " by " + this.currentArtistName;
+          "▶ " + this.currentSongName + " by " + this.currentArtistName;
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
         document.getElementById("play" + this.currentSongID).style.display =
@@ -273,14 +279,17 @@ export default {
         this.currentSongAlbum = Album;
         this.currentSongLength = Length;
         this.wavesurfer.load(SongURL);
+        document.getElementById("load" + SongID).style.display = "block";
+        document.getElementById("play" + SongID).style.display = "none";
         //alert("first")
       }
       // Continues paused/plays loaded song
       else if (this.currentSongID == SongID) {
         this.wavesurfer.play();
         document.title =
-          "Playing " + this.currentSongName + " by " + this.currentArtistName;
-        document.getElementById("pause" + SongID).style.display = "block";
+          "▶ " + this.currentSongName + " by " + this.currentArtistName;
+        //document.getElementById("pause" + SongID).style.display = "block";
+        document.getElementById("load" + SongID).style.display = "block";
         document.getElementById("play" + SongID).style.display = "none";
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
@@ -293,6 +302,7 @@ export default {
           "block";
         document.getElementById("pause" + this.currentSongID).style.display =
           "none";
+        document.getElementById("load" + SongID).style.display = "none";
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
         this.currentSongID = SongID;
@@ -301,6 +311,8 @@ export default {
         this.currentSongAlbum = Album;
         this.currentSongLength = Length;
         this.wavesurfer.load(SongURL);
+        document.getElementById("load" + SongID).style.display = "block";
+        document.getElementById("play" + SongID).style.display = "none";
         //alert("new")
       }
     },
@@ -315,7 +327,10 @@ export default {
     populateSongList(songs) {
       for (var i = 0; i < songs.length; i += 6) {
         let minutes = parseInt(songs[i + 4] / 60); 
-        let seconds = parseInt(songs[i + 4] - minutes * 60); 
+        let seconds = parseInt(songs[i + 4] - minutes * 60);
+
+        if (seconds < 9)
+          seconds = "0" + seconds;  
 
         this.songs.push({
           SongID: songs[i],
@@ -400,9 +415,11 @@ export default {
 
     // Fires when a song is loading 
     this.wavesurfer.on("loading", function (progress) {
-      console.log("Loading progress: " + progress);
+      //console.log("Loading progress: " + progress);
 
       if (progress < 100) {
+        document.getElementById("play" + SongID).style.display = "none";
+        document.getElementById("load" + SongID).style.display = "block";
         document.getElementById("songLoader").style.display = "block";
         document.getElementById("songLoaderProgress").innerHTML =
           progress + "%";
@@ -414,7 +431,15 @@ export default {
     // Controls volume slider
     let volumeSlider = document.getElementById("wavesurferVolume");
     volumeSlider.oninput = function () {
-      self.wavesurfer.setVolume(volumeSlider.value / 100);
+      //let logaritmicVolume = 0.13 * (1 - (Math.log(volumeSlider.value) / Math.log(0.5)));
+      let logaritmicVolume = 0.215 * Math.log(volumeSlider.value)
+      console.log(logaritmicVolume.toString());
+      if (logaritmicVolume > 0.85) {
+        self.wavesurfer.setVolume(logaritmicVolume);
+      } else {
+        self.wavesurfer.setVolume(volumeSlider.value / 85);
+      }
+      
     };
   },
 };
@@ -467,6 +492,8 @@ export default {
 }
 
 #divCenterTableHeader {
+  position: fixed;
+  top: 39px; 
   background-color: rgba(0, 0, 0, 0.5);
   padding: 7px;
   margin-left: 1px;
@@ -600,9 +627,11 @@ export default {
   position: absolute;
   left: 170px;
   right: 0px;
-  bottom: 160px;
-  top: 39px;
+  bottom: 190px;
+  top: 78px;
   z-index: 0;
+  overflow-y: scroll;
+  overflow-x: hidden; 
 }
 
 #waveform {
@@ -680,7 +709,7 @@ export default {
   display: block;
   margin: auto;
   margin-top: 15px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 100%;
   width: 75px;
   height: 75px;
@@ -693,7 +722,7 @@ export default {
   display: block;
   margin: auto;
   margin-top: 15px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 100%;
   width: 75px;
   height: 75px;
