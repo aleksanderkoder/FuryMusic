@@ -61,7 +61,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: black;
-  /* margin-top: 60px; */
   position: absolute;
   background-color: black;
   top: 0;
@@ -80,7 +79,7 @@ export default {
 body {
   background-color: black;
   font-family: "Wals";
-  overflow: hidden;
+  overflow: hidden; 
 }
 
 input:focus {
