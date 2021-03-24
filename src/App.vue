@@ -27,7 +27,7 @@ export default {
       showRegUserComp: false,
       showPlayerComp: false,
       loggedIn: false,
-      username: "",
+      username: ""
     };
   },
   methods: {

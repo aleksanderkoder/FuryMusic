@@ -70,11 +70,11 @@
               <td class="tableSongsHeaderArtist">
                 <span>Artist</span>
               </td>
-              <td class="tableSongsHeaderLength">
-                <span>Length</span>
-              </td>
               <td class="tableSongsHeaderAlbum">
                 <span>Album</span>
+              </td>
+              <td class="tableSongsHeaderLength">
+                <span>Length</span>
               </td>
             </tr>
           </table>
@@ -98,18 +98,18 @@
                   song.Album
                 )
               "
-              style="color: black; cursor: pointer"
+              style="color: black; cursor: pointer; filter: drop-shadow(0px 0px 7px #FFFFFF);"
               :icon="['fas', 'play']"
             />
             <font-awesome-icon
               v-bind:id="'pause' + song.SongID"
               v-on:click="pauseSong(song.SongID)"
-              style="color: black; cursor: pointer; display: none"
+              style="color: black; cursor: pointer; display: none; filter: drop-shadow(0px 0px 7px #FFFFFF);"
               :icon="['fas', 'pause']"
             />
             <font-awesome-icon
               v-bind:id="'load' + song.SongID"
-              style="color: black; display: none"
+              style="color: black; display: none; filter: drop-shadow(0px 0px 4px #FFFFFF);"
               :icon="['fas', 'spinner']"
               spin
             />
@@ -120,11 +120,11 @@
           <div class="divSongsArtistName ellipsis">
             {{ song.ArtistName }}
           </div>
-          <div class="divSongsSongLength">
-            {{ song.Length }}
-          </div>
           <div class="divSongsSongAlbum ellipsis">
             {{ song.Album }}
+          </div>
+          <div class="divSongsSongLength">
+            {{ song.Length }}
           </div>
         </div>
       </div>
@@ -170,6 +170,18 @@
             :icon="['fas', 'pause']"
           />
         </div>
+        <font-awesome-icon
+          id="volumeUp"
+          v-on:click="muteUnmute('mute')"
+          style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px;"
+          :icon="['fas', 'volume-up']"
+        />
+        <font-awesome-icon
+          id="volumeMute"
+          v-on:click="muteUnmute('unmute')"
+          style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px; display: none;"
+          :icon="['fas', 'volume-mute']"
+        />
         <input
           type="range"
           min="0"
@@ -236,6 +248,7 @@ export default {
       showCustomBackImg: false,
       uploadImgLabel: false,
       showUploadSong: false,
+      oldVol: 0, 
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -279,8 +292,11 @@ export default {
         this.currentSongAlbum = Album;
         this.currentSongLength = Length;
         this.wavesurfer.load(SongURL);
-        document.getElementById("load" + SongID).style.display = "block";
+        document.getElementById("play" + SongID).parentElement.parentElement.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+        document.getElementById("play" + SongID).parentElement.parentElement.style.color = "white";
         document.getElementById("play" + SongID).style.display = "none";
+        document.getElementById("load" + SongID).style.display = "block";
+        
       }
       // Continues paused/plays loaded song
       else if (this.currentSongID == SongID) {
@@ -304,12 +320,16 @@ export default {
           "none";
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
+        document.getElementById("play" + this.currentSongID).parentElement.parentElement.style.backgroundColor = "white";
+        document.getElementById("play" + this.currentSongID).parentElement.parentElement.style.color = "black";
         this.currentSongID = SongID;
         this.currentSongName = SongName;
         this.currentArtistName = ArtistName;
         this.currentSongAlbum = Album;
         this.currentSongLength = Length;
         this.wavesurfer.load(SongURL);
+        document.getElementById("play" + SongID).parentElement.parentElement.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+        document.getElementById("play" + SongID).parentElement.parentElement.style.color = "white";
         document.getElementById("load" + SongID).style.display = "block";
         document.getElementById("play" + SongID).style.display = "none";
       }
@@ -334,8 +354,8 @@ export default {
           ArtistName: songs[i + 1],
           SongName: songs[i + 2],
           SongURL: songs[i + 3],
-          Length: minutes + ":" + seconds,
-          Album: songs[i + 5]
+          Album: songs[i + 5],
+          Length: minutes + ":" + seconds
         });
       }
     },
@@ -351,6 +371,21 @@ export default {
       let searchQuery = document.getElementById("searchSong").value;
 
       // AJAX here
+    },
+    muteUnmute(mode) {
+      if (mode == "mute") {
+        document.getElementById("volumeMute").style.display = "block";
+        document.getElementById("volumeUp").style.display = "none";
+        this.oldVol = document.getElementById("wavesurferVolume").value;
+        document.getElementById("wavesurferVolume").value = 0;
+        this.wavesurfer.setVolume(0); 
+      } else {
+        document.getElementById("volumeMute").style.display = "none";
+        document.getElementById("volumeUp").style.display = "block";
+        document.getElementById("wavesurferVolume");
+        document.getElementById("wavesurferVolume").value = this.oldVol;
+        this.wavesurfer.setVolume(this.oldVol * this.oldVol / 10000); 
+      }
     },
     minimizeMaximizePlayer() {
       if (document.getElementById("divPlayerControls").style.display == "block") {
@@ -413,7 +448,7 @@ export default {
       responsive: true
     });
 
-    // Prepares event for when song finishes
+    // Event for when song finishes
     this.wavesurfer.on("finish", function() {
       document.title = "Fury Music";
       document.getElementById("play" + self.currentSongID).style.display =
@@ -468,6 +503,14 @@ export default {
       self.wavesurfer.setVolume(vol);
       localStorage.setItem("volume", volumeSlider.value);
       localStorage.setItem("volumeLog", vol);
+
+      if (volumeSlider.value == 0) {
+        document.getElementById("volumeMute").style.display = "block";
+        document.getElementById("volumeUp").style.display = "none";
+      } else {
+        document.getElementById("volumeMute").style.display = "none";
+        document.getElementById("volumeUp").style.display = "block";
+      }
     };
   }
 };
@@ -541,8 +584,8 @@ export default {
 }
 
 .tableSongsHeaderLength {
-  padding-left: 200px;
-  width: 50px;
+  width: 150px;
+  padding-left: 185px;
 }
 
 .tableSongsHeaderArtist {
@@ -551,19 +594,25 @@ export default {
 }
 
 .tableSongsHeaderAlbum {
-  width: 150px;
-  padding-left: 75px;
+  padding-left: 200px;
+  width: 50px;
 }
 
 #divSongPane {
   display: flex;
   text-align: left;
-  background-color: white;
+  background-color: white; 
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 10px;
   width: 1150px;
   margin-top: 15px;
   margin-left: 15px;
+  transition: 0.5s; 
+}
+
+#divSongPane:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white; 
 }
 
 .ellipsis {
@@ -696,7 +745,7 @@ export default {
   bottom: 130px;
   left: 48%;
   color: white;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.65);
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
@@ -706,30 +755,25 @@ export default {
 }
 
 #wavesurferVolume {
-  display: block;
+  position: absolute;
+  bottom: 15px;
+  width: 110px;
   margin: auto;
-  margin-top: 15px;
-  left: 55px;
-  top: 100px;
+  left: 60px;
+  top: 97px;
   -webkit-appearance: none;
   appearance: none;
   background: rgb(92, 91, 91);
-  opacity: 0.5;
-  height: 7px;
+  height: 5px;
   border-radius: 3px;
-  transition: opacity 0.3s;
   cursor: pointer;
-}
-
-#wavesurferVolume:hover {
-  opacity: 1;
 }
 
 #wavesurferVolume::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   background: #ffffff;
   border-radius: 100%;
   cursor: pointer;
