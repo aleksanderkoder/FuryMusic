@@ -48,7 +48,7 @@
       <div
         id="divSidebarCurrentSongInfo"
         v-if="currentSongName != ''"
-        class="animate__animated animate__fadeInLeft"
+        class="animate__animated animate__fadeInLeft ellipsis"
       >
         <!-- Song cover image here maybe?  -->
         <p style="font-weight: bold">{{ currentSongName }}</p>
@@ -173,13 +173,13 @@
         <font-awesome-icon
           id="volumeUp"
           v-on:click="muteUnmute('mute')"
-          style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px;"
+          style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px; cursor: pointer;"
           :icon="['fas', 'volume-up']"
         />
         <font-awesome-icon
           id="volumeMute"
           v-on:click="muteUnmute('unmute')"
-          style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px; display: none;"
+          style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px; display: none; cursor: pointer;"
           :icon="['fas', 'volume-mute']"
         />
         <input
@@ -249,6 +249,8 @@ export default {
       uploadImgLabel: false,
       showUploadSong: false,
       oldVol: 0, 
+      searchSongsCopy: [],
+      copyCurrentSongID: "",
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -263,19 +265,35 @@ export default {
           this.currentSongName + ", by " + this.currentArtistName;
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
-        document.getElementById("play" + this.currentSongID).style.display =
-          "none";
-        document.getElementById("pause" + this.currentSongID).style.display =
-          "block";
+        if(document.getElementById("play" + this.currentSongID) != null) {
+          document.getElementById("play" + this.currentSongID).style.display =
+            "none";
+          document.getElementById("pause" + this.currentSongID).style.display =
+            "block";
+        } else {
+          document.getElementById("play" + this.copyCurrentSongID).style.display =
+            "none";
+          document.getElementById("pause" + this.copyCurrentSongID).style.display =
+            "none";
+        }
+        
       } else {
         this.wavesurfer.pause();
         document.title = "Paused";
         document.getElementById("divPause").style.display = "none";
         document.getElementById("divPlay").style.display = "block";
-        document.getElementById("pause" + this.currentSongID).style.display =
-          "none";
-        document.getElementById("play" + this.currentSongID).style.display =
-          "block";
+        if(document.getElementById("pause" + this.currentSongID) != null) {
+          document.getElementById("pause" + this.currentSongID).style.display =
+            "none";
+          document.getElementById("play" + this.currentSongID).style.display =
+            "block";
+        } else {
+          document.getElementById("pause" + this.copyCurrentSongID).style.display =
+            "none";
+          document.getElementById("play" + this.copyCurrentSongID).style.display =
+            "block";
+        }
+        
       }
     },
     playSong(SongURL, SongID, SongName, ArtistName, Length, Album) {
@@ -283,6 +301,15 @@ export default {
       setTimeout(function() {
         document.getElementById("divPlayerMinimize").style.display = "block";
       }, 1000);
+
+      if(this.copyCurrentSongID != "" && document.getElementById("searchSong").value == "") {
+        //alert(this.copyCurrentSongID)
+        document.getElementById("play" + this.copyCurrentSongID).parentElement.parentElement.style.backgroundColor = "white";
+        document.getElementById("play" + this.copyCurrentSongID).parentElement.parentElement.style.color = "black";
+        document.getElementById("play" + this.copyCurrentSongID).style.display = "block";
+        document.getElementById("pause" + this.copyCurrentSongID).style.display = "none";
+        this.copyCurrentSongID = ""; 
+      }
 
       // If no song is selected, load selected song
       if (this.currentSongID == "") {
@@ -312,6 +339,7 @@ export default {
       // If a song has been selected before, but it's not the same song
       else {
         document.title = "Fury Music";
+        this.wavesurfer.empty(); 
         document.getElementById("play" + this.currentSongID).style.display =
           "block";
         document.getElementById("pause" + this.currentSongID).style.display =
@@ -358,6 +386,7 @@ export default {
           Length: minutes + ":" + seconds
         });
       }
+      this.searchSongsCopy = this.songs; 
     },
     waveformInteraction() {
       let self = this;
@@ -368,9 +397,36 @@ export default {
       }
     },
     searchSong() {
+      this.songs = this.searchSongsCopy; 
+      this.copyCurrentSongID = this.currentSongID;
       let searchQuery = document.getElementById("searchSong").value;
-
-      // AJAX here
+      let matches = []; 
+      for(let i = 0; i < this.songs.length; i++) {
+        let string = this.songs[i].SongName;
+        if(string.includes(searchQuery))
+        { 
+          matches.push({
+            SongID: this.songs[i].SongID,
+            ArtistName: this.songs[i].ArtistName,
+            SongName: this.songs[i].SongName,
+            SongURL: this.songs[i].SongURL,
+            Album: this.songs[i].Album,
+            Length: this.songs[i].Length
+            }); 
+        }
+      }
+        this.songs = matches; 
+        this.currentSongName = "";
+        this.currentArtistName = "";
+        this.currentSongID = "";
+        this.currentSongAlbum = "";
+        this.currentSongLength = "";
+        document.getElementById("divPlayerControls").style.display = "none"; 
+        document.getElementById("divPlayerMinimize").style.display = "none"; 
+        document.getElementById("divPlay").style.display = "block";
+        document.getElementById("divPause").style.display = "none";
+        //this.wavesurfer.empty(); 
+      
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -470,6 +526,10 @@ export default {
         document.getElementById("divPlay").style.pointerEvents = "none";
         document.getElementById("wavesurferVolume").style.opacity = "0.25";
         document.getElementById("wavesurferVolume").style.pointerEvents = "none";
+        document.getElementById("volumeMute").style.opacity = "0.25";
+        document.getElementById("volumeMute").style.pointerEvents = "none";
+        document.getElementById("volumeUp").style.opacity = "0.25";
+        document.getElementById("volumeUp").style.pointerEvents = "none";
         document.getElementById("load" + self.currentSongID).style.display =
           "block";
         document.getElementById("songLoader").style.display = "block";
@@ -480,17 +540,24 @@ export default {
           self.wavesurfer.setVolume(localStorage.getItem("volumeLog")); 
         }
     
-      } else {
-        document.getElementById("songLoader").style.display = "none";
-        document.getElementById("divPlay").style.opacity = "1";
-        document.getElementById("divPlay").style.pointerEvents = "auto";
-        document.getElementById("wavesurferVolume").style.opacity = "1";
-        document.getElementById("wavesurferVolume").style.pointerEvents = "auto";
-        document.getElementById("play" + self.currentSongID).style.display =
-          "block";
-        document.getElementById("load" + self.currentSongID).style.display =
-          "none";
       }
+    });
+
+    // Fires when wavesurfer is ready
+    this.wavesurfer.on("ready", function() {
+      document.getElementById("songLoader").style.display = "none";
+      document.getElementById("divPlay").style.opacity = "1";
+      document.getElementById("divPlay").style.pointerEvents = "auto";
+      document.getElementById("wavesurferVolume").style.opacity = "1";
+      document.getElementById("wavesurferVolume").style.pointerEvents = "auto";
+      document.getElementById("volumeMute").style.opacity = "1";
+        document.getElementById("volumeMute").style.pointerEvents = "auto";
+        document.getElementById("volumeUp").style.opacity = "1";
+        document.getElementById("volumeUp").style.pointerEvents = "auto";
+      document.getElementById("play" + self.currentSongID).style.display =
+        "block";
+      document.getElementById("load" + self.currentSongID).style.display =
+        "none";
     });
 
     // Controls volume slider and saving of value
@@ -607,10 +674,19 @@ export default {
   width: 1150px;
   margin-top: 15px;
   margin-left: 15px;
-  transition: 0.5s; 
+  transition: 0.3s; 
 }
 
 #divSongPane:hover {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  color: white !important; 
+}
+
+font-awesome-icon {
+  background-color: transparent !important;
+}
+
+.divSongPaneHover:hover {
   background-color: rgba(0, 0, 0, 0.7);
   color: white; 
 }
@@ -641,10 +717,10 @@ export default {
 #divSidebarCurrentSongInfo {
   color: white;
   position: absolute;
-  left: 0;
+  left: 5%;
   bottom: 0;
   text-align: center;
-  width: 100%;
+  width: 90%;
 }
 
 #divSidebar {
