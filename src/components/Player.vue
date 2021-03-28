@@ -205,7 +205,11 @@
     >
       <span id="spanPlayerMinimize">Minimize</span>
       <font-awesome-icon id="fontPlayerMinimize" :icon="['fas', 'sort-down']" />
-      <font-awesome-icon id="fontPlayerMaximize" :icon="['fas', 'sort-up']" style="display: none;" />
+      <font-awesome-icon
+        id="fontPlayerMaximize"
+        :icon="['fas', 'sort-up']"
+        style="display: none;"
+      />
     </div>
 
     <UploadBackImg
@@ -248,11 +252,11 @@ export default {
       showCustomBackImg: false,
       uploadImgLabel: false,
       showUploadSong: false,
-      oldVol: 0, 
+      oldVol: 0,
       searchSongsCopy: [],
       matches: [],
       copyCurrentSongID: "",
-      toggleShuffle: false, 
+      toggleShuffle: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -264,38 +268,40 @@ export default {
       if (mode == "play") {
         this.wavesurfer.play();
         document.title =
-          "Playing " + this.currentSongName + " by " + this.currentArtistName;
+          "Playing '" + this.currentSongName + "' by " + this.currentArtistName;
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
-        if(document.getElementById("play" + this.currentSongID) != null) {
+        if (document.getElementById("play" + this.currentSongID) != null) {
           document.getElementById("play" + this.currentSongID).style.display =
             "none";
           document.getElementById("pause" + this.currentSongID).style.display =
             "block";
         } else {
-          document.getElementById("play" + this.copyCurrentSongID).style.display =
-            "none";
-          document.getElementById("pause" + this.copyCurrentSongID).style.display =
-            "none";
+          document.getElementById(
+            "play" + this.copyCurrentSongID
+          ).style.display = "none";
+          document.getElementById(
+            "pause" + this.copyCurrentSongID
+          ).style.display = "none";
         }
-        
       } else {
         this.wavesurfer.pause();
         document.title = "Paused";
         document.getElementById("divPause").style.display = "none";
         document.getElementById("divPlay").style.display = "block";
-        if(document.getElementById("pause" + this.currentSongID) != null) {
+        if (document.getElementById("pause" + this.currentSongID) != null) {
           document.getElementById("pause" + this.currentSongID).style.display =
             "none";
           document.getElementById("play" + this.currentSongID).style.display =
             "block";
         } else {
-          document.getElementById("pause" + this.copyCurrentSongID).style.display =
-            "none";
-          document.getElementById("play" + this.copyCurrentSongID).style.display =
-            "block";
+          document.getElementById(
+            "pause" + this.copyCurrentSongID
+          ).style.display = "none";
+          document.getElementById(
+            "play" + this.copyCurrentSongID
+          ).style.display = "block";
         }
-        
       }
     },
     playSong(SongURL, SongID, SongName, ArtistName, Length, Album) {
@@ -304,13 +310,23 @@ export default {
         document.getElementById("divPlayerMinimize").style.display = "block";
       }, 1000);
 
-      if(this.copyCurrentSongID != "" && document.getElementById("searchSong").value == "") {
+      if (
+        this.copyCurrentSongID != "" &&
+        document.getElementById("searchSong").value == ""
+      ) {
         //alert(this.copyCurrentSongID)
-        document.getElementById("play" + this.copyCurrentSongID).parentElement.parentElement.style.backgroundColor = "white";
-        document.getElementById("play" + this.copyCurrentSongID).parentElement.parentElement.style.color = "black";
-        document.getElementById("play" + this.copyCurrentSongID).style.display = "block";
-        document.getElementById("pause" + this.copyCurrentSongID).style.display = "none";
-        this.copyCurrentSongID = ""; 
+        document.getElementById(
+          "play" + this.copyCurrentSongID
+        ).parentElement.parentElement.style.backgroundColor = "white";
+        document.getElementById(
+          "play" + this.copyCurrentSongID
+        ).parentElement.parentElement.style.color = "black";
+        document.getElementById("play" + this.copyCurrentSongID).style.display =
+          "block";
+        document.getElementById(
+          "pause" + this.copyCurrentSongID
+        ).style.display = "none";
+        this.copyCurrentSongID = "";
       }
 
       // If no song is selected, load selected song
@@ -321,27 +337,30 @@ export default {
         this.currentSongAlbum = Album;
         this.currentSongLength = Length;
         this.wavesurfer.load(SongURL);
-        document.getElementById("play" + SongID).parentElement.parentElement.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-        document.getElementById("play" + SongID).parentElement.parentElement.style.color = "white";
+        document.getElementById(
+          "play" + SongID
+        ).parentElement.parentElement.style.backgroundColor =
+          "rgba(0, 0, 0, 0.7)";
+        document.getElementById(
+          "play" + SongID
+        ).parentElement.parentElement.style.color = "white";
         document.getElementById("play" + SongID).style.display = "none";
         document.getElementById("load" + SongID).style.display = "block";
-        
       }
       // Continues paused/plays loaded song
       else if (this.currentSongID == SongID) {
         this.wavesurfer.play();
         document.title =
-          "Playing " + this.currentSongName + " by " + this.currentArtistName;
+          "Playing '" + this.currentSongName + "' by " + this.currentArtistName;
         document.getElementById("pause" + SongID).style.display = "block";
         document.getElementById("play" + SongID).style.display = "none";
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
-
       }
       // If a song has been selected before, but it's not the same song
       else {
         document.title = "Fury Music";
-        this.wavesurfer.empty(); 
+        this.wavesurfer.empty();
         document.getElementById("play" + this.currentSongID).style.display =
           "block";
         document.getElementById("pause" + this.currentSongID).style.display =
@@ -350,16 +369,25 @@ export default {
           "none";
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
-        document.getElementById("play" + this.currentSongID).parentElement.parentElement.style.backgroundColor = "white";
-        document.getElementById("play" + this.currentSongID).parentElement.parentElement.style.color = "black";
+        document.getElementById(
+          "play" + this.currentSongID
+        ).parentElement.parentElement.style.backgroundColor = "white";
+        document.getElementById(
+          "play" + this.currentSongID
+        ).parentElement.parentElement.style.color = "black";
         this.currentSongID = SongID;
         this.currentSongName = SongName;
         this.currentArtistName = ArtistName;
         this.currentSongAlbum = Album;
         this.currentSongLength = Length;
         this.wavesurfer.load(SongURL);
-        document.getElementById("play" + SongID).parentElement.parentElement.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-        document.getElementById("play" + SongID).parentElement.parentElement.style.color = "white";
+        document.getElementById(
+          "play" + SongID
+        ).parentElement.parentElement.style.backgroundColor =
+          "rgba(0, 0, 0, 0.7)";
+        document.getElementById(
+          "play" + SongID
+        ).parentElement.parentElement.style.color = "white";
         document.getElementById("load" + SongID).style.display = "block";
         document.getElementById("play" + SongID).style.display = "none";
       }
@@ -388,7 +416,7 @@ export default {
           Length: minutes + ":" + seconds
         });
       }
-      this.searchSongsCopy = this.songs; 
+      this.searchSongsCopy = this.songs;
     },
     waveformInteraction() {
       let self = this;
@@ -399,14 +427,18 @@ export default {
       }
     },
     searchSong() {
-      this.songs = this.searchSongsCopy; 
+      this.songs = this.searchSongsCopy;
       this.copyCurrentSongID = this.currentSongID;
-      let searchQuery = document.getElementById("searchSong").value.toLowerCase();
-      this.matches = []; 
-      for(let i = 0; i < this.songs.length; i++) {
+      let searchQuery = document
+        .getElementById("searchSong")
+        .value.toLowerCase();
+      this.matches = [];
+      for (let i = 0; i < this.songs.length; i++) {
         let string = this.songs[i].SongName.toLowerCase();
-        if(string.includes(searchQuery) && !this.searchDupCheck(this.songs[i]))
-        { 
+        if (
+          string.includes(searchQuery) &&
+          !this.searchDupCheck(this.songs[i])
+        ) {
           this.matches.push({
             SongID: this.songs[i].SongID,
             ArtistName: this.songs[i].ArtistName,
@@ -414,12 +446,14 @@ export default {
             SongURL: this.songs[i].SongURL,
             Album: this.songs[i].Album,
             Length: this.songs[i].Length
-            }); 
+          });
         }
 
         string = this.songs[i].ArtistName.toLowerCase();
-        if(string.includes(searchQuery) && !this.searchDupCheck(this.songs[i]))
-        { 
+        if (
+          string.includes(searchQuery) &&
+          !this.searchDupCheck(this.songs[i])
+        ) {
           this.matches.push({
             SongID: this.songs[i].SongID,
             ArtistName: this.songs[i].ArtistName,
@@ -427,12 +461,14 @@ export default {
             SongURL: this.songs[i].SongURL,
             Album: this.songs[i].Album,
             Length: this.songs[i].Length
-            }); 
+          });
         }
 
         string = this.songs[i].Album.toLowerCase();
-        if(string.includes(searchQuery) && !this.searchDupCheck(this.songs[i].SongID))
-        { 
+        if (
+          string.includes(searchQuery) &&
+          !this.searchDupCheck(this.songs[i].SongID)
+        ) {
           this.matches.push({
             SongID: this.songs[i].SongID,
             ArtistName: this.songs[i].ArtistName,
@@ -440,30 +476,30 @@ export default {
             SongURL: this.songs[i].SongURL,
             Album: this.songs[i].Album,
             Length: this.songs[i].Length
-            }); 
+          });
         }
       }
-        this.songs = this.matches; 
+      this.songs = this.matches;
 
-      if(document.getElementById("searchSong").value == "") {
-        this.songs = this.searchSongsCopy; 
+      if (document.getElementById("searchSong").value == "") {
+        this.songs = this.searchSongsCopy;
       }
-        
+
       this.currentSongID = "";
       this.currentSongAlbum = "";
       this.currentSongLength = "";
-      document.getElementById("divPlayerControls").style.display = "none"; 
-      document.getElementById("divPlayerMinimize").style.display = "none"; 
+      document.getElementById("divPlayerControls").style.display = "none";
+      document.getElementById("divPlayerMinimize").style.display = "none";
       document.getElementById("divPlay").style.display = "block";
       document.getElementById("divPause").style.display = "none";
     },
     searchDupCheck(input) {
-      for(let i = 0; i < this.matches.length; i++) {
-        if(input == this.matches[i].SongID) {
-          return true; 
+      for (let i = 0; i < this.matches.length; i++) {
+        if (input == this.matches[i].SongID) {
+          return true;
         }
-         
-      }return false;
+      }
+      return false;
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -471,28 +507,32 @@ export default {
         document.getElementById("volumeUp").style.display = "none";
         this.oldVol = document.getElementById("wavesurferVolume").value;
         document.getElementById("wavesurferVolume").value = 0;
-        this.wavesurfer.setVolume(0); 
+        this.wavesurfer.setVolume(0);
       } else {
         document.getElementById("volumeMute").style.display = "none";
         document.getElementById("volumeUp").style.display = "block";
         document.getElementById("wavesurferVolume");
         document.getElementById("wavesurferVolume").value = this.oldVol;
-        this.wavesurfer.setVolume(this.oldVol * this.oldVol / 10000); 
+        this.wavesurfer.setVolume((this.oldVol * this.oldVol) / 10000);
       }
     },
     minimizeMaximizePlayer() {
-      if (document.getElementById("divPlayerControls").style.display == "block") {
+      if (
+        document.getElementById("divPlayerControls").style.display == "block"
+      ) {
         document.getElementById("divPlayerControls").style.display = "none";
         document.getElementById("divPlayerMinimize").style.bottom = "0";
-        document.getElementById("spanPlayerMinimize").innerHTML = "Maximize"; 
-        document.getElementById("fontPlayerMaximize").style.display = "inline-block"; 
-        document.getElementById("fontPlayerMinimize").style.display = "none"; 
+        document.getElementById("spanPlayerMinimize").innerHTML = "Maximize";
+        document.getElementById("fontPlayerMaximize").style.display =
+          "inline-block";
+        document.getElementById("fontPlayerMinimize").style.display = "none";
       } else {
         document.getElementById("divPlayerMinimize").style.bottom = "130px";
         document.getElementById("divPlayerControls").style.display = "block";
         document.getElementById("divPlayerMinimize").style.bottom = "130px";
-        document.getElementById("spanPlayerMinimize").innerHTML = "Minimize"; 
-        document.getElementById("fontPlayerMinimize").style.display = "inline-block"; 
+        document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
+        document.getElementById("fontPlayerMinimize").style.display =
+          "inline-block";
         document.getElementById("fontPlayerMaximize").style.display = "none";
       }
     },
@@ -554,15 +594,14 @@ export default {
 
     // Fires when a song is loading
     this.wavesurfer.on("loading", function(progress) {
-      //console.log("Loading progress: " + progress);
-
-      if (progress < 100) {
+        document.title = "Fury Music";
         document.getElementById("play" + self.currentSongID).style.display =
           "none";
         document.getElementById("divPlay").style.opacity = "0.25";
         document.getElementById("divPlay").style.pointerEvents = "none";
         document.getElementById("wavesurferVolume").style.opacity = "0.25";
-        document.getElementById("wavesurferVolume").style.pointerEvents = "none";
+        document.getElementById("wavesurferVolume").style.pointerEvents =
+          "none";
         document.getElementById("volumeMute").style.opacity = "0.25";
         document.getElementById("volumeMute").style.pointerEvents = "none";
         document.getElementById("volumeUp").style.opacity = "0.25";
@@ -574,10 +613,8 @@ export default {
           progress + "%";
 
         if (localStorage.getItem("volumeLog")) {
-          self.wavesurfer.setVolume(localStorage.getItem("volumeLog")); 
+          self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
         }
-    
-      }
     });
 
     // Fires when wavesurfer is ready
@@ -600,7 +637,7 @@ export default {
     // Controls volume slider and saving of value
     let volumeSlider = document.getElementById("wavesurferVolume");
     if (localStorage.getItem("volume")) {
-      volumeSlider.value = localStorage.getItem("volume");  
+      volumeSlider.value = localStorage.getItem("volume");
     }
     volumeSlider.oninput = function() {
       let vol = (volumeSlider.value * volumeSlider.value) / 10000;
@@ -635,16 +672,16 @@ export default {
 #divSearchSong {
   position: absolute;
   right: 585px;
-  top: 5px;
-  background-color: rgba(0, 0, 0, 0.9); 
-  border-radius: 100px; 
+  top: 6px;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 100px;
   padding-left: 10px;
   padding-right: 10px;
 }
 
 #searchSong {
   border: none;
-  color: white; 
+  color: white;
   background-color: transparent;
   /* box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; */
   height: 25px;
@@ -676,7 +713,7 @@ export default {
   position: fixed;
   top: 39px;
   left: 170px;
-  right: 0; 
+  right: 0;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 7px;
   margin-left: 1px;
@@ -710,18 +747,18 @@ export default {
 #divSongPane {
   display: flex;
   text-align: left;
-  background-color: white; 
+  background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 10px;
   width: 1150px;
   margin-top: 15px;
   margin-left: 15px;
-  transition: 0.2s; 
+  transition: 0.2s;
 }
 
 #divSongPane:hover {
   background-color: rgba(0, 0, 0, 0.7) !important;
-  color: white !important; 
+  color: white !important;
 }
 
 font-awesome-icon {
@@ -730,7 +767,7 @@ font-awesome-icon {
 
 .divSongPaneHover:hover {
   background-color: rgba(0, 0, 0, 0.7);
-  color: white; 
+  color: white;
 }
 
 .ellipsis {
@@ -992,5 +1029,4 @@ a {
   display: block;
   color: white;
 }
-
 </style>
