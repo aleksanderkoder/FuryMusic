@@ -1,32 +1,34 @@
 <template>
-  <div
-    class="animate__animated animate__fadeInDownBig"
-    id="divCustomBackImgWrapper"
-  >
-    <font-awesome-icon
-      style="color: #8b0000; font-size: 25px; position: absolute; right: 25px; top: 15px; cursor: pointer;"
-      :icon="['fas', 'times']"
-      v-on:click="cancel()"
-    />
-    <h1>Upload custom background image</h1>
-    <label for="file" id="btnChooseImage"> Select image </label>
-    <input
-      id="file"
-      type="file"
-      accept=".jpg,.png,.gif"
-      v-on:change="uploadImage()"
-    />
-    <br />
-    <img src="" id="imageShowcase" width="350px" />
-    <div v-show="showConfirm">
-      <h2>Do you want to use this image?</h2>
-      <button id="btnConfirmUpload" v-on:click="useImage()">
-        Use this image
+  <div id="backgroundFade" class="animate__animated animate__fadeIn">
+    <div
+      class="animate__animated animate__fadeInDownBig"
+      id="divCustomBackImgWrapper"
+    >
+      <font-awesome-icon
+        style="color: #8b0000; font-size: 25px; position: fixed; right: 25px; top: 15px; cursor: pointer;"
+        :icon="['fas', 'times']"
+        v-on:click="cancel()"
+      />
+      <h1>Upload background image</h1>
+      <label for="file" id="btnChooseImage"> Select image </label>
+      <input
+        id="file"
+        type="file"
+        accept=".jpg,.png,.gif"
+        v-on:change="uploadImage()"
+      />
+      <br />
+      <img src="" id="imageShowcase" width="350px"  />
+      <div v-show="showConfirm">
+        <h2>Do you want to use this image?</h2>
+        <button id="btnConfirmUpload" v-on:click="useImage()">
+          Use this image
+        </button>
+      </div>
+      <button id="btnRevert" v-on:click="revertToDefault()">
+        Revert to default
       </button>
     </div>
-    <button id="btnRevert" v-on:click="revertToDefault()">
-      Revert to default
-    </button>
   </div>
 </template>
 
@@ -103,7 +105,7 @@ export default {
 #btnConfirmUpload,
 #btnChooseImage {
   margin: 20px;
-  background-color: #3c3e41af;
+  background-color: #000000;
   color: white;
   text-decoration: none;
   border: none;
@@ -131,7 +133,7 @@ export default {
   right: 10px;
   border: none;
   background-color: transparent;
-  color: white;
+  color: black;
 }
 
 #btnRevert:hover {
@@ -143,24 +145,33 @@ export default {
 }
 
 #divCustomBackImgWrapper {
-  position: absolute;
   width: 600px;
   min-height: 450px;
+  max-height: 60%;
+  overflow-y: auto;
   margin: 0 auto;
   left: 0;
   right: 0;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.85);
-  margin-top: 10%;
+  background-color: white;
+  margin-top: 10%; 
   border-radius: 1%;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Wals";
-  z-index: 9999;
+  z-index: 2;
 }
 
 #divConfirm {
   display: none;
+}
+
+#backgroundFade {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 1;
 }
 
 input[type="file"] {
@@ -174,7 +185,7 @@ button {
 h1,
 h2 {
   font-weight: normal;
-  color: white;
+  color: black;
 }
 
 ul {

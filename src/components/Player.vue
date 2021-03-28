@@ -7,7 +7,7 @@
         width="80px"
       />
       <div id="divSearchSong">
-        <font-awesome-icon style="color: black" :icon="['fas', 'search']" />
+        <font-awesome-icon style="color: white" :icon="['fas', 'search']" />
         <input
           type="text"
           id="searchSong"
@@ -250,7 +250,9 @@ export default {
       showUploadSong: false,
       oldVol: 0, 
       searchSongsCopy: [],
+      matches: [],
       copyCurrentSongID: "",
+      toggleShuffle: false, 
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -262,7 +264,7 @@ export default {
       if (mode == "play") {
         this.wavesurfer.play();
         document.title =
-          this.currentSongName + ", by " + this.currentArtistName;
+          "Playing " + this.currentSongName + " by " + this.currentArtistName;
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
         if(document.getElementById("play" + this.currentSongID) != null) {
@@ -329,7 +331,7 @@ export default {
       else if (this.currentSongID == SongID) {
         this.wavesurfer.play();
         document.title =
-          this.currentSongName + ", by " + this.currentArtistName;
+          "Playing " + this.currentSongName + " by " + this.currentArtistName;
         document.getElementById("pause" + SongID).style.display = "block";
         document.getElementById("play" + SongID).style.display = "none";
         document.getElementById("divPlay").style.display = "none";
@@ -399,13 +401,39 @@ export default {
     searchSong() {
       this.songs = this.searchSongsCopy; 
       this.copyCurrentSongID = this.currentSongID;
-      let searchQuery = document.getElementById("searchSong").value;
-      let matches = []; 
+      let searchQuery = document.getElementById("searchSong").value.toLowerCase();
+      this.matches = []; 
       for(let i = 0; i < this.songs.length; i++) {
-        let string = this.songs[i].SongName;
-        if(string.includes(searchQuery))
+        let string = this.songs[i].SongName.toLowerCase();
+        if(string.includes(searchQuery) && !this.searchDupCheck(this.songs[i]))
         { 
-          matches.push({
+          this.matches.push({
+            SongID: this.songs[i].SongID,
+            ArtistName: this.songs[i].ArtistName,
+            SongName: this.songs[i].SongName,
+            SongURL: this.songs[i].SongURL,
+            Album: this.songs[i].Album,
+            Length: this.songs[i].Length
+            }); 
+        }
+
+        string = this.songs[i].ArtistName.toLowerCase();
+        if(string.includes(searchQuery) && !this.searchDupCheck(this.songs[i]))
+        { 
+          this.matches.push({
+            SongID: this.songs[i].SongID,
+            ArtistName: this.songs[i].ArtistName,
+            SongName: this.songs[i].SongName,
+            SongURL: this.songs[i].SongURL,
+            Album: this.songs[i].Album,
+            Length: this.songs[i].Length
+            }); 
+        }
+
+        string = this.songs[i].Album.toLowerCase();
+        if(string.includes(searchQuery) && !this.searchDupCheck(this.songs[i].SongID))
+        { 
+          this.matches.push({
             SongID: this.songs[i].SongID,
             ArtistName: this.songs[i].ArtistName,
             SongName: this.songs[i].SongName,
@@ -415,18 +443,27 @@ export default {
             }); 
         }
       }
-        this.songs = matches; 
-        this.currentSongName = "";
-        this.currentArtistName = "";
-        this.currentSongID = "";
-        this.currentSongAlbum = "";
-        this.currentSongLength = "";
-        document.getElementById("divPlayerControls").style.display = "none"; 
-        document.getElementById("divPlayerMinimize").style.display = "none"; 
-        document.getElementById("divPlay").style.display = "block";
-        document.getElementById("divPause").style.display = "none";
-        //this.wavesurfer.empty(); 
-      
+        this.songs = this.matches; 
+
+      if(document.getElementById("searchSong").value == "") {
+        this.songs = this.searchSongsCopy; 
+      }
+        
+      this.currentSongID = "";
+      this.currentSongAlbum = "";
+      this.currentSongLength = "";
+      document.getElementById("divPlayerControls").style.display = "none"; 
+      document.getElementById("divPlayerMinimize").style.display = "none"; 
+      document.getElementById("divPlay").style.display = "block";
+      document.getElementById("divPause").style.display = "none";
+    },
+    searchDupCheck(input) {
+      for(let i = 0; i < this.matches.length; i++) {
+        if(input == this.matches[i].SongID) {
+          return true; 
+        }
+         
+      }return false;
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -551,9 +588,9 @@ export default {
       document.getElementById("wavesurferVolume").style.opacity = "1";
       document.getElementById("wavesurferVolume").style.pointerEvents = "auto";
       document.getElementById("volumeMute").style.opacity = "1";
-        document.getElementById("volumeMute").style.pointerEvents = "auto";
-        document.getElementById("volumeUp").style.opacity = "1";
-        document.getElementById("volumeUp").style.pointerEvents = "auto";
+      document.getElementById("volumeMute").style.pointerEvents = "auto";
+      document.getElementById("volumeUp").style.opacity = "1";
+      document.getElementById("volumeUp").style.pointerEvents = "auto";
       document.getElementById("play" + self.currentSongID).style.display =
         "block";
       document.getElementById("load" + self.currentSongID).style.display =
@@ -597,14 +634,19 @@ export default {
 
 #divSearchSong {
   position: absolute;
-  right: 530px;
+  right: 585px;
   top: 5px;
+  background-color: rgba(0, 0, 0, 0.9); 
+  border-radius: 100px; 
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #searchSong {
   border: none;
-  border-radius: 3px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px;
+  color: white; 
+  background-color: transparent;
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; */
   height: 25px;
 }
 
@@ -674,7 +716,7 @@ export default {
   width: 1150px;
   margin-top: 15px;
   margin-left: 15px;
-  transition: 0.3s; 
+  transition: 0.2s; 
 }
 
 #divSongPane:hover {

@@ -1,37 +1,43 @@
 <template>
-  <div
-    class="animate__animated animate__fadeInDownBig"
-    id="divUploadSongWrapper"
-  >
-    <font-awesome-icon
-        style="color: #8b0000; font-size: 25px; position: absolute; right: 25px; top: 15px; cursor: pointer;"
-        :icon="['fas', 'times']"
-        v-on:click="cancel()"
-      />
-    <h1>Upload song</h1>
-    <form onSubmit="return false">
-      <label for="fileSong" id="btnChooseSong"> Select song </label>
-      <input
-        id="fileSong"
-        type="file"
-        accept=".mp3"
-        v-on:change="showSongForm()"
-      />
-      <br />
-      <div v-show="showForm">
-        <p id="pSelected"></p>
-        <input type="text" placeholder="Song name" v-model="songName" />
+  <div id="backgroundFade" class="animate__animated animate__fadeIn">
+    <div
+      class="animate__animated animate__fadeInDownBig"
+      id="divUploadSongWrapper"
+    >
+      <font-awesome-icon
+          style="color: #8b0000; font-size: 25px; position: fixed; right: 25px; top: 15px; cursor: pointer;"
+          :icon="['fas', 'times']"
+          v-on:click="cancel()"
+        />
+      <h1>Upload song</h1>
+      <form onSubmit="return false">
+        <label for="fileSong" id="btnChooseSong"> Select song </label>
+        <input
+          id="fileSong"
+          type="file"
+          accept=".mp3"
+          v-on:change="showSongForm()"
+        />
         <br />
-        <input type="text" placeholder="Artist name" v-model="songArtist" />
-        <br />
-        <input type="text" placeholder="Album name" v-model="songAlbum" />
-        <br />
-        <button id="btnConfirmUploadUS" type="submit" v-on:click="uploadSong()">
-          Upload
-        </button>
-      </div>
-    </form>
-    <font-awesome-icon id="loadingSpinnerUS" :icon="['fas', 'spinner']" spin />
+        <div v-show="showForm">
+          <span id="spanSelected"></span>
+          <font-awesome-icon class="paddingRight" style="color: black" :icon="['fas', 'music']" />
+          <input type="text" placeholder="Song name" v-model="songName" />
+          <br />
+          <font-awesome-icon class="paddingRight" style="color: black" :icon="['fas', 'user']" />
+          <input type="text" placeholder="Artist name" v-model="songArtist" />
+          <br />
+          <font-awesome-icon class="paddingRight" style="color: black" :icon="['fas', 'record-vinyl']" />
+          <input type="text" placeholder="Album name" v-model="songAlbum" />
+          <br />
+          <button id="btnConfirmUploadUS" type="submit" v-on:click="uploadSong()">
+            Upload
+          </button>
+        </div>
+      </form>
+      <font-awesome-icon id="loadingSpinnerUS" :icon="['fas', 'spinner']" spin />
+      <p v-show="showError">Invalid information!</p>
+    </div>
   </div>
 </template>
 
@@ -45,6 +51,7 @@ export default {
       songAlbum: "",
       songDuration: 0,
       showForm: false,
+      showError: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/",
     };
   },
@@ -62,58 +69,69 @@ export default {
             self.songDuration = audio.duration;
           });
         });
-        document.getElementById("pSelected").innerHTML = song.name;
+        document.getElementById("spanSelected").innerHTML = song.name;
         this.showForm = true;
       } else {
         Ozone.fire("info", "Only mp3 files can be uploaded", "center");
       }
     },
     uploadSong() {
-      let self = this;
-      document.getElementById("loadingSpinnerUS").style.display = "block";
-      document.getElementById("btnConfirmUploadUS").style.display = "none";
-      let fd = new FormData();
-      let files = document.getElementById("fileSong").files[0];
+      if(this.regEx()) {
+        let self = this;
+        document.getElementById("loadingSpinnerUS").style.display = "block";
+        document.getElementById("btnConfirmUploadUS").style.display = "none";
+        let fd = new FormData();
+        let files = document.getElementById("fileSong").files[0];
 
-      fd.append("songName", this.songName);
-      fd.append("songArtist", this.songArtist);
-      fd.append("songAlbum", this.songAlbum);
-      fd.append("songLength", this.songDuration);
-      fd.append("file", files);
+        fd.append("songName", this.songName);
+        fd.append("songArtist", this.songArtist);
+        fd.append("songAlbum", this.songAlbum);
+        fd.append("songLength", this.songDuration);
+        fd.append("file", files);
 
-      $.ajax({
-        url: this.apiURL + "uploadSong.php",
-        data: fd,
-        processData: false,
-        contentType: false,
-        type: "POST",
-        success: function (data) {
-          document.getElementById("loadingSpinnerUS").style.display = "none";
-          document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
-          let response = JSON.parse(data);
-          if (response.status == 1) {
-            Ozone.fire("success", response.message, "center");
-            self.$emit("hideUploadSongComponent");
-          } else {
-            Ozone.fire("error", response.message, "center");
+        $.ajax({
+          url: this.apiURL + "uploadSong.php",
+          data: fd,
+          processData: false,
+          contentType: false,
+          type: "POST",
+          success: function (data) {
+            document.getElementById("loadingSpinnerUS").style.display = "none";
+            document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
+            let response = JSON.parse(data);
+            if (response.status == 1) {
+              Ozone.fire("success", response.message, "center");
+              self.$emit("hideUploadSongComponent");
+            } else {
+              Ozone.fire("error", response.message, "center");
+            }
+          },error: function (error) {
+            document.getElementById("loadingSpinnerUS").style.display = "none";
+            document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
+            Ozone.fire("error", "Server out of reach", "center");
           }
-        },error: function (error) {
-          document.getElementById("loadingSpinnerUS").style.display = "none";
-          document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
-          Ozone.fire("error", "Server out of reach", "center");
-        }
-      });
+        });
+      }
+      
     },
     cancel() {
       this.$emit("hideUploadSongComponent");
     },
+    regEx() {
+      let regEx = /^[0-9a-zæøåA-ZÆØÅ!?,.-]{1,50}$/;
+      if(regEx.test(this.songName) && regEx.test(this.ArtistName) && regEx.test(this.AlbumName)) {
+        this.showError = false; 
+        return true; 
+      }
+      this.showError = true;
+      return false; 
+    }
   },
 };
 </script>
 
 <style scoped>
 
-#btnConfirmUploadUS,
 #btnChooseSong {
   margin: 20px;
   background-color: black;
@@ -139,6 +157,28 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+#btnConfirmUploadUS {
+  margin: 20px;
+  background-color: black;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: white;
+  text-decoration: none;
+  border: none;
+  height: 35px;
+  width: 110px;
+  border-radius: 4px;
+  font-family: "Wals";
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#spanSelected {
+  margin-top: 40px; 
+  margin-bottom: 10px;
+  display: block; 
+}
+
 #divUploadSongWrapper {
   position: absolute;
   width: 600px;
@@ -153,7 +193,7 @@ export default {
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Wals";
-  z-index: 9999;
+  z-index: 2;
 }
 
 #loadingSpinnerUS {
@@ -161,6 +201,14 @@ export default {
   font-size: 40px; 
   margin: auto;
   margin-top: 30px; 
+}
+
+#backgroundFade {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 1;
 }
 
 input[type="text"] {
@@ -173,10 +221,15 @@ input[type="text"] {
   font-family: "Wals";
   border-radius: 3px;
   display: inline-block;
+  margin-right: 33px;
 }
 
 input[type="file"] {
   display: none;
+}
+
+.paddingRight {
+  padding-right: 10px; 
 }
 
 button {
@@ -185,7 +238,7 @@ button {
 }
 
 p {
-  margin-top: 40px;
+  color: red; 
 }
 
 h1,
