@@ -3,8 +3,9 @@
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
       <img
         id="logo"
-        src="../assets/fury music logo round small.png"
+        :src="logo"
         width="80px"
+        v-on:click="showEasteregg()"
       />
       <div id="divSearchSong">
         <font-awesome-icon style="color: white" :icon="['fas', 'search']" />
@@ -257,6 +258,9 @@ export default {
       matches: [],
       copyCurrentSongID: "",
       toggleShuffle: false,
+      logo: "src/assets/fury music logo round small.png", 
+      logoImage: "src/assets/fury music logo round small.png", 
+      easterImage: "src/assets/east long.gif",
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -536,6 +540,18 @@ export default {
         document.getElementById("fontPlayerMaximize").style.display = "none";
       }
     },
+    showEasteregg() {
+      let self = this;
+      this.logo = this.easterImage;
+      let dask = new Audio("src/assets/easteregg.mp3");
+      setTimeout(function() {
+        dask.play();
+      }, 400); 
+      setTimeout(function() {
+        self.logo = self.logoImage; 
+      }, 1900);
+      
+    },
     signOut() {
       localStorage.removeItem("username");
       localStorage.removeItem("password");
@@ -790,6 +806,7 @@ font-awesome-icon {
 
 #logo {
   position: absolute;
+  border-radius: 100%;
   left: 45px;
 }
 
