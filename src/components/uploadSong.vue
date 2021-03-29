@@ -119,7 +119,7 @@ export default {
     },
     regEx() {
       let regEx = /^[0-9a-zæøåA-ZÆØÅ!?,.-]{1,50}$/;
-      if(regEx.test(this.songName) && regEx.test(this.ArtistName) && regEx.test(this.AlbumName)) {
+      if(regEx.test(this.songName) && regEx.test(this.songArtist) && regEx.test(this.songAlbum)) {
         this.showError = false; 
         return true; 
       }
