@@ -4,7 +4,7 @@
       <img
         id="logo"
         :src="logo"
-        width="80px"
+        width="65px"
         v-on:click="showEasteregg()"
       />
       <div id="divSearchSong">
@@ -191,7 +191,9 @@
           id="wavesurferVolume"
         />
       </div>
+      <span id="spanElapsedPlaytime">{{elapsedPlaytime}}</span>
       <div id="waveform" v-on:click="waveformInteraction()"></div>
+      <span id="spanTotalPlaytime">{{currentSongLength}}</span>
     </div>
 
     <div id="songLoader">
@@ -250,6 +252,7 @@ export default {
       currentArtistName: "",
       currentSongAlbum: "",
       currentSongLength: 0,
+      elapsedPlaytime: 0, 
       showCustomBackImg: false,
       uploadImgLabel: false,
       showUploadSong: false,
@@ -258,8 +261,8 @@ export default {
       matches: [],
       copyCurrentSongID: "",
       toggleShuffle: false,
-      logo: "src/assets/fury music logo round small.png", 
-      logoImage: "src/assets/fury music logo round small.png", 
+      logo: "src/assets/fury logo favicon5.png", 
+      logoImage: "src/assets/fury logo favicon5.png", 
       easterImage: "src/assets/east long.gif",
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
@@ -339,7 +342,7 @@ export default {
         this.currentArtistName = ArtistName;
         this.currentSongID = SongID;
         this.currentSongAlbum = Album;
-        this.currentSongLength = Length;
+        this.currentSongLength = Length; 
         this.wavesurfer.load(SongURL);
         document.getElementById(
           "play" + SongID
@@ -608,6 +611,15 @@ export default {
       document.getElementById("divPause").style.display = "none";
     });
 
+    this.wavesurfer.on("audioprocess", function(progress) {
+      let minutes = parseInt(progress / 60); 
+      let seconds = parseInt(progress - minutes * 60); 
+      if(seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      self.elapsedPlaytime = minutes + ":" + seconds; 
+    });
+
     // Fires when a song is loading
     this.wavesurfer.on("loading", function(progress) {
         document.title = "Fury Music";
@@ -648,6 +660,7 @@ export default {
         "block";
       document.getElementById("load" + self.currentSongID).style.display =
         "none";
+      self.elapsedPlaytime = "0:00"; 
     });
 
     // Controls volume slider and saving of value
@@ -687,9 +700,9 @@ export default {
 
 #divSearchSong {
   position: absolute;
-  right: 585px;
+  right: 285px;
   top: 6px;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.65);
   border-radius: 100px;
   padding-left: 10px;
   padding-right: 10px;
@@ -701,6 +714,24 @@ export default {
   background-color: transparent;
   /* box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; */
   height: 25px;
+}
+
+#searchSong::placeholder {
+  color: white;
+}
+
+#spanTotalPlaytime {
+  position: absolute;
+  color: white; 
+  right: 60px;
+  bottom: 55px;
+}
+
+#spanElapsedPlaytime {
+  position: absolute;
+  color: white;
+  left: 210px;
+  bottom: 55px; 
 }
 
 .divSongsPlay {
@@ -730,7 +761,7 @@ export default {
   top: 39px;
   left: 170px;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   padding: 7px;
   margin-left: 1px;
   color: white;
@@ -764,7 +795,7 @@ export default {
   display: flex;
   text-align: left;
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
   width: 1150px;
   margin-top: 15px;
@@ -773,7 +804,7 @@ export default {
 }
 
 #divSongPane:hover {
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
   color: white !important;
 }
 
@@ -805,9 +836,10 @@ font-awesome-icon {
 }
 
 #logo {
-  position: absolute;
-  border-radius: 100%;
-  left: 45px;
+  position: absolute; 
+  /* border-radius: 100%;  */
+  left: 50px;
+  top: 5px; 
 }
 
 #divSidebarCurrentSongInfo {
@@ -823,7 +855,8 @@ font-awesome-icon {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.8);
   width: 170px;
-  height: 100%;
+  top: 39px;
+  bottom: 0;
   z-index: 0;
   border-right: 1px solid white;
 }
@@ -900,7 +933,7 @@ font-awesome-icon {
   left: 0;
   padding-bottom: 15px;
   padding-top: 15px;
-  margin-left: 200px;
+  margin-left: 260px;
   outline: none;
   cursor: pointer;
 }
@@ -917,7 +950,7 @@ font-awesome-icon {
   bottom: 130px;
   left: 48%;
   color: white;
-  background-color: rgba(0, 0, 0, 0.65);
+  background-color: rgba(0, 0, 0, 0.8);
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;

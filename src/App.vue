@@ -118,8 +118,7 @@ a {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.5); 
-  box-shadow: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.7); 
 }
 
 /* Handle on hover */
