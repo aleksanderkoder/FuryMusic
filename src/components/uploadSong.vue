@@ -98,6 +98,7 @@ export default {
         fd.append("songArtist", this.songArtist);
         fd.append("songAlbum", this.songAlbum);
         fd.append("songLength", this.songDuration);
+        fd.append("publisher", this.$store.state.username);
         fd.append("file", files);
 
         $.ajax({

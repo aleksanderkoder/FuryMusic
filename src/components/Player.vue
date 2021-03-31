@@ -78,6 +78,9 @@
               <td class="tableSongsHeaderLength">
                 <span>Length</span>
               </td>
+              <td class="tableSongsHeaderPublisher">
+                <span>Published by</span>
+              </td>
             </tr>
           </table>
         </div>
@@ -127,6 +130,9 @@
           </div>
           <div class="divSongsSongLength">
             {{ song.Length }}
+          </div>
+          <div class="divSongsPublisher">
+            {{ song.Publisher }}
           </div>
         </div>
       </div>
@@ -414,7 +420,7 @@ export default {
       document.title = "Paused";
     },
     populateSongList(songs) {
-      for (var i = 0; i < songs.length; i += 6) {
+      for (var i = 0; i < songs.length; i += 7) {
         let minutes = parseInt(songs[i + 4] / 60);
         let seconds = parseInt(songs[i + 4] - minutes * 60);
 
@@ -426,7 +432,8 @@ export default {
           SongName: songs[i + 2],
           SongURL: songs[i + 3],
           Album: songs[i + 5],
-          Length: minutes + ":" + seconds
+          Length: minutes + ":" + seconds,
+          Publisher: songs[i + 6]
         });
       }
       this.searchSongsCopy = this.songs;
@@ -763,6 +770,11 @@ export default {
   flex: 0 0 125px;
 }
 
+.divSongsPublisher {
+  flex: 0 0 175px; 
+  padding-left: 85px; 
+}
+
 .divSongsSongAlbum {
   flex: 0 0 190px;
   padding-right: 50px;
@@ -793,6 +805,11 @@ export default {
   padding-left: 185px;
 }
 
+.tableSongsHeaderPublisher {
+  width: 150px; 
+  padding-left: 60px; 
+}
+
 .tableSongsHeaderArtist {
   width: 150px;
   padding-left: 35px;
@@ -809,7 +826,7 @@ export default {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
-  width: 1150px;
+  width: 1410px;
   margin-top: 15px;
   margin-left: 15px;
   transition: 0.2s;
