@@ -62,6 +62,7 @@ export default {
       let song = document.getElementById("fileSong").files[0];
       if (song.type == "audio/mpeg") {
         let reader = new FileReader();
+        let reader2 = new FileReader(); 
         let audio = document.createElement("audio");
         reader.readAsArrayBuffer(song);
         reader.addEventListener("loadend", function () {
@@ -71,7 +72,10 @@ export default {
             self.songArtist = mp3tag.tags.artist; 
             self.songAlbum = mp3tag.tags.album; 
           }
-          audio.src = reader.result;
+        });
+        reader2.readAsDataURL(song);
+        reader2.addEventListener("loadend", function () {
+          audio.src = reader2.result;
           audio.addEventListener("loadedmetadata", function () {
             self.songDuration = audio.duration;
           });
@@ -79,7 +83,7 @@ export default {
         document.getElementById("spanSelected").innerHTML = song.name;
         this.showForm = true;
       } else {
-        Ozone.fire("info", "Only mp3 files can be uploaded", "center");
+        Ozone.fire("info", "Only mp3 files can be uploaded", "bottom-middle");
       }
     },
     uploadSong() {
@@ -107,10 +111,10 @@ export default {
             document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
             let response = JSON.parse(data);
             if (response.status == 1) {
-              Ozone.fire("success", response.message, "center");
+              Ozone.fire("success", response.message, "bottom-middle");
               self.$emit("hideUploadSongComponent");
             } else {
-              Ozone.fire("error", response.message, "center");
+              Ozone.fire("error", response.message, "bottom-middle");
             }
           },error: function (error) {
             document.getElementById("loadingSpinnerUS").style.display = "none";
