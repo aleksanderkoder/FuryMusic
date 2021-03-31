@@ -57,13 +57,20 @@ export default {
   },
   methods: {
     showSongForm() {
+      
       let self = this;
       let song = document.getElementById("fileSong").files[0];
       if (song.type == "audio/mpeg") {
         let reader = new FileReader();
-        var audio = document.createElement("audio");
-        reader.readAsDataURL(song);
+        let audio = document.createElement("audio");
+        reader.readAsArrayBuffer(song);
         reader.addEventListener("loadend", function () {
+          const mp3tag = new MP3Tag(reader.result)
+          if(mp3tag.read()) {
+            self.songName = mp3tag.tags.title; 
+            self.songArtist = mp3tag.tags.artist; 
+            self.songAlbum = mp3tag.tags.album; 
+          }
           audio.src = reader.result;
           audio.addEventListener("loadedmetadata", function () {
             self.songDuration = audio.duration;
@@ -118,7 +125,7 @@ export default {
       this.$emit("hideUploadSongComponent");
     },
     regEx() {
-      let regEx = /^[0-9a-zæøåA-ZÆØÅ!?,.-]{1,50}$/;
+      let regEx = /^[0-9a-zæøåA-ZÆØÅ\s!?,.-]{1,50}$/;
       if(regEx.test(this.songName) && regEx.test(this.songArtist) && regEx.test(this.songAlbum)) {
         this.showError = false; 
         return true; 
@@ -126,7 +133,7 @@ export default {
       this.showError = true;
       return false; 
     }
-  },
+  }
 };
 </script>
 

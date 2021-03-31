@@ -6,6 +6,7 @@
         :src="logo"
         width="65px"
         v-on:click="showEasteregg()"
+        class="animate__animated animate__pulse animate__infinite animate__slow"
       />
       <div id="divSearchSong">
         <font-awesome-icon style="color: white" :icon="['fas', 'search']" />
@@ -313,6 +314,12 @@ export default {
     },
     playSong(SongURL, SongID, SongName, ArtistName, Length, Album) {
       document.getElementById("divPlayerControls").style.display = "block";
+      document.getElementById("divPlayerMinimize").style.bottom = "130px";
+      document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
+      document.getElementById("fontPlayerMinimize").style.display =
+        "inline-block";
+      document.getElementById("fontPlayerMaximize").style.display = "none";
+      
       setTimeout(function() {
         document.getElementById("divPlayerMinimize").style.display = "block";
       }, 1000);
@@ -367,7 +374,6 @@ export default {
       // If a song has been selected before, but it's not the same song
       else {
         document.title = "Fury Music";
-        this.wavesurfer.empty();
         document.getElementById("play" + this.currentSongID).style.display =
           "block";
         document.getElementById("pause" + this.currentSongID).style.display =
@@ -386,7 +392,7 @@ export default {
         this.currentSongName = SongName;
         this.currentArtistName = ArtistName;
         this.currentSongAlbum = Album;
-        this.currentSongLength = Length;
+        this.currentSongLength = Length; 
         this.wavesurfer.load(SongURL);
         document.getElementById(
           "play" + SongID
@@ -434,12 +440,16 @@ export default {
       }
     },
     searchSong() {
-      this.songs = this.searchSongsCopy;
-      this.copyCurrentSongID = this.currentSongID;
       let searchQuery = document
         .getElementById("searchSong")
         .value.toLowerCase();
+      
+      if (searchQuery.length == 1) return; 
+
+      this.songs = this.searchSongsCopy;
+      this.copyCurrentSongID = this.currentSongID;
       this.matches = [];
+
       for (let i = 0; i < this.songs.length; i++) {
         let string = this.songs[i].SongName.toLowerCase();
         if (
@@ -536,7 +546,6 @@ export default {
       } else {
         document.getElementById("divPlayerMinimize").style.bottom = "130px";
         document.getElementById("divPlayerControls").style.display = "block";
-        document.getElementById("divPlayerMinimize").style.bottom = "130px";
         document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
         document.getElementById("fontPlayerMinimize").style.display =
           "inline-block";
@@ -593,7 +602,7 @@ export default {
       container: "#waveform",
       waveColor: "white",
       progressColor: "black",
-      barWidth: "2",
+      barWidth: 2,
       height: 100,
       normalize: false,
       fillParent: true,
@@ -603,6 +612,7 @@ export default {
     // Event for when song finishes
     this.wavesurfer.on("finish", function() {
       document.title = "Fury Music";
+      self.elapsedPlaytime = self.currentSongLength; 
       document.getElementById("play" + self.currentSongID).style.display =
         "block";
       document.getElementById("pause" + self.currentSongID).style.display =
@@ -622,7 +632,8 @@ export default {
 
     // Fires when a song is loading
     this.wavesurfer.on("loading", function(progress) {
-        document.title = "Fury Music";
+        document.title = "Fury Music"; 
+        self.elapsedPlaytime = "0:00"; 
         document.getElementById("play" + self.currentSongID).style.display =
           "none";
         document.getElementById("divPlay").style.opacity = "0.25";
@@ -723,7 +734,7 @@ export default {
 #spanTotalPlaytime {
   position: absolute;
   color: white; 
-  right: 60px;
+  right: 55px;
   bottom: 55px;
 }
 
@@ -753,7 +764,8 @@ export default {
 }
 
 .divSongsSongAlbum {
-  flex: 0 0 240px;
+  flex: 0 0 190px;
+  padding-right: 50px;
 }
 
 #divCenterTableHeader {
