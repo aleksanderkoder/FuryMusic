@@ -6,6 +6,7 @@
         :src="logo"
         width="65px"
         v-on:click="showEasteregg()"
+        alt="Fury Music logo"
         class="animate__animated animate__pulse animate__infinite animate__slow"
       />
       <div id="divSearchSong">
@@ -120,19 +121,26 @@
             />
           </div>
           <div class="divSongsSongName ellipsis">
-            {{ song.SongName }}
+            <span v-bind:title="song.SongName">{{ song.SongName }}</span>
           </div>
           <div class="divSongsArtistName ellipsis">
-            {{ song.ArtistName }}
+            <span v-bind:title="song.ArtistName">{{ song.ArtistName }}</span>
           </div>
           <div class="divSongsSongAlbum ellipsis">
-            {{ song.Album }}
+            <span v-bind:title="song.Album">{{ song.Album }}</span>
           </div>
           <div class="divSongsSongLength">
-            {{ song.Length }}
+            <span v-bind:title="song.Length">{{ song.Length }}</span>
           </div>
-          <div class="divSongsPublisher">
-            {{ song.Publisher }}
+          <div class="divSongsPublisher ellipsis">
+            <span v-bind:title="song.Publisher">{{ song.Publisher }}</span>
+          </div>
+          <div class="divSongOptions">
+            <font-awesome-icon
+              style="color: lightgrey; cursor: pointer;"
+              :icon="['fas', 'cloud-download-alt']"
+              v-on:click="downloadSong(song.SongURL)"
+            />
           </div>
         </div>
       </div>
@@ -525,6 +533,9 @@ export default {
       }
       return false;
     },
+    downloadSong(songURL) {
+      window.open(songURL,"_blank"); 
+    },
     muteUnmute(mode) {
       if (mode == "mute") {
         document.getElementById("volumeMute").style.display = "block";
@@ -826,7 +837,7 @@ export default {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
-  width: 1410px;
+  width: 1435px;
   margin-top: 15px;
   margin-left: 15px;
   transition: 0.2s;
