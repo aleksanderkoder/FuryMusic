@@ -23,7 +23,7 @@
           style="color: black"
           :icon="['fas', 'user-circle']"
         />
-        {{ this.$store.state.username }}
+        {{ $store.state.username }}
       </div>
       <button id="btnSignOut" v-on:click="signOut()">
         <font-awesome-icon
@@ -37,9 +37,9 @@
     <div id="divSidebar" class="animate__animated animate__fadeInLeft">
       <h3 id="h3Library">Your library</h3>
 
-      <a>All public songs</a>
+      <span class="sidebarLink" v-on:click="resetSearch()">All public songs</span>
       <br />
-      <a>My uploaded songs</a>
+      <span class="sidebarLink" v-on:click="searchSong($store.state.username)">My uploaded songs</span>
 
       <h3>Playlists</h3>
 
@@ -137,9 +137,17 @@
           </div>
           <div class="divSongOptions">
             <font-awesome-icon
-              style="color: lightgrey; cursor: pointer;"
+              id="fontDownloadSong"
+              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 50px;"
               :icon="['fas', 'cloud-download-alt']"
               v-on:click="downloadSong(song.SongURL)"
+            />
+            <font-awesome-icon v-if="$store.state.username == song.Publisher"
+              id="fontDeleteSong"
+              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
+              style:hover="color: red;"
+              :icon="['fas', 'trash-alt']"
+              v-on:click="deleteSong(song.SongID)"
             />
           </div>
         </div>
@@ -454,17 +462,60 @@ export default {
         }, 100);
       }
     },
-    searchSong() {
-      let searchQuery = document
-        .getElementById("searchSong")
-        .value.toLowerCase();
+    resetSearch() {
+      document.getElementById("searchSong").value = "";
+      this.songs = this.searchSongsCopy;
+    },
+    searchSong(value) {
+      let searchQuery = ""; 
+
+      // Determines wether to search using query from search field or parameter/find user's self uploaded songs 
+      if(value == undefined) {
+        searchQuery = document
+          .getElementById("searchSong")
+          .value.toLowerCase();
+      } else {
+        searchQuery = value; 
+        this.songs = this.searchSongsCopy;
+        this.copyCurrentSongID = this.currentSongID;
+        this.matches = [];
+
+        for (let i = 0; i < this.songs.length; i++) {
+          let string = this.songs[i].Publisher.toLowerCase();
+          if (
+            string.includes(searchQuery) &&
+            !this.searchDupCheck(this.songs[i])
+          ) {
+            this.matches.push({
+              SongID: this.songs[i].SongID,
+              ArtistName: this.songs[i].ArtistName,
+              SongName: this.songs[i].SongName,
+              SongURL: this.songs[i].SongURL,
+              Album: this.songs[i].Album,
+              Length: this.songs[i].Length,
+              Publisher: this.songs[i].Publisher
+            });
+          }
+        }
+          this.songs = this.matches;
+          this.currentSongID = "";
+          this.currentSongAlbum = "";
+          this.currentSongLength = "";
+          document.getElementById("divPlayerControls").style.display = "none";
+          document.getElementById("divPlayerMinimize").style.display = "none";
+          document.getElementById("divPlay").style.display = "block";
+          document.getElementById("divPause").style.display = "none";
+          return; 
+      } 
       
+      // Needs at least 2 characters to do a meaningful search
       if (searchQuery.length == 1) return; 
 
       this.songs = this.searchSongsCopy;
       this.copyCurrentSongID = this.currentSongID;
       this.matches = [];
 
+      // Loops through 
       for (let i = 0; i < this.songs.length; i++) {
         let string = this.songs[i].SongName.toLowerCase();
         if (
@@ -477,7 +528,8 @@ export default {
             SongName: this.songs[i].SongName,
             SongURL: this.songs[i].SongURL,
             Album: this.songs[i].Album,
-            Length: this.songs[i].Length
+            Length: this.songs[i].Length,
+            Publisher: this.songs[i].Publisher
           });
         }
 
@@ -492,7 +544,8 @@ export default {
             SongName: this.songs[i].SongName,
             SongURL: this.songs[i].SongURL,
             Album: this.songs[i].Album,
-            Length: this.songs[i].Length
+            Length: this.songs[i].Length,
+            Publisher: this.songs[i].Publisher
           });
         }
 
@@ -507,7 +560,24 @@ export default {
             SongName: this.songs[i].SongName,
             SongURL: this.songs[i].SongURL,
             Album: this.songs[i].Album,
-            Length: this.songs[i].Length
+            Length: this.songs[i].Length,
+            Publisher: this.songs[i].Publisher
+          });
+        }
+
+        string = this.songs[i].Publisher.toLowerCase();
+        if (
+          string.includes(searchQuery) &&
+          !this.searchDupCheck(this.songs[i].SongID)
+        ) {
+          this.matches.push({
+            SongID: this.songs[i].SongID,
+            ArtistName: this.songs[i].ArtistName,
+            SongName: this.songs[i].SongName,
+            SongURL: this.songs[i].SongURL,
+            Album: this.songs[i].Album,
+            Length: this.songs[i].Length,
+            Publisher: this.songs[i].Publisher
           });
         }
       }
@@ -535,6 +605,22 @@ export default {
     },
     downloadSong(songURL) {
       window.open(songURL,"_blank"); 
+    },
+    deleteSong(songid) {
+      let self = this;
+      // axios({
+      //   method: 'post',
+      //   url: this.apiURL + "deleteSong.php",
+      //   data: {
+      //     username: self.$store.state.username,
+      //     songId: songid
+      //   }
+      // }).then(function(response) {
+      //   alert(response); 
+      // });
+      axios.post(self.apiURL + "deleteSong.php").then((response) => {
+          console.log(response.data);
+      });
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -773,7 +859,7 @@ export default {
 }
 
 .divSongsArtistName {
-  flex: 0 0 305px;
+  flex: 0 0 250px;
   padding-right: 50px;
 }
 
@@ -783,7 +869,7 @@ export default {
 
 .divSongsPublisher {
   flex: 0 0 175px; 
-  padding-left: 85px; 
+  padding-left: 55px; 
 }
 
 .divSongsSongAlbum {
@@ -800,6 +886,7 @@ export default {
   padding: 7px;
   margin-left: 1px;
   color: white;
+  white-space: nowrap;
 }
 
 .tableSongsHeader {
@@ -808,27 +895,22 @@ export default {
 
 .tableSongsHeaderTitle {
   padding-left: 60px;
-  width: 348px;
 }
 
 .tableSongsHeaderLength {
-  width: 150px;
-  padding-left: 185px;
+  padding-left: 190px;
 }
 
 .tableSongsHeaderPublisher {
-  width: 150px; 
-  padding-left: 60px; 
+  padding-left: 130px; 
 }
 
 .tableSongsHeaderArtist {
-  width: 150px;
-  padding-left: 35px;
+  padding-left: 350px;
 }
 
 .tableSongsHeaderAlbum {
-  padding-left: 200px;
-  width: 50px;
+  padding-left: 260px;
 }
 
 #divSongPane {
@@ -1030,6 +1112,26 @@ font-awesome-icon {
   background: #ffffff;
   border-radius: 100%;
   cursor: pointer;
+}
+
+.sidebarLink {
+  display: block;
+  color: white;
+  padding: 3px; 
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebarLink:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+#fontDownloadSong:hover {
+  color: rgb(71, 158, 187) !important;
+}
+
+#fontDeleteSong:hover {
+  color: #8b0000 !important;
 }
 
 #divPlay {

@@ -1,5 +1,5 @@
 <template>
-  <div id="backgroundFade" class="animate__animated animate__fadeIn">
+  <div id="backgroundFade" v-on:click.self="cancel()" class="animate__animated animate__fadeIn">
     <div
       class="animate__animated animate__fadeInDownBig"
       id="divCustomBackImgWrapper"
