@@ -21,14 +21,17 @@
         <br />
         <div v-show="showForm">
           <span id="spanSelected"></span>
-          <font-awesome-icon class="paddingRight" style="color: black" :icon="['fas', 'music']" />
+          <font-awesome-icon class="paddingRight" :icon="['fas', 'music']" />
           <input type="text" placeholder="Song name" v-model="songName" />
           <br />
-          <font-awesome-icon class="paddingRight" style="color: black" :icon="['fas', 'user']" />
+          <font-awesome-icon class="paddingRight" :icon="['fas', 'user']" />
           <input type="text" placeholder="Artist name" v-model="songArtist" />
           <br />
-          <font-awesome-icon class="paddingRight" style="color: black" :icon="['fas', 'record-vinyl']" />
+          <font-awesome-icon class="paddingRight" :icon="['fas', 'record-vinyl']" />
           <input type="text" placeholder="Album name" v-model="songAlbum" />
+          <br />
+          <font-awesome-icon class="paddingRight" :icon="['fas', 'image']" />
+          <input type="text" placeholder="Song cover image URL" v-model="songCover" />
           <br />
           <button id="btnConfirmUploadUS" type="submit" v-on:click="uploadSong()">
             Upload
@@ -49,6 +52,7 @@ export default {
       songName: "",
       songArtist: "",
       songAlbum: "",
+      songCover: "",
       songDuration: 0,
       showForm: false,
       showError: false,
@@ -99,6 +103,7 @@ export default {
         fd.append("songAlbum", this.songAlbum);
         fd.append("songLength", this.songDuration);
         fd.append("publisher", this.$store.state.username);
+        fd.append("songCover", this.songCover);
         fd.append("file", files);
 
         $.ajax({
@@ -130,8 +135,9 @@ export default {
       this.$emit("hideUploadSongComponent");
     },
     regEx() {
-      let regEx = /^[0-9a-zæøåA-ZÆØÅ\s!?,.-]{1,50}$/;
-      if(regEx.test(this.songName) && regEx.test(this.songArtist) && regEx.test(this.songAlbum)) {
+      let regEx = /^[0-9a-zæøåA-ZÆØÅ\s!?/,.-]{1,50}$/;
+      let regExImgCover = /^[0-9a-zæøåA-ZÆØÅ%!?=&/:,.-]{0,255}$/;
+      if(regEx.test(this.songName) && regEx.test(this.songArtist) && regEx.test(this.songAlbum) && regExImgCover.test(this.songCover)) {
         this.showError = false; 
         return true; 
       }

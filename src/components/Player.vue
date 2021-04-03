@@ -54,6 +54,7 @@
         class="animate__animated animate__fadeInLeft ellipsis"
       >
         <!-- Song cover image here maybe?  -->
+        <img id="SongCoverImage" v-bind:src="currentSongImageURL" width="80px">
         <p style="font-weight: bold">{{ currentSongName }}</p>
         <p>{{ currentArtistName }}</p>
       </div>
@@ -101,7 +102,8 @@
                   song.SongName,
                   song.ArtistName,
                   song.Length,
-                  song.Album
+                  song.Album,
+                  song.SongImageURL
                 )
               "
               style="color: black; cursor: pointer; filter: drop-shadow(0px 0px 7px #FFFFFF);"
@@ -140,6 +142,7 @@
               id="fontDownloadSong"
               style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 50px;"
               :icon="['fas', 'cloud-download-alt']"
+              title="Download"
               v-on:click="downloadSong(song.SongURL)"
             />
             <font-awesome-icon v-if="$store.state.username == song.Publisher"
@@ -147,7 +150,8 @@
               style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
               style:hover="color: red;"
               :icon="['fas', 'trash-alt']"
-              v-on:click="deleteSong(song.SongID)"
+              title = "Delete"
+              v-on:click="deleteSong(song.SongID, song.SongURL)"
             />
           </div>
         </div>
@@ -275,6 +279,7 @@ export default {
       currentArtistName: "",
       currentSongAlbum: "",
       currentSongLength: 0,
+      currentSongImageURL: "",
       elapsedPlaytime: 0, 
       showCustomBackImg: false,
       uploadImgLabel: false,
@@ -334,7 +339,7 @@ export default {
         }
       }
     },
-    playSong(SongURL, SongID, SongName, ArtistName, Length, Album) {
+    playSong(SongURL, SongID, SongName, ArtistName, Length, Album, SongImageURL) {
       document.getElementById("divPlayerControls").style.display = "block";
       document.getElementById("divPlayerMinimize").style.bottom = "130px";
       document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
@@ -372,6 +377,7 @@ export default {
         this.currentSongID = SongID;
         this.currentSongAlbum = Album;
         this.currentSongLength = Length; 
+        this.currentSongImageURL = SongImageURL;
         this.wavesurfer.load(SongURL);
         document.getElementById(
           "play" + SongID
@@ -415,6 +421,7 @@ export default {
         this.currentArtistName = ArtistName;
         this.currentSongAlbum = Album;
         this.currentSongLength = Length; 
+        this.currentSongImageURL = SongImageURL;
         this.wavesurfer.load(SongURL);
         document.getElementById(
           "play" + SongID
@@ -436,7 +443,7 @@ export default {
       document.title = "Paused";
     },
     populateSongList(songs) {
-      for (var i = 0; i < songs.length; i += 7) {
+      for (var i = 0; i < songs.length; i += 8) {
         let minutes = parseInt(songs[i + 4] / 60);
         let seconds = parseInt(songs[i + 4] - minutes * 60);
 
@@ -449,7 +456,8 @@ export default {
           SongURL: songs[i + 3],
           Album: songs[i + 5],
           Length: minutes + ":" + seconds,
-          Publisher: songs[i + 6]
+          Publisher: songs[i + 6],
+          SongImageURL: songs[i + 7]
         });
       }
       this.searchSongsCopy = this.songs;
@@ -606,21 +614,30 @@ export default {
     downloadSong(songURL) {
       window.open(songURL,"_blank"); 
     },
-    deleteSong(songid) {
+    deleteSong(songid, songurl) { // FIXES MER HER MED SONGID PÅ SERVER OSV.
       let self = this;
-      // axios({
-      //   method: 'post',
-      //   url: this.apiURL + "deleteSong.php",
-      //   data: {
-      //     username: self.$store.state.username,
-      //     songId: songid
-      //   }
-      // }).then(function(response) {
-      //   alert(response); 
-      // });
-      axios.post(self.apiURL + "deleteSong.php").then((response) => {
-          console.log(response.data);
-      });
+      Ozone.fire("info", "Do you really want to delete this song?", "center", "dialog", "Delete", "Cancel", function() {
+        let fd = new FormData();
+        fd.append("username", self.$store.state.username);
+        fd.append("songURL", songurl);
+
+        fetch(self.apiURL + "deleteSong.php", {
+          method: "post",
+          body: fd
+          }).then(function (response) {
+            return response.text().then(function (text) {
+              if(text == "OK") {
+                self.songs.splice(self.songs.indexOf(songurl), 1); 
+                self.searchSongsCopy.splice(self.searchSongsCopy.indexOf(songurl), 1);
+                Ozone.fire("success", "Song has been deleted", "bottom-middle"); 
+              } else {
+                Ozone.fire("error", "Something went wrong", "bottom-middle"); 
+              } 
+          })
+          }).catch(function (error) {
+            console.error('Error:', error);
+          });
+      })
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -1124,6 +1141,16 @@ font-awesome-icon {
 
 .sidebarLink:hover {
   background-color: rgba(255, 255, 255, 0.15);
+}
+
+#SongCoverImage {
+  box-shadow:
+  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+  0 12.5px 10px rgba(0, 0, 0, 0.06),
+  0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+  0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+  0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
 #fontDownloadSong:hover {
