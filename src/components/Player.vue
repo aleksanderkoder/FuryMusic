@@ -37,9 +37,13 @@
     <div id="divSidebar" class="animate__animated animate__fadeInLeft">
       <h3 id="h3Library">Your library</h3>
 
-      <span class="sidebarLink" v-on:click="resetSearch()">All public songs</span>
+      <span class="sidebarLink" v-on:click="resetSearch()"
+        >All public songs</span
+      >
       <br />
-      <span class="sidebarLink" v-on:click="searchSong($store.state.username)">My uploaded songs</span>
+      <span class="sidebarLink" v-on:click="searchSong($store.state.username)"
+        >My uploaded songs</span
+      >
 
       <h3>Playlists</h3>
 
@@ -53,7 +57,11 @@
         v-if="currentSongName != ''"
         class="animate__animated animate__fadeInLeft ellipsis"
       >
-        <img id="SongCoverImage" v-bind:src="currentSongImageURL" width="90px">
+        <img
+          id="SongCoverImage"
+          v-bind:src="currentSongImageURL"
+          width="90px"
+        />
         <p style="font-weight: bold">{{ currentSongName }}</p>
         <p>{{ currentArtistName }}</p>
       </div>
@@ -145,12 +153,13 @@
               title="Download"
               v-on:click="downloadSong(song.SongURL)"
             />
-            <font-awesome-icon v-if="$store.state.username == song.Publisher"
+            <font-awesome-icon
+              v-if="$store.state.username == song.Publisher"
               id="fontDeleteSong"
               style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
               style:hover="color: red;"
               :icon="['fas', 'trash-alt']"
-              title = "Delete"
+              title="Delete"
               v-on:click="deleteSong(song.SongID, song.SongURL)"
             />
           </div>
@@ -218,9 +227,9 @@
           id="wavesurferVolume"
         />
       </div>
-      <span id="spanElapsedPlaytime">{{elapsedPlaytime}}</span>
+      <span id="spanElapsedPlaytime">{{ elapsedPlaytime }}</span>
       <div id="waveform" v-on:click="waveformInteraction()"></div>
-      <span id="spanTotalPlaytime">{{currentSongLength}}</span>
+      <span id="spanTotalPlaytime">{{ currentSongLength }}</span>
     </div>
 
     <div id="songLoader">
@@ -280,17 +289,14 @@ export default {
       currentSongAlbum: "",
       currentSongLength: 0,
       currentSongImageURL: "",
-      elapsedPlaytime: 0, 
+      elapsedPlaytime: 0,
       showCustomBackImg: false,
       uploadImgLabel: false,
       showUploadSong: false,
       oldVol: 0,
-      searchSongsCopy: [],
-      matches: [],
-      copyCurrentSongID: "",
       toggleShuffle: false,
-      logo: "src/assets/fury logo favicon5.png", 
-      logoImage: "src/assets/fury logo favicon5.png", 
+      logo: "src/assets/fury logo favicon5.png",
+      logoImage: "src/assets/fury logo favicon5.png",
       easterImage: "src/assets/east long.gif",
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
@@ -306,69 +312,42 @@ export default {
           "Playing '" + this.currentSongName + "' by " + this.currentArtistName;
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
-        if (document.getElementById("play" + this.currentSongID) != null) {
-          document.getElementById("play" + this.currentSongID).style.display =
-            "none";
-          document.getElementById("pause" + this.currentSongID).style.display =
-            "block";
-        } else {
-          document.getElementById(
-            "play" + this.copyCurrentSongID
-          ).style.display = "none";
-          document.getElementById(
-            "pause" + this.copyCurrentSongID
-          ).style.display = "none";
-        }
+        document.getElementById("play" + this.currentSongID).style.display =
+          "none";
+        document.getElementById("pause" + this.currentSongID).style.display =
+          "block";
       } else {
         this.wavesurfer.pause();
         document.title = "Paused";
         document.getElementById("divPause").style.display = "none";
         document.getElementById("divPlay").style.display = "block";
-        if (document.getElementById("pause" + this.currentSongID) != null) {
+        
           document.getElementById("pause" + this.currentSongID).style.display =
             "none";
           document.getElementById("play" + this.currentSongID).style.display =
             "block";
-        } else {
-          document.getElementById(
-            "pause" + this.copyCurrentSongID
-          ).style.display = "none";
-          document.getElementById(
-            "play" + this.copyCurrentSongID
-          ).style.display = "block";
-        }
+        
       }
     },
-    playSong(SongURL, SongID, SongName, ArtistName, Length, Album, SongImageURL) {
+    playSong(
+      SongURL,
+      SongID,
+      SongName,
+      ArtistName,
+      Length,
+      Album,
+      SongImageURL
+    ) {
       document.getElementById("divPlayerControls").style.display = "block";
       document.getElementById("divPlayerMinimize").style.bottom = "130px";
       document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
       document.getElementById("fontPlayerMinimize").style.display =
         "inline-block";
       document.getElementById("fontPlayerMaximize").style.display = "none";
-      
+
       setTimeout(function() {
         document.getElementById("divPlayerMinimize").style.display = "block";
       }, 1000);
-
-      if (
-        this.copyCurrentSongID != "" &&
-        document.getElementById("searchSong").value == ""
-      ) {
-        //alert(this.copyCurrentSongID)
-        document.getElementById(
-          "play" + this.copyCurrentSongID
-        ).parentElement.parentElement.style.backgroundColor = "white";
-        document.getElementById(
-          "play" + this.copyCurrentSongID
-        ).parentElement.parentElement.style.color = "black";
-        document.getElementById("play" + this.copyCurrentSongID).style.display =
-          "block";
-        document.getElementById(
-          "pause" + this.copyCurrentSongID
-        ).style.display = "none";
-        this.copyCurrentSongID = "";
-      }
 
       // If no song is selected, load selected song
       if (this.currentSongID == "") {
@@ -376,7 +355,7 @@ export default {
         this.currentArtistName = ArtistName;
         this.currentSongID = SongID;
         this.currentSongAlbum = Album;
-        this.currentSongLength = Length; 
+        this.currentSongLength = Length;
         this.currentSongImageURL = SongImageURL;
         this.wavesurfer.load(SongURL);
         document.getElementById(
@@ -420,7 +399,7 @@ export default {
         this.currentSongName = SongName;
         this.currentArtistName = ArtistName;
         this.currentSongAlbum = Album;
-        this.currentSongLength = Length; 
+        this.currentSongLength = Length;
         this.currentSongImageURL = SongImageURL;
         this.wavesurfer.load(SongURL);
         document.getElementById(
@@ -473,172 +452,103 @@ export default {
     },
     resetSearch() {
       document.getElementById("searchSong").value = "";
-      this.songs = this.searchSongsCopy;
+      for (let i = 0; i < this.songs.length; i++) {
+        this.songs[i].Show = true;
+      }
     },
     searchSong(value) {
-      let searchQuery = ""; 
-
-      // Determines wether to search using query from search field or parameter/find user's self uploaded songs 
-      if(value == undefined) {
-        searchQuery = document
-          .getElementById("searchSong")
-          .value.toLowerCase();
+      let searchQuery = "";
+      // Determines wether to search using query from search field or parameter/find user's self uploaded songs
+      if (value == undefined) {
+        searchQuery = document.getElementById("searchSong").value.toLowerCase();
       } else {
-        searchQuery = value; 
-        this.songs = this.searchSongsCopy;
-        this.copyCurrentSongID = this.currentSongID;
-        this.matches = [];
+        searchQuery = value;
 
         for (let i = 0; i < this.songs.length; i++) {
           let string = this.songs[i].Publisher.toLowerCase();
-          if (
-            string.includes(searchQuery) &&
-            !this.searchDupCheck(this.songs[i])
-          ) {
-            this.matches.push({
-              SongID: this.songs[i].SongID,
-              ArtistName: this.songs[i].ArtistName,
-              SongName: this.songs[i].SongName,
-              SongURL: this.songs[i].SongURL,
-              Album: this.songs[i].Album,
-              Length: this.songs[i].Length,
-              Publisher: this.songs[i].Publisher
-            });
+          if (string.includes(searchQuery)) {
+            this.songs[i].Show = true;
+          } else {
+            this.songs[i].Show = false;
           }
         }
-          this.songs = this.matches;
-          this.currentSongID = "";
-          this.currentSongAlbum = "";
-          this.currentSongLength = "";
-          document.getElementById("divPlayerControls").style.display = "none";
-          document.getElementById("divPlayerMinimize").style.display = "none";
-          document.getElementById("divPlay").style.display = "block";
-          document.getElementById("divPause").style.display = "none";
-          return; 
-      } 
-      
-      // Needs at least 2 characters to do a meaningful search
-      if (searchQuery.length == 1) return; 
+        document.getElementById("divPlayerControls").style.display = "none";
+        document.getElementById("divPlayerMinimize").style.display = "none";
+        document.getElementById("divPlay").style.display = "block";
+        document.getElementById("divPause").style.display = "none";
+        return;
+      }
 
-      this.songs = this.searchSongsCopy;
-      this.copyCurrentSongID = this.currentSongID;
-      this.matches = [];
+      this.resetSearch();
 
-      // Loops through 
+      // Loops through songs and filters out any entries who doesn't fit search query
       for (let i = 0; i < this.songs.length; i++) {
         let string = this.songs[i].SongName.toLowerCase();
-        if (
-          string.includes(searchQuery) &&
-          !this.searchDupCheck(this.songs[i])
-        ) {
-          this.matches.push({
-            SongID: this.songs[i].SongID,
-            ArtistName: this.songs[i].ArtistName,
-            SongName: this.songs[i].SongName,
-            SongURL: this.songs[i].SongURL,
-            Album: this.songs[i].Album,
-            Length: this.songs[i].Length,
-            Publisher: this.songs[i].Publisher
-          });
-        }
-
-        string = this.songs[i].ArtistName.toLowerCase();
-        if (
-          string.includes(searchQuery) &&
-          !this.searchDupCheck(this.songs[i])
-        ) {
-          this.matches.push({
-            SongID: this.songs[i].SongID,
-            ArtistName: this.songs[i].ArtistName,
-            SongName: this.songs[i].SongName,
-            SongURL: this.songs[i].SongURL,
-            Album: this.songs[i].Album,
-            Length: this.songs[i].Length,
-            Publisher: this.songs[i].Publisher
-          });
+        let hit = 0;
+        if (string.includes(searchQuery)) {
+          hit++;
         }
 
         string = this.songs[i].Album.toLowerCase();
-        if (
-          string.includes(searchQuery) &&
-          !this.searchDupCheck(this.songs[i].SongID)
-        ) {
-          this.matches.push({
-            SongID: this.songs[i].SongID,
-            ArtistName: this.songs[i].ArtistName,
-            SongName: this.songs[i].SongName,
-            SongURL: this.songs[i].SongURL,
-            Album: this.songs[i].Album,
-            Length: this.songs[i].Length,
-            Publisher: this.songs[i].Publisher
-          });
+        if (string.includes(searchQuery)) {
+          hit++;
+        }
+
+        string = this.songs[i].ArtistName.toLowerCase();
+        if (string.includes(searchQuery)) {
+          hit++;
         }
 
         string = this.songs[i].Publisher.toLowerCase();
-        if (
-          string.includes(searchQuery) &&
-          !this.searchDupCheck(this.songs[i].SongID)
-        ) {
-          this.matches.push({
-            SongID: this.songs[i].SongID,
-            ArtistName: this.songs[i].ArtistName,
-            SongName: this.songs[i].SongName,
-            SongURL: this.songs[i].SongURL,
-            Album: this.songs[i].Album,
-            Length: this.songs[i].Length,
-            Publisher: this.songs[i].Publisher
-          });
+        if (string.includes(searchQuery)) {
+          hit++;
+        }
+        if (hit < 1) {
+          this.songs[i].Show = false;
         }
       }
-      this.songs = this.matches;
-
-      if (document.getElementById("searchSong").value == "") {
-        this.songs = this.searchSongsCopy;
-      }
-
-      this.currentSongID = "";
-      this.currentSongAlbum = "";
-      this.currentSongLength = "";
-      document.getElementById("divPlayerControls").style.display = "none";
-      document.getElementById("divPlayerMinimize").style.display = "none";
-      document.getElementById("divPlay").style.display = "block";
-      document.getElementById("divPause").style.display = "none";
-    },
-    searchDupCheck(input) {
-      for (let i = 0; i < this.matches.length; i++) {
-        if (input == this.matches[i].SongID) {
-          return true;
-        }
-      }
-      return false;
     },
     downloadSong(songURL) {
-      window.open(songURL,"_blank"); 
+      window.open(songURL, "_blank");
     },
-    deleteSong(songid, songurl) { // FIXES MER HER MED SONGID PÅ SERVER OSV.
+    deleteSong(songid, songurl) {
+      // FIXES MER HER MED SONGID PÅ SERVER OSV.
       let self = this;
-      Ozone.fire("info", "Delete song?", "center", "dialog", "Delete", "Cancel", function() {
-        let fd = new FormData();
-        fd.append("username", self.$store.state.username);
-        fd.append("songURL", songurl);
+      Ozone.fire(
+        "info",
+        "Delete song?",
+        "center",
+        "dialog",
+        "Delete",
+        "Cancel",
+        function() {
+          let fd = new FormData();
+          fd.append("username", self.$store.state.username);
+          fd.append("songURL", songurl);
 
-        fetch(self.apiURL + "deleteSong.php", {
-          method: "post",
-          body: fd
-          }).then(function (response) {
-            return response.text().then(function (text) {
-              if(text == "OK") {
-                self.songs.splice(self.songs.indexOf(songurl), 1); 
-                self.searchSongsCopy.splice(self.searchSongsCopy.indexOf(songurl), 1);
-                Ozone.fire("success", "Song has been deleted", "bottom-middle"); 
-              } else {
-                Ozone.fire("error", "Something went wrong", "bottom-middle"); 
-              } 
+          fetch(self.apiURL + "deleteSong.php", {
+            method: "post",
+            body: fd
           })
-          }).catch(function (error) {
-            console.error('Error:', error);
-          });
-      })
+            .then(function(response) {
+              return response.text().then(function(text) {
+                if (text == "OK") {
+                  self.songs.splice(self.songs.indexOf(songurl), 1);
+                  Ozone.fire(
+                    "success",
+                    "Song has been deleted",
+                    "bottom-middle"
+                  );
+                } else {
+                  Ozone.fire("error", "Something went wrong", "bottom-middle");
+                }
+              });
+            })
+            .catch(function(error) {
+              console.error("Error:", error);
+            });
+        }
+      );
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -680,11 +590,10 @@ export default {
       let dask = new Audio("src/assets/easteregg.mp3");
       setTimeout(function() {
         dask.play();
-      }, 400); 
+      }, 400);
       setTimeout(function() {
-        self.logo = self.logoImage; 
+        self.logo = self.logoImage;
       }, 1900);
-      
     },
     signOut() {
       localStorage.removeItem("username");
@@ -696,20 +605,22 @@ export default {
     loggedIn: function() {
       console.log("Fetching all songs...");
       var self = this;
-        fetch(self.apiURL + "getAllSongs.php", {
-          method: "post"
-          }).then(function (response) {
-            return response.json().then(function (text) {
-              console.log(text);
-              if (text != "Error") {
-                self.populateSongList(text);
-              } else {
-                console.log("ERROR: " + text);
-              }
-            })
-          }).catch(function (error) {
-            console.log(error); 
+      fetch(self.apiURL + "getAllSongs.php", {
+        method: "post"
+      })
+        .then(function(response) {
+          return response.json().then(function(text) {
+            console.log(text);
+            if (text != "Error") {
+              self.populateSongList(text);
+            } else {
+              console.log("ERROR: " + text);
+            }
           });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
   mounted() {
@@ -730,7 +641,7 @@ export default {
     // Event for when song finishes
     this.wavesurfer.on("finish", function() {
       document.title = "Fury Music";
-      self.elapsedPlaytime = self.currentSongLength; 
+      self.elapsedPlaytime = self.currentSongLength;
       document.getElementById("play" + self.currentSongID).style.display =
         "block";
       document.getElementById("pause" + self.currentSongID).style.display =
@@ -740,38 +651,36 @@ export default {
     });
 
     this.wavesurfer.on("audioprocess", function(progress) {
-      let minutes = parseInt(progress / 60); 
-      let seconds = parseInt(progress - minutes * 60); 
-      if(seconds < 10) {
+      let minutes = parseInt(progress / 60);
+      let seconds = parseInt(progress - minutes * 60);
+      if (seconds < 10) {
         seconds = "0" + seconds;
       }
-      self.elapsedPlaytime = minutes + ":" + seconds; 
+      self.elapsedPlaytime = minutes + ":" + seconds;
     });
 
     // Fires when a song is loading
     this.wavesurfer.on("loading", function(progress) {
-        document.title = "Fury Music"; 
-        self.elapsedPlaytime = "0:00"; 
-        document.getElementById("play" + self.currentSongID).style.display =
-          "none";
-        document.getElementById("divPlay").style.opacity = "0.25";
-        document.getElementById("divPlay").style.pointerEvents = "none";
-        document.getElementById("wavesurferVolume").style.opacity = "0.25";
-        document.getElementById("wavesurferVolume").style.pointerEvents =
-          "none";
-        document.getElementById("volumeMute").style.opacity = "0.25";
-        document.getElementById("volumeMute").style.pointerEvents = "none";
-        document.getElementById("volumeUp").style.opacity = "0.25";
-        document.getElementById("volumeUp").style.pointerEvents = "none";
-        document.getElementById("load" + self.currentSongID).style.display =
-          "block";
-        document.getElementById("songLoader").style.display = "block";
-        document.getElementById("songLoaderProgress").innerHTML =
-          progress + "%";
+      document.title = "Fury Music";
+      self.elapsedPlaytime = "0:00";
+      document.getElementById("play" + self.currentSongID).style.display =
+        "none";
+      document.getElementById("divPlay").style.opacity = "0.25";
+      document.getElementById("divPlay").style.pointerEvents = "none";
+      document.getElementById("wavesurferVolume").style.opacity = "0.25";
+      document.getElementById("wavesurferVolume").style.pointerEvents = "none";
+      document.getElementById("volumeMute").style.opacity = "0.25";
+      document.getElementById("volumeMute").style.pointerEvents = "none";
+      document.getElementById("volumeUp").style.opacity = "0.25";
+      document.getElementById("volumeUp").style.pointerEvents = "none";
+      document.getElementById("load" + self.currentSongID).style.display =
+        "block";
+      document.getElementById("songLoader").style.display = "block";
+      document.getElementById("songLoaderProgress").innerHTML = progress + "%";
 
-        if (localStorage.getItem("volumeLog")) {
-          self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
-        }
+      if (localStorage.getItem("volumeLog")) {
+        self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
+      }
     });
 
     // Fires when wavesurfer is ready
@@ -789,7 +698,7 @@ export default {
         "block";
       document.getElementById("load" + self.currentSongID).style.display =
         "none";
-      self.elapsedPlaytime = "0:00"; 
+      self.elapsedPlaytime = "0:00";
     });
 
     // Controls volume slider and saving of value
@@ -866,7 +775,7 @@ export default {
 
 #spanTotalPlaytime {
   position: absolute;
-  color: white; 
+  color: white;
   right: 55px;
   bottom: 55px;
 }
@@ -875,7 +784,7 @@ export default {
   position: absolute;
   color: white;
   left: 210px;
-  bottom: 55px; 
+  bottom: 55px;
 }
 
 .divSongsPlay {
@@ -897,8 +806,8 @@ export default {
 }
 
 .divSongsPublisher {
-  flex: 0 0 175px; 
-  padding-left: 55px; 
+  flex: 0 0 175px;
+  padding-left: 55px;
 }
 
 .divSongsSongAlbum {
@@ -931,7 +840,7 @@ export default {
 }
 
 .tableSongsHeaderPublisher {
-  padding-left: 130px; 
+  padding-left: 130px;
 }
 
 .tableSongsHeaderArtist {
@@ -987,10 +896,10 @@ font-awesome-icon {
 }
 
 #logo {
-  position: absolute; 
+  position: absolute;
   /* border-radius: 100%;  */
   left: 50px;
-  top: 5px; 
+  top: 5px;
 }
 
 #divSidebarCurrentSongInfo {
@@ -1146,7 +1055,7 @@ font-awesome-icon {
 .sidebarLink {
   display: block;
   color: white;
-  padding: 3px; 
+  padding: 3px;
   cursor: pointer;
   transition: 0.3s;
 }
@@ -1156,13 +1065,10 @@ font-awesome-icon {
 }
 
 #SongCoverImage {
-  box-shadow:
-  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-  0 12.5px 10px rgba(0, 0, 0, 0.06),
-  0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-  0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-  0 100px 80px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
 #fontDownloadSong:hover {
