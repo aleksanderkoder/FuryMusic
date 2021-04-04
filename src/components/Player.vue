@@ -97,7 +97,7 @@
           id="divSongPane"
           v-for="song in songs"
           :key="song.SongID"
-          v-show="song.Show == true"
+          v-show="song.Show"
           class="animate__animated animate__fadeInRight"
         >
           <div class="divSongsPlay">
@@ -145,7 +145,6 @@
           <div class="divSongsPublisher ellipsis">
             <span v-bind:title="song.Publisher">{{ song.Publisher }}</span>
           </div>
-          <div class="divSongOptions">
             <font-awesome-icon
               id="fontDownloadSong"
               style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 50px;"
@@ -162,7 +161,6 @@
               title="Delete"
               v-on:click="deleteSong(song.SongID, song.SongURL)"
             />
-          </div>
         </div>
       </div>
 
@@ -251,6 +249,13 @@
       />
     </div>
 
+    <div id="divPlayerOptions" class="animate__animated animate__flipInY">
+      <font-awesome-icon id="fontToggleShuffle"
+      style="opacity: 1;"
+      title="Toggle shuffle"
+      v-on:click="toggleShufflePlay()" :icon="['fas', 'random']" />
+    </div>
+
     <UploadBackImg
       v-show="showCustomBackImg"
       @hideCustomBackgroundImageComponent="showCustomBackImg = false"
@@ -294,7 +299,7 @@ export default {
       uploadImgLabel: false,
       showUploadSong: false,
       oldVol: 0,
-      toggleShuffle: false,
+      toggleShuffle: true,
       logo: "src/assets/fury logo favicon5.png",
       logoImage: "src/assets/fury logo favicon5.png",
       easterImage: "src/assets/east long.gif",
@@ -340,6 +345,7 @@ export default {
     ) {
       document.getElementById("divPlayerControls").style.display = "block";
       document.getElementById("divPlayerMinimize").style.bottom = "130px";
+      document.getElementById("divPlayerOptions").style.bottom = "130px";
       document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
       document.getElementById("fontPlayerMinimize").style.display =
         "inline-block";
@@ -347,6 +353,7 @@ export default {
 
       setTimeout(function() {
         document.getElementById("divPlayerMinimize").style.display = "block";
+        document.getElementById("divPlayerOptions").style.display = "block";
       }, 1000);
 
       // If no song is selected, load selected song
@@ -508,6 +515,16 @@ export default {
         }
       }
     },
+    toggleShufflePlay() {
+      let btn = document.getElementById("fontToggleShuffle"); 
+      if(btn.style.opacity == "0.25") {
+        this.toggleShuffle = true; 
+        document.getElementById("fontToggleShuffle").style.opacity = "1";
+        return; 
+      }
+      btn.style.opacity = "0.25";
+      this.toggleShuffle = false;
+    },
     downloadSong(songURL) {
       window.open(songURL, "_blank");
     },
@@ -549,6 +566,11 @@ export default {
             });
         }
       );
+    },
+    playRandom() {
+      console.log("Playing random song...");
+      let next = this.songs[Math.floor(Math.random() * this.songs.length)];
+      this.playSong(next.SongURL, next.SongID, next.SongName, next.ArtistName, next.Length, next.Album, next.SongImageURL); 
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -610,7 +632,6 @@ export default {
       })
         .then(function(response) {
           return response.json().then(function(text) {
-            console.log(text);
             if (text != "Error") {
               self.populateSongList(text);
             } else {
@@ -648,6 +669,13 @@ export default {
         "none";
       document.getElementById("divPlay").style.display = "block";
       document.getElementById("divPause").style.display = "none";
+
+      if(self.toggleShuffle) {
+        setTimeout(function() {
+          self.playRandom(); 
+        }, 3000); 
+      }
+
     });
 
     this.wavesurfer.on("audioprocess", function(progress) {
@@ -699,6 +727,9 @@ export default {
       document.getElementById("load" + self.currentSongID).style.display =
         "none";
       self.elapsedPlaytime = "0:00";
+      if(self.toggleShuffle) {
+        self.wavePlayPauseToggle("play"); 
+      }
     });
 
     // Controls volume slider and saving of value
@@ -737,11 +768,11 @@ export default {
 }
 
 #divPlayerOptions {
-  display: "block";
+  display: none;
   position: absolute;
   text-align: center;
   bottom: 130px;
-  left: 170px;
+  left: 171px;
   color: white;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 5px;

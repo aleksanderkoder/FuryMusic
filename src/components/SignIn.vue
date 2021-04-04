@@ -37,7 +37,11 @@
       <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
       <br />
       <br />
-      <font-awesome-icon id="loadingSpinner" :icon="['fas', 'circle-notch']" spin />
+      <font-awesome-icon
+        id="loadingSpinner"
+        :icon="['fas', 'circle-notch']"
+        spin
+      />
       <a href="">Forgot password?</a>
     </div>
     <p id="makersMark" class="animate__animated animate__fadeInUpBig">
@@ -53,7 +57,7 @@ export default {
     return {
       username: "",
       password: "",
-      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/",
+      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
   methods: {
@@ -72,8 +76,9 @@ export default {
         fetch(self.apiURL + "userSignIn.php", {
           method: "post",
           body: fd
-          }).then(function (response) {
-            return response.text().then(function (text) {
+        })
+          .then(function(response) {
+            return response.text().then(function(text) {
               console.log(text);
               document.getElementById("loadingSpinner").style.display = "none";
               document.getElementById("btnLogIn").style.display = "block";
@@ -92,10 +97,20 @@ export default {
                 self.$store.commit("updateUsername", self.username);
                 self.$emit("fetchSongsGrant");
 
-                setTimeout(function () {
+                let time = new Date();
+                time = time.getHours();
+                let greeting = "";
+                if (time < 8) {
+                  greeting = "Good morning, ";
+                } else if (time > 8 && time < 18) {
+                  greeting = "Good day, ";
+                } else if (time > 18) {
+                  greeting = "Good evening, ";
+                }
+                setTimeout(function() {
                   Ozone.fire(
-                    "success",
-                    "Signed in as " + self.$store.state.username,
+                    "info",
+                    greeting + self.$store.state.username + "!",
                     "bottom-middle"
                   );
                 }, 2000);
@@ -107,8 +122,9 @@ export default {
               }
               self.username = "";
               self.password = "";
-            })
-          }).catch(function (error) {
+            });
+          })
+          .catch(function(error) {
             console.log(error);
             document.getElementById("loadingSpinner").style.display = "none";
             document.getElementById("btnLogIn").style.display = "block";
@@ -140,7 +156,7 @@ export default {
     goToSignUp() {
       document.getElementById("error").style.display = "none";
       this.$store.commit("showSignUp");
-    },
+    }
   },
   mounted() {
     // Checks if user information has been already entered, and logs user in if true
@@ -151,24 +167,25 @@ export default {
     }
 
     // Logo start animation toggling
-    setTimeout(function () {
-      document.getElementById("logo").setAttribute("class","animate__animated animate__pulse animate__slow animate__infinite")
-    }, 2000); 
-    
-  },
+    setTimeout(function() {
+      document
+        .getElementById("logo")
+        .setAttribute(
+          "class",
+          "animate__animated animate__pulse animate__slow animate__infinite"
+        );
+    }, 2000);
+  }
 };
 </script>
 
 <style scoped>
-
 #pageWrapper {
   height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
-
 }
-
 
 #divLogInWrapper {
   text-align: center;
