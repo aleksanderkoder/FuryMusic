@@ -251,7 +251,7 @@
 
     <div id="divPlayerOptions" class="animate__animated animate__flipInY">
       <font-awesome-icon id="fontToggleShuffle"
-      style="opacity: 1;"
+      style="opacity: 0.25;"
       title="Toggle shuffle"
       v-on:click="toggleShufflePlay()" :icon="['fas', 'random']" />
     </div>
@@ -299,7 +299,7 @@ export default {
       uploadImgLabel: false,
       showUploadSong: false,
       oldVol: 0,
-      toggleShuffle: true,
+      toggleShuffle: false,
       logo: "src/assets/fury logo favicon5.png",
       logoImage: "src/assets/fury logo favicon5.png",
       easterImage: "src/assets/east long.gif",
@@ -596,9 +596,15 @@ export default {
         document.getElementById("spanPlayerMinimize").innerHTML = "Maximize";
         document.getElementById("fontPlayerMaximize").style.display =
           "inline-block";
+        document.getElementById("divPlayerOptions").style.display = "none";
         document.getElementById("fontPlayerMinimize").style.display = "none";
       } else {
+        document.getElementById("divPlayerMinimize").style.display = "none"; 
         document.getElementById("divPlayerMinimize").style.bottom = "130px";
+        setTimeout(function() {
+          document.getElementById("divPlayerMinimize").style.display = "block"; 
+          document.getElementById("divPlayerOptions").style.display = "block";
+        }, 1000);
         document.getElementById("divPlayerControls").style.display = "block";
         document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
         document.getElementById("fontPlayerMinimize").style.display =
@@ -1047,6 +1053,8 @@ font-awesome-icon {
   padding-right: 10px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
   cursor: pointer;
 }
 
@@ -1163,6 +1171,15 @@ font-awesome-icon {
 #divPlayerWrapper {
   width: 100%;
   height: 100%;
+}
+
+.animation-move-up {
+  animation: move-up 1s ease 1;
+}
+
+@keyframes move-up {
+  0% {bottom: 0;}
+  100% {bottom: 130px;}
 }
 
 button {

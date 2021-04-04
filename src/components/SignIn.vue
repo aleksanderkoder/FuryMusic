@@ -102,9 +102,9 @@ export default {
                 let greeting = "";
                 if (time < 8) {
                   greeting = "Good morning, ";
-                } else if (time > 8 && time < 18) {
+                } else if (time >= 8 && time < 18) {
                   greeting = "Good day, ";
-                } else if (time > 18) {
+                } else if (time >= 18) {
                   greeting = "Good evening, ";
                 }
                 setTimeout(function() {
