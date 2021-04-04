@@ -37,7 +37,7 @@
       <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
       <br />
       <br />
-      <font-awesome-icon id="loadingSpinner" :icon="['fas', 'spinner']" spin />
+      <font-awesome-icon id="loadingSpinner" :icon="['fas', 'circle-notch']" spin />
       <a href="">Forgot password?</a>
     </div>
     <p id="makersMark" class="animate__animated animate__fadeInUpBig">
@@ -65,56 +65,56 @@ export default {
       document.getElementById("error").style.display = "none";
 
       if (this.regExLogIn()) {
-        $.ajax({
-          type: "POST",
-          url: this.apiURL + "userSignIn.php",
-          dataType: "json",
-          data: { username: this.username, password: this.password },
-          cache: false,
-          async: true,
-          success: function (data) {
-            console.log(data);
-            document.getElementById("loadingSpinner").style.display = "none";
-            document.getElementById("btnLogIn").style.display = "block";
-            document.getElementById("btnGoToSignUp").style.display = "block";
+        let fd = new FormData();
+        fd.append("username", this.username);
+        fd.append("password", this.password);
 
-            if (data != "Wrong info") {
-              console.log("Logging in user...");
+        fetch(self.apiURL + "userSignIn.php", {
+          method: "post",
+          body: fd
+          }).then(function (response) {
+            return response.text().then(function (text) {
+              console.log(text);
+              document.getElementById("loadingSpinner").style.display = "none";
+              document.getElementById("btnLogIn").style.display = "block";
+              document.getElementById("btnGoToSignUp").style.display = "block";
 
-              localStorage.setItem("username", self.username);
-              localStorage.setItem("password", self.password);
+              if (text != "Wrong info") {
+                console.log("Logging in user...");
 
-              document.getElementById("username").value = "";
-              document.getElementById("password").value = "";
-              document.getElementById("error").style.display = "none";
-              self.$store.commit("showPlayer");
-              self.$store.commit("updateUsername", self.username);
-              self.$emit("fetchSongsGrant");
+                localStorage.setItem("username", self.username);
+                localStorage.setItem("password", self.password);
 
-              setTimeout(function () {
-                Ozone.fire(
-                  "success",
-                  "Signed in as " + self.$store.state.username,
-                  "bottom-middle"
-                );
-              }, 2000);
-            } else {
-              document.getElementById("error").style.display = "block";
-              document.getElementById("error").innerHTML =
-                "Wrong username or password!";
-              console.log("feil");
-            }
-            self.username = "";
-            self.password = "";
-          },
-          error: function (error) {
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("error").style.display = "none";
+                self.$store.commit("showPlayer");
+                self.$store.commit("updateUsername", self.username);
+                self.$emit("fetchSongsGrant");
+
+                setTimeout(function () {
+                  Ozone.fire(
+                    "success",
+                    "Signed in as " + self.$store.state.username,
+                    "bottom-middle"
+                  );
+                }, 2000);
+              } else {
+                document.getElementById("error").style.display = "block";
+                document.getElementById("error").innerHTML =
+                  "Wrong username or password!";
+                console.log("feil");
+              }
+              self.username = "";
+              self.password = "";
+            })
+          }).catch(function (error) {
             console.log(error);
             document.getElementById("loadingSpinner").style.display = "none";
             document.getElementById("btnLogIn").style.display = "block";
             document.getElementById("btnGoToSignUp").style.display = "block";
             Ozone.fire("error", "Server out of reach", "top-right");
-          }
-        });
+          });
       } else {
         document.getElementById("error").style.display = "block";
         document.getElementById("loadingSpinner").style.display = "none";

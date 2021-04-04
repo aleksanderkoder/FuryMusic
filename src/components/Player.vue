@@ -53,8 +53,7 @@
         v-if="currentSongName != ''"
         class="animate__animated animate__fadeInLeft ellipsis"
       >
-        <!-- Song cover image here maybe?  -->
-        <img id="SongCoverImage" v-bind:src="currentSongImageURL" width="80px">
+        <img id="SongCoverImage" v-bind:src="currentSongImageURL" width="90px">
         <p style="font-weight: bold">{{ currentSongName }}</p>
         <p>{{ currentArtistName }}</p>
       </div>
@@ -90,6 +89,7 @@
           id="divSongPane"
           v-for="song in songs"
           :key="song.SongID"
+          v-show="song.Show == true"
           class="animate__animated animate__fadeInRight"
         >
           <div class="divSongsPlay">
@@ -118,7 +118,7 @@
             <font-awesome-icon
               v-bind:id="'load' + song.SongID"
               style="color: black; display: none; filter: drop-shadow(0px 0px 4px #FFFFFF);"
-              :icon="['fas', 'spinner']"
+              :icon="['fas', 'circle-notch']"
               spin
             />
           </div>
@@ -224,7 +224,7 @@
     </div>
 
     <div id="songLoader">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin />
+      <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
       <span id="songLoaderProgress"></span>
     </div>
 
@@ -457,7 +457,8 @@ export default {
           Album: songs[i + 5],
           Length: minutes + ":" + seconds,
           Publisher: songs[i + 6],
-          SongImageURL: songs[i + 7]
+          SongImageURL: songs[i + 7],
+          Show: true
         });
       }
       this.searchSongsCopy = this.songs;
@@ -467,7 +468,7 @@ export default {
       if (this.wavesurfer.isPlaying()) {
         setTimeout(function() {
           self.wavesurfer.play();
-        }, 100);
+        }, 1);
       }
     },
     resetSearch() {
@@ -616,7 +617,7 @@ export default {
     },
     deleteSong(songid, songurl) { // FIXES MER HER MED SONGID PÅ SERVER OSV.
       let self = this;
-      Ozone.fire("info", "Do you really want to delete this song?", "center", "dialog", "Delete", "Cancel", function() {
+      Ozone.fire("info", "Delete song?", "center", "dialog", "Delete", "Cancel", function() {
         let fd = new FormData();
         fd.append("username", self.$store.state.username);
         fd.append("songURL", songurl);
@@ -695,24 +696,20 @@ export default {
     loggedIn: function() {
       console.log("Fetching all songs...");
       var self = this;
-      $.ajax({
-        type: "POST",
-        url: this.apiURL + "getAllSongs.php",
-        dataType: "json",
-        cache: false,
-        async: true,
-        success: function(data) {
-          console.log(data);
-          if (data != "Error") {
-            self.populateSongList(data);
-          } else {
-            console.log("ERROR: " + data);
-          }
-        },
-        error: function(er) {
-          console.log(er);
-        }
-      });
+        fetch(self.apiURL + "getAllSongs.php", {
+          method: "post"
+          }).then(function (response) {
+            return response.json().then(function (text) {
+              console.log(text);
+              if (text != "Error") {
+                self.populateSongList(text);
+              } else {
+                console.log("ERROR: " + text);
+              }
+            })
+          }).catch(function (error) {
+            console.log(error); 
+          });
     }
   },
   mounted() {
@@ -827,6 +824,21 @@ export default {
   background-color: rgba(0, 0, 0, 0.6);
   padding: 5px;
   border-radius: 3px;
+  cursor: pointer;
+}
+
+#divPlayerOptions {
+  display: "block";
+  position: absolute;
+  text-align: center;
+  bottom: 130px;
+  left: 170px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-top-right-radius: 5px;
   cursor: pointer;
 }
 

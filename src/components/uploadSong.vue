@@ -38,7 +38,7 @@
           </button>
         </div>
       </form>
-      <font-awesome-icon id="loadingSpinnerUS" :icon="['fas', 'spinner']" spin />
+      <font-awesome-icon id="loadingSpinnerUS" :icon="['fas', 'circle-notch']" spin />
       <p v-show="showError">Invalid information!</p>
     </div>
   </div>
@@ -106,28 +106,26 @@ export default {
         fd.append("songCover", this.songCover);
         fd.append("file", files);
 
-        $.ajax({
-          url: this.apiURL + "uploadSong.php",
-          data: fd,
-          processData: false,
-          contentType: false,
-          type: "POST",
-          success: function (data) {
-            document.getElementById("loadingSpinnerUS").style.display = "none";
-            document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
-            let response = JSON.parse(data);
-            if (response.status == 1) {
-              Ozone.fire("success", response.message, "bottom-middle");
-              self.$emit("hideUploadSongComponent");
-            } else {
-              Ozone.fire("error", response.message, "bottom-middle");
-            }
-          },error: function (error) {
+        fetch(self.apiURL + "uploadSong.php", {
+          method: "post",
+          body: fd
+          }).then(function (response) {
+            return response.json().then(function (response) {
+              document.getElementById("loadingSpinnerUS").style.display = "none";
+              document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
+              if (response.status == 1) {
+                Ozone.fire("success", response.message, "bottom-middle");
+                self.$emit("hideUploadSongComponent");
+              } else {
+                Ozone.fire("error", response.message, "bottom-middle");
+              }
+          })
+          }).catch(function (error) {
+            console.error('Error:', error);
             document.getElementById("loadingSpinnerUS").style.display = "none";
             document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
             Ozone.fire("error", "Server out of reach", "center");
-          }
-        });
+          });
       }
       
     },

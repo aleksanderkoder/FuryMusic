@@ -40,7 +40,7 @@
         >
           {{ error }}
         </p>
-        <p id="error2" class="animate__animated animate__fadeInRight"></p>
+        <p id="error2" class="animate__animated animate__shakeX"></p>
         <input
           type="submit"
           v-on:click="registerUser()"
@@ -68,22 +68,23 @@ export default {
   methods: {
     registerUser() {
       if (this.regExSignUp()) {
-        $.ajax({
-          type: "POST",
-          url: this.apiURL + "userSignUp.php",
-          dataType: "json",
-          data: {
-            username: this.username,
-            password: this.password,
-            email: this.email,
-          },
-          cache: false,
-          success: function (data) {
-            if (data == "Username taken") {
+        let self = this;
+        let fd = new FormData();
+        fd.append("username", this.username);
+        fd.append("password", this.password);
+        fd.append("email", this.email);
+
+        fetch(self.apiURL + "userSignUp.php", {
+          method: "post",
+          body: fd
+          }).then(function (response) {
+            return response.text().then(function (text) {
+              console.log(text)
+              if (text == "Username taken") {
               document.getElementById("error2").style.display = "block";
               document.getElementById("error2").innerHTML =
                 "Username or email has already been taken!";
-            } else if (data == "OK") {
+            } else if (text == "OK") {
               document.getElementById("regUsername").value = "";
               document.getElementById("regEmail").value = "";
               document.getElementById("regPassword").value = "";
@@ -93,11 +94,10 @@ export default {
               document.getElementById("error2").innerHTML =
                 "You have been registered!";
             }
-          },
-          error: function (er) {
-            console.log(er);
-          },
-        });
+          })
+          }).catch(function (error) {
+            console.error('Error:', error);
+          });
       }
     },
     regExSignUp() {
