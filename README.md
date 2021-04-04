@@ -2,6 +2,7 @@
 
 > A music player application built for the web.
 > Live beta version: https://furymusicplayer.000webhostapp.com/ 
+
 > Test user credentials: testuser, testpass
  
 ## Screenshots
