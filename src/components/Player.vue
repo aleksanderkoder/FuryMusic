@@ -60,7 +60,7 @@
         <img
           id="SongCoverImage"
           v-bind:src="currentSongImageURL"
-          width="90px"
+          width="95px"
         />
         <p style="font-weight: bold">{{ currentSongName }}</p>
         <p>{{ currentArtistName }}</p>
@@ -230,7 +230,7 @@
       <span id="spanTotalPlaytime">{{ currentSongLength }}</span>
     </div>
 
-    <div id="songLoader">
+    <div id="songLoader"> 
       <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
       <span id="songLoaderProgress"></span>
     </div>
@@ -310,6 +310,19 @@ export default {
     loggedIn: Boolean
   },
   methods: {
+    playNext() {
+      let index;
+      for(let i = 0; i < this.songs.length; i++) {
+        if (this.songs[i].SongID == this.currentSongID) {
+          index = i + 1; 
+        }
+      }
+      if(index == this.songs.length) {
+        index = 0; 
+      }
+      let nextSong = this.songs[index];
+      this.playSong(nextSong.SongURL, nextSong.SongID, nextSong.SongName, nextSong.ArtistName, nextSong.Length, nextSong.Album, nextSong.SongImageURL); 
+    },
     wavePlayPauseToggle(mode) {
       if (mode == "play") {
         this.wavesurfer.play();
@@ -447,7 +460,6 @@ export default {
           Show: true
         });
       }
-      this.searchSongsCopy = this.songs;
     },
     waveformInteraction() {
       let self = this;
@@ -479,10 +491,6 @@ export default {
             this.songs[i].Show = false;
           }
         }
-        document.getElementById("divPlayerControls").style.display = "none";
-        document.getElementById("divPlayerMinimize").style.display = "none";
-        document.getElementById("divPlay").style.display = "block";
-        document.getElementById("divPause").style.display = "none";
         return;
       }
 
@@ -680,6 +688,10 @@ export default {
         setTimeout(function() {
           self.playRandom(); 
         }, 3000); 
+      } else {
+        setTimeout(function() {
+          self.playNext();
+        }, 3000); 
       }
 
     });
@@ -733,9 +745,7 @@ export default {
       document.getElementById("load" + self.currentSongID).style.display =
         "none";
       self.elapsedPlaytime = "0:00";
-      if(self.toggleShuffle) {
-        self.wavePlayPauseToggle("play"); 
-      }
+      self.wavePlayPauseToggle("play"); 
     });
 
     // Controls volume slider and saving of value

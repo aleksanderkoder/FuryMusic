@@ -41,6 +41,11 @@
           {{ error }}
         </p>
         <p id="error2" class="animate__animated animate__shakeX"></p>
+        <font-awesome-icon
+          id="loadingSpinner"
+          :icon="['fas', 'circle-notch']"
+          spin
+        />
         <input
           type="submit"
           v-on:click="registerUser()"
@@ -69,6 +74,7 @@ export default {
     registerUser() {
       if (this.regExSignUp()) {
         let self = this;
+        document.getElementById("loadingSpinner").style.display = "block";
         let fd = new FormData();
         fd.append("username", this.username);
         fd.append("password", this.password);
@@ -80,6 +86,7 @@ export default {
           }).then(function (response) {
             return response.text().then(function (text) {
               console.log(text)
+              document.getElementById("loadingSpinner").style.display = "none";
               if (text == "Username taken") {
               document.getElementById("error2").style.display = "block";
               document.getElementById("error2").innerHTML =
@@ -97,6 +104,7 @@ export default {
           })
           }).catch(function (error) {
             console.error('Error:', error);
+            document.getElementById("loadingSpinner").style.display = "none";
           });
       }
     },
@@ -228,6 +236,13 @@ export default {
 #btnBack:hover {
   background-color: lightgrey;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+#loadingSpinner {
+  color: black;
+  font-size: 40px;
+  display: none;
+  margin: auto;
 }
 
 button {
