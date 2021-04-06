@@ -254,15 +254,23 @@
 
     <div
       id="divPlayerMinimize"
-      v-on:click="minimizeMaximizePlayer()"
+      v-on:click="minimizeMaximizePlayer('min')"
       class="animate__animated animate__flipInY"
     >
       <span id="spanPlayerMinimize">Minimize</span>
       <font-awesome-icon id="fontPlayerMinimize" :icon="['fas', 'sort-down']" />
-      <font-awesome-icon
+      
+    </div>
+
+    <div
+      id="divPlayerMaximize"
+      v-on:click="minimizeMaximizePlayer('max')"
+      class="animate__animated animate__flipInY"
+    >
+    <span id="spanPlayerMaximize">Maximize</span>
+    <font-awesome-icon
         id="fontPlayerMaximize"
         :icon="['fas', 'sort-up']"
-        style="display: none;"
       />
     </div>
 
@@ -336,7 +344,7 @@ export default {
     playNext() {
       let index;
       let nextSong;
-      if(!this.toggleShuffle) {
+      if (!this.toggleShuffle) {
         for (let i = 0; i < this.songs.length; i++) {
           if (this.songs[i].SongID == this.currentSongID) {
             index = i + 1;
@@ -348,17 +356,16 @@ export default {
         nextSong = this.songs[index];
 
         this.playSong(
-        nextSong.SongURL,
-        nextSong.SongID,
-        nextSong.SongName,
-        nextSong.ArtistName,
-        nextSong.Length,
-        nextSong.Album,
-        nextSong.SongImageURL
-      );
-
+          nextSong.SongURL,
+          nextSong.SongID,
+          nextSong.SongName,
+          nextSong.ArtistName,
+          nextSong.Length,
+          nextSong.Album,
+          nextSong.SongImageURL
+        );
       } else {
-        this.playRandom(); 
+        this.playRandom();
       }
     },
     playPrevious() {
@@ -413,7 +420,7 @@ export default {
     ) {
       if (this.loading) return; // If something is already loading, don't do anything
 
-      this.minimizeMaximizePlayer(); 
+      this.minimizeMaximizePlayer("max");
 
       // If no song is selected, load selected song
       if (this.currentSongID == "") {
@@ -669,31 +676,22 @@ export default {
         this.wavesurfer.setVolume((this.oldVol * this.oldVol) / 10000);
       }
     },
-    minimizeMaximizePlayer() {
-      if (
-        document.getElementById("divPlayerControls").style.display == "block"
-      ) {
+    minimizeMaximizePlayer(mode) {
+      if (mode == "min") {
         document.getElementById("divCenter").style.bottom = "85px";
         document.getElementById("divPlayerControls").style.display = "none";
-        document.getElementById("divPlayerMinimize").style.bottom = "0";
-        document.getElementById("spanPlayerMinimize").innerHTML = "Maximize";
-        document.getElementById("fontPlayerMaximize").style.display =
-          "inline-block";
+        document.getElementById("divPlayerMinimize").style.display = "none"; 
+        document.getElementById("divPlayerMaximize").style.display = "block"; 
         document.getElementById("divPlayerOptions").style.display = "none";
-        document.getElementById("fontPlayerMinimize").style.display = "none";
-      } else {
+      } else if (mode == "max") {
         document.getElementById("divCenter").style.bottom = "190px";
-        document.getElementById("divPlayerMinimize").style.display = "none";
-        document.getElementById("divPlayerMinimize").style.bottom = "130px";
+        document.getElementById("divPlayerMaximize").style.display = "none";
+
         setTimeout(function() {
           document.getElementById("divPlayerMinimize").style.display = "block";
           document.getElementById("divPlayerOptions").style.display = "block";
         }, 1000);
         document.getElementById("divPlayerControls").style.display = "block";
-        document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
-        document.getElementById("fontPlayerMinimize").style.display =
-          "inline-block";
-        document.getElementById("fontPlayerMaximize").style.display = "none";
       }
     },
     showEasteregg() {
@@ -1142,6 +1140,24 @@ font-awesome-icon {
   position: absolute;
   text-align: center;
   bottom: 130px;
+  left: 48%;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  cursor: pointer;
+}
+
+#divPlayerMaximize {
+  display: none;
+  position: absolute;
+  text-align: center;
+  bottom: 0px;
   left: 48%;
   color: white;
   background-color: rgba(0, 0, 0, 0.8);
