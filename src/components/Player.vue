@@ -413,18 +413,7 @@ export default {
     ) {
       if (this.loading) return; // If something is already loading, don't do anything
 
-      document.getElementById("divPlayerControls").style.display = "block";
-      document.getElementById("divPlayerMinimize").style.bottom = "130px";
-      document.getElementById("divPlayerOptions").style.bottom = "130px";
-      document.getElementById("spanPlayerMinimize").innerHTML = "Minimize";
-      document.getElementById("fontPlayerMinimize").style.display =
-        "inline-block";
-      document.getElementById("fontPlayerMaximize").style.display = "none";
-
-      setTimeout(function() {
-        document.getElementById("divPlayerMinimize").style.display = "block";
-        document.getElementById("divPlayerOptions").style.display = "block";
-      }, 1000);
+      this.minimizeMaximizePlayer(); 
 
       // If no song is selected, load selected song
       if (this.currentSongID == "") {
@@ -684,6 +673,7 @@ export default {
       if (
         document.getElementById("divPlayerControls").style.display == "block"
       ) {
+        document.getElementById("divCenter").style.bottom = "85px";
         document.getElementById("divPlayerControls").style.display = "none";
         document.getElementById("divPlayerMinimize").style.bottom = "0";
         document.getElementById("spanPlayerMinimize").innerHTML = "Maximize";
@@ -692,6 +682,7 @@ export default {
         document.getElementById("divPlayerOptions").style.display = "none";
         document.getElementById("fontPlayerMinimize").style.display = "none";
       } else {
+        document.getElementById("divCenter").style.bottom = "190px";
         document.getElementById("divPlayerMinimize").style.display = "none";
         document.getElementById("divPlayerMinimize").style.bottom = "130px";
         setTimeout(function() {
@@ -870,7 +861,7 @@ export default {
 <style scoped>
 #customBackgroundImagePanel {
   position: fixed;
-  right: 10px;
+  right: 20px;
   bottom: 150px;
   color: white;
   background-color: rgba(0, 0, 0, 0.6);
@@ -1121,7 +1112,7 @@ font-awesome-icon {
   position: absolute;
   left: 170px;
   right: 0px;
-  bottom: 190px;
+  bottom: 30px;
   top: 78px;
   z-index: 0;
   overflow-y: scroll;
