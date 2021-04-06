@@ -145,22 +145,22 @@
           <div class="divSongsPublisher ellipsis">
             <span v-bind:title="song.Publisher">{{ song.Publisher }}</span>
           </div>
-            <font-awesome-icon
-              id="fontDownloadSong"
-              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 50px;"
-              :icon="['fas', 'cloud-download-alt']"
-              title="Download"
-              v-on:click="downloadSong(song.SongURL)"
-            />
-            <font-awesome-icon
-              v-if="$store.state.username == song.Publisher"
-              id="fontDeleteSong"
-              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
-              style:hover="color: red;"
-              :icon="['fas', 'trash-alt']"
-              title="Delete"
-              v-on:click="deleteSong(song.SongID, song.SongURL)"
-            />
+          <font-awesome-icon
+            id="fontDownloadSong"
+            style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 50px;"
+            :icon="['fas', 'cloud-download-alt']"
+            title="Download"
+            v-on:click="downloadSong(song.SongURL)"
+          />
+          <font-awesome-icon
+            v-if="$store.state.username == song.Publisher"
+            id="fontDeleteSong"
+            style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
+            style:hover="color: red;"
+            :icon="['fas', 'trash-alt']"
+            title="Delete"
+            v-on:click="deleteSong(song.SongID, song.SongURL)"
+          />
         </div>
       </div>
 
@@ -206,18 +206,35 @@
           />
         </div>
         <font-awesome-icon
+          id="stepForward"
+          title="Skip"
+          v-on:click="playNext()"
+          style="position: absolute; bottom: 55px; left: 153px; color: white; font-size: 17px; cursor: pointer;"
+          :icon="['fas', 'step-forward']"
+        />
+        <font-awesome-icon
+          id="stepBackwards"
+          title="Step backwards"
+          v-on:click="playPrevious()"
+          style="position: absolute; bottom: 55px; left: 30px; color: white; font-size: 17px; cursor: pointer;"
+          :icon="['fas', 'step-backward']"
+        />
+        <font-awesome-icon
           id="volumeUp"
+          title="Mute"
           v-on:click="muteUnmute('mute')"
-          style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px; cursor: pointer;"
+          style="position: absolute; bottom: 15px; left: 30px; color: white; font-size: 17px; cursor: pointer;"
           :icon="['fas', 'volume-up']"
         />
         <font-awesome-icon
           id="volumeMute"
+          title="Unmute"
           v-on:click="muteUnmute('unmute')"
           style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px; display: none; cursor: pointer;"
           :icon="['fas', 'volume-mute']"
         />
         <input
+          title="Change volume"
           type="range"
           min="0"
           max="100"
@@ -230,7 +247,7 @@
       <span id="spanTotalPlaytime">{{ currentSongLength }}</span>
     </div>
 
-    <div id="songLoader"> 
+    <div id="songLoader">
       <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
       <span id="songLoaderProgress"></span>
     </div>
@@ -250,10 +267,13 @@
     </div>
 
     <div id="divPlayerOptions" class="animate__animated animate__flipInY">
-      <font-awesome-icon id="fontToggleShuffle"
-      style="opacity: 0.25;"
-      title="Toggle shuffle"
-      v-on:click="toggleShufflePlay()" :icon="['fas', 'random']" />
+      <font-awesome-icon
+        id="fontToggleShuffle"
+        style="opacity: 0.25;"
+        title="Toggle shuffle"
+        v-on:click="toggleShufflePlay()"
+        :icon="['fas', 'random']"
+      />
     </div>
 
     <UploadBackImg
@@ -288,6 +308,8 @@ export default {
     return {
       wavesurfer: null,
       songs: [],
+      songHistory: [],
+      historyIndex: 0,
       currentSongID: "",
       currentSongName: "",
       currentArtistName: "",
@@ -298,6 +320,7 @@ export default {
       showCustomBackImg: false,
       uploadImgLabel: false,
       showUploadSong: false,
+      loading: false,
       oldVol: 0,
       toggleShuffle: false,
       logo: "src/assets/fury logo favicon5.png",
@@ -312,16 +335,49 @@ export default {
   methods: {
     playNext() {
       let index;
-      for(let i = 0; i < this.songs.length; i++) {
-        if (this.songs[i].SongID == this.currentSongID) {
-          index = i + 1; 
+      let nextSong;
+      if(!this.toggleShuffle) {
+        for (let i = 0; i < this.songs.length; i++) {
+          if (this.songs[i].SongID == this.currentSongID) {
+            index = i + 1;
+          }
         }
+        if (index == this.songs.length) {
+          index = 0;
+        }
+        nextSong = this.songs[index];
+
+        this.playSong(
+        nextSong.SongURL,
+        nextSong.SongID,
+        nextSong.SongName,
+        nextSong.ArtistName,
+        nextSong.Length,
+        nextSong.Album,
+        nextSong.SongImageURL
+      );
+
+      } else {
+        this.playRandom(); 
       }
-      if(index == this.songs.length) {
-        index = 0; 
+    },
+    playPrevious() {
+      if (this.historyIndex != 1) {
+        this.songHistory.pop();
+        this.historyIndex--;
+        let prevSong = this.songHistory[this.historyIndex - 1];
+        this.playSong(
+          prevSong.SongURL,
+          prevSong.SongID,
+          prevSong.SongName,
+          prevSong.ArtistName,
+          prevSong.Length,
+          prevSong.Album,
+          prevSong.SongImageURL
+        );
+        this.historyIndex--;
+        this.songHistory.pop();
       }
-      let nextSong = this.songs[index];
-      this.playSong(nextSong.SongURL, nextSong.SongID, nextSong.SongName, nextSong.ArtistName, nextSong.Length, nextSong.Album, nextSong.SongImageURL); 
     },
     wavePlayPauseToggle(mode) {
       if (mode == "play") {
@@ -339,12 +395,11 @@ export default {
         document.title = "Paused";
         document.getElementById("divPause").style.display = "none";
         document.getElementById("divPlay").style.display = "block";
-        
-          document.getElementById("pause" + this.currentSongID).style.display =
-            "none";
-          document.getElementById("play" + this.currentSongID).style.display =
-            "block";
-        
+
+        document.getElementById("pause" + this.currentSongID).style.display =
+          "none";
+        document.getElementById("play" + this.currentSongID).style.display =
+          "block";
       }
     },
     playSong(
@@ -356,6 +411,8 @@ export default {
       Album,
       SongImageURL
     ) {
+      if (this.loading) return; // If something is already loading, don't do anything
+
       document.getElementById("divPlayerControls").style.display = "block";
       document.getElementById("divPlayerMinimize").style.bottom = "130px";
       document.getElementById("divPlayerOptions").style.bottom = "130px";
@@ -371,6 +428,16 @@ export default {
 
       // If no song is selected, load selected song
       if (this.currentSongID == "") {
+        this.songHistory.push({
+          SongURL: SongURL,
+          SongID: SongID,
+          SongName: SongName,
+          ArtistName: ArtistName,
+          Length: Length,
+          Album: Album,
+          SongImageURL: SongImageURL
+        });
+        this.historyIndex++;
         this.currentSongName = SongName;
         this.currentArtistName = ArtistName;
         this.currentSongID = SongID;
@@ -415,6 +482,16 @@ export default {
         document.getElementById(
           "play" + this.currentSongID
         ).parentElement.parentElement.style.color = "black";
+        this.songHistory.push({
+          SongURL: SongURL,
+          SongID: SongID,
+          SongName: SongName,
+          ArtistName: ArtistName,
+          Length: Length,
+          Album: Album,
+          SongImageURL: SongImageURL
+        });
+        this.historyIndex++;
         this.currentSongID = SongID;
         this.currentSongName = SongName;
         this.currentArtistName = ArtistName;
@@ -524,11 +601,11 @@ export default {
       }
     },
     toggleShufflePlay() {
-      let btn = document.getElementById("fontToggleShuffle"); 
-      if(btn.style.opacity == "0.25") {
-        this.toggleShuffle = true; 
+      let btn = document.getElementById("fontToggleShuffle");
+      if (btn.style.opacity == "0.25") {
+        this.toggleShuffle = true;
         document.getElementById("fontToggleShuffle").style.opacity = "1";
-        return; 
+        return;
       }
       btn.style.opacity = "0.25";
       this.toggleShuffle = false;
@@ -578,7 +655,15 @@ export default {
     playRandom() {
       console.log("Playing random song...");
       let next = this.songs[Math.floor(Math.random() * this.songs.length)];
-      this.playSong(next.SongURL, next.SongID, next.SongName, next.ArtistName, next.Length, next.Album, next.SongImageURL); 
+      this.playSong(
+        next.SongURL,
+        next.SongID,
+        next.SongName,
+        next.ArtistName,
+        next.Length,
+        next.Album,
+        next.SongImageURL
+      );
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -607,10 +692,10 @@ export default {
         document.getElementById("divPlayerOptions").style.display = "none";
         document.getElementById("fontPlayerMinimize").style.display = "none";
       } else {
-        document.getElementById("divPlayerMinimize").style.display = "none"; 
+        document.getElementById("divPlayerMinimize").style.display = "none";
         document.getElementById("divPlayerMinimize").style.bottom = "130px";
         setTimeout(function() {
-          document.getElementById("divPlayerMinimize").style.display = "block"; 
+          document.getElementById("divPlayerMinimize").style.display = "block";
           document.getElementById("divPlayerOptions").style.display = "block";
         }, 1000);
         document.getElementById("divPlayerControls").style.display = "block";
@@ -684,16 +769,15 @@ export default {
       document.getElementById("divPlay").style.display = "block";
       document.getElementById("divPause").style.display = "none";
 
-      if(self.toggleShuffle) {
+      if (self.toggleShuffle) {
         setTimeout(function() {
-          self.playRandom(); 
-        }, 3000); 
+          self.playRandom();
+        }, 3000);
       } else {
         setTimeout(function() {
           self.playNext();
-        }, 3000); 
+        }, 3000);
       }
-
     });
 
     this.wavesurfer.on("audioprocess", function(progress) {
@@ -707,6 +791,7 @@ export default {
 
     // Fires when a song is loading
     this.wavesurfer.on("loading", function(progress) {
+      self.loading = true;
       document.title = "Fury Music";
       self.elapsedPlaytime = "0:00";
       document.getElementById("play" + self.currentSongID).style.display =
@@ -717,6 +802,10 @@ export default {
       document.getElementById("wavesurferVolume").style.pointerEvents = "none";
       document.getElementById("volumeMute").style.opacity = "0.25";
       document.getElementById("volumeMute").style.pointerEvents = "none";
+      document.getElementById("stepForward").style.opacity = "0.25";
+      document.getElementById("stepForward").style.pointerEvents = "none";
+      document.getElementById("stepBackwards").style.opacity = "0.25";
+      document.getElementById("stepBackwards").style.pointerEvents = "none";
       document.getElementById("volumeUp").style.opacity = "0.25";
       document.getElementById("volumeUp").style.pointerEvents = "none";
       document.getElementById("load" + self.currentSongID).style.display =
@@ -731,11 +820,18 @@ export default {
 
     // Fires when wavesurfer is ready
     this.wavesurfer.on("ready", function() {
+      self.loading = false;
       document.getElementById("songLoader").style.display = "none";
       document.getElementById("divPlay").style.opacity = "1";
       document.getElementById("divPlay").style.pointerEvents = "auto";
       document.getElementById("wavesurferVolume").style.opacity = "1";
       document.getElementById("wavesurferVolume").style.pointerEvents = "auto";
+      document.getElementById("stepForward").style.opacity = "1";
+      document.getElementById("stepForward").style.pointerEvents = "auto";
+      if (self.historyIndex > 1) {
+        document.getElementById("stepBackwards").style.opacity = "1";
+        document.getElementById("stepBackwards").style.pointerEvents = "auto";
+      }
       document.getElementById("volumeMute").style.opacity = "1";
       document.getElementById("volumeMute").style.pointerEvents = "auto";
       document.getElementById("volumeUp").style.opacity = "1";
@@ -745,7 +841,7 @@ export default {
       document.getElementById("load" + self.currentSongID).style.display =
         "none";
       self.elapsedPlaytime = "0:00";
-      self.wavePlayPauseToggle("play"); 
+      self.wavePlayPauseToggle("play");
     });
 
     // Controls volume slider and saving of value
@@ -774,7 +870,7 @@ export default {
 <style scoped>
 #customBackgroundImagePanel {
   position: fixed;
-  right: 15px;
+  right: 10px;
   bottom: 150px;
   color: white;
   background-color: rgba(0, 0, 0, 0.6);
@@ -1114,10 +1210,7 @@ font-awesome-icon {
 }
 
 #SongCoverImage {
-  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
-    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-    0 100px 80px rgba(0, 0, 0, 0.12);
+  box-shadow: 2px 4px 10px #000000;
 }
 
 #fontDownloadSong:hover {
@@ -1188,8 +1281,12 @@ font-awesome-icon {
 }
 
 @keyframes move-up {
-  0% {bottom: 0;}
-  100% {bottom: 130px;}
+  0% {
+    bottom: 0;
+  }
+  100% {
+    bottom: 130px;
+  }
 }
 
 button {
