@@ -44,8 +44,8 @@
       />
       <a href="">Forgot password?</a>
     </div>
-    <p id="makersMark" class="animate__animated animate__fadeInUpBig">
-      © Aleksander Johansen
+    <p id="makersMark">
+      © 2021 Aleksander Johansen
     </p>
   </div>
 </template>

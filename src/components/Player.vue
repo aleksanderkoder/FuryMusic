@@ -705,6 +705,28 @@ export default {
         self.logo = self.logoImage;
       }, 1900);
     },
+    playLinkedSong() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let songlink = urlParams.get("songlink");
+      if (songlink != undefined) {
+        let song;
+        for (let i = 0; i < this.songs.length; i++) {
+          if(this.songs[i].SongID == songlink) {
+            song = this.songs[i];
+          }
+        }
+        this.playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName, song.Length, song.Album, song.SongImageURL); 
+      }
+    },
+    copySongLink(songid) {
+      navigator.permissions.query({name: "clipboard-write"}).then(result => {
+        if (result.state == "granted" || result.state == "prompt") {
+          /* write to the clipboard now */
+          alert("granted"); 
+        }
+      });
+
+    },
     signOut() {
       localStorage.removeItem("username");
       localStorage.removeItem("password");
@@ -713,6 +735,7 @@ export default {
   },
   watch: {
     loggedIn: function() {
+      this.copySongLink(); 
       console.log("Fetching all songs...");
       var self = this;
       fetch(self.apiURL + "getAllSongs.php", {

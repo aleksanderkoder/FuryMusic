@@ -133,7 +133,7 @@ export default {
       this.$emit("hideUploadSongComponent");
     },
     regEx() {
-      let regEx = /^[0-9a-zæøåA-ZÆØÅ\s!?_'/,.-]{1,50}$/;
+      let regEx = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
       let regExImgCover = /^[0-9a-zæøåA-ZÆØÅ%!?=&/-:,.]{0,255}$/;
       if(regEx.test(this.songName) && regEx.test(this.songArtist) && regEx.test(this.songAlbum) && regExImgCover.test(this.songCover)) {
         this.showError = false; 
