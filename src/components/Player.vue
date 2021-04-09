@@ -54,16 +54,16 @@
 
       <div
         id="divSidebarCurrentSongInfo"
-        v-if="currentSongName != ''"
+        v-if="currentSong.SongName != ''"
         class="animate__animated animate__fadeInLeft ellipsis"
       >
         <img
           id="SongCoverImage"
-          v-bind:src="currentSongImageURL"
+          v-bind:src="currentSong.SongImageURL"
           width="95px"
         />
-        <p style="font-weight: bold">{{ currentSongName }}</p>
-        <p>{{ currentArtistName }}</p>
+        <p style="font-weight: bold">{{ currentSong.SongName }}</p>
+        <p>{{ currentSong.ArtistName }}</p>
       </div>
     </div>
 
@@ -105,13 +105,7 @@
               v-bind:id="'play' + song.SongID"
               v-on:click="
                 playSong(
-                  song.SongURL,
-                  song.SongID,
-                  song.SongName,
-                  song.ArtistName,
-                  song.Length,
-                  song.Album,
-                  song.SongImageURL
+                  song
                 )
               "
               style="color: black; cursor: pointer; filter: drop-shadow(0px 0px 7px #FFFFFF);"
@@ -251,7 +245,7 @@
       </div>
       <span id="spanElapsedPlaytime">{{ elapsedPlaytime }}</span>
       <div id="waveform" v-on:click="waveformInteraction()"></div>
-      <span id="spanTotalPlaytime">{{ currentSongLength }}</span>
+      <span id="spanTotalPlaytime">{{ currentSong.Length }}</span>
     </div>
 
     <div id="songLoader">
@@ -323,14 +317,9 @@ export default {
     return {
       wavesurfer: null,
       songs: [],
+      currentSong: {SongID: "", SongURL: "", SongName: "", ArtistName: "", Length: 0, Album: "", SongImageURL: ""}, 
       songHistory: [],
       historyIndex: 0,
-      currentSongID: "",
-      currentSongName: "",
-      currentArtistName: "",
-      currentSongAlbum: "",
-      currentSongLength: 0,
-      currentSongImageURL: "",
       elapsedPlaytime: 0,
       showCustomBackImg: false,
       uploadImgLabel: false,
@@ -353,7 +342,7 @@ export default {
       let nextSong;
       if (!this.toggleShuffle) {
         for (let i = 0; i < this.songs.length; i++) {
-          if (this.songs[i].SongID == this.currentSongID) {
+          if (this.songs[i].SongID == this.currentSong.SongID) {
             index = i + 1;
           }
         }
@@ -362,15 +351,7 @@ export default {
         }
         nextSong = this.songs[index];
 
-        this.playSong(
-          nextSong.SongURL,
-          nextSong.SongID,
-          nextSong.SongName,
-          nextSong.ArtistName,
-          nextSong.Length,
-          nextSong.Album,
-          nextSong.SongImageURL
-        );
+        this.playSong(nextSong);
       } else {
         this.playRandom();
       }
@@ -380,15 +361,7 @@ export default {
         this.songHistory.pop();
         this.historyIndex--;
         let prevSong = this.songHistory[this.historyIndex - 1];
-        this.playSong(
-          prevSong.SongURL,
-          prevSong.SongID,
-          prevSong.SongName,
-          prevSong.ArtistName,
-          prevSong.Length,
-          prevSong.Album,
-          prevSong.SongImageURL
-        );
+        this.playSong(prevSong);
         this.historyIndex--;
         this.songHistory.pop();
       }
@@ -397,12 +370,12 @@ export default {
       if (mode == "play") {
         this.wavesurfer.play();
         document.title =
-          "Playing '" + this.currentSongName + "' by " + this.currentArtistName;
+          "Playing '" + this.currentSong.SongName + "' by " + this.currentSong.ArtistName;
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
-        document.getElementById("play" + this.currentSongID).style.display =
+        document.getElementById("play" + this.currentSong.SongID).style.display =
           "none";
-        document.getElementById("pause" + this.currentSongID).style.display =
+        document.getElementById("pause" + this.currentSong.SongID).style.display =
           "block";
       } else {
         this.wavesurfer.pause();
@@ -410,107 +383,71 @@ export default {
         document.getElementById("divPause").style.display = "none";
         document.getElementById("divPlay").style.display = "block";
 
-        document.getElementById("pause" + this.currentSongID).style.display =
+        document.getElementById("pause" + this.currentSong.SongID).style.display =
           "none";
-        document.getElementById("play" + this.currentSongID).style.display =
+        document.getElementById("play" + this.currentSong.SongID).style.display =
           "block";
       }
     },
-    playSong(
-      SongURL,
-      SongID,
-      SongName,
-      ArtistName,
-      Length,
-      Album,
-      SongImageURL
-    ) {
+    playSong(song) {
       if (this.loading) return; // If something is already loading, don't do anything
 
       this.minimizeMaximizePlayer("max");
 
       // If no song is selected, load selected song
-      if (this.currentSongID == "") {
-        this.songHistory.push({
-          SongURL: SongURL,
-          SongID: SongID,
-          SongName: SongName,
-          ArtistName: ArtistName,
-          Length: Length,
-          Album: Album,
-          SongImageURL: SongImageURL
-        });
+      if (this.currentSong.SongID == "") {
         this.historyIndex++;
-        this.currentSongName = SongName;
-        this.currentArtistName = ArtistName;
-        this.currentSongID = SongID;
-        this.currentSongAlbum = Album;
-        this.currentSongLength = Length;
-        this.currentSongImageURL = SongImageURL;
-        this.wavesurfer.load(SongURL);
+        this.currentSong = song; 
+        this.wavesurfer.load(song.SongURL);
         document.getElementById(
-          "play" + SongID
+          "play" + song.SongID
         ).parentElement.parentElement.style.backgroundColor =
           "rgba(0, 0, 0, 0.7)";
         document.getElementById(
-          "play" + SongID
+          "play" + song.SongID
         ).parentElement.parentElement.style.color = "white";
-        document.getElementById("play" + SongID).style.display = "none";
-        document.getElementById("load" + SongID).style.display = "block";
+        document.getElementById("play" + song.SongID).style.display = "none";
+        document.getElementById("load" + song.SongID).style.display = "block";
       }
       // Continues paused/plays loaded song
-      else if (this.currentSongID == SongID) {
+      else if (this.currentSong.SongID == song.SongID) {
         this.wavesurfer.play();
         document.title =
-          "Playing '" + this.currentSongName + "' by " + this.currentArtistName;
-        document.getElementById("pause" + SongID).style.display = "block";
-        document.getElementById("play" + SongID).style.display = "none";
+          "Playing '" + this.currentSong.SongName + "' by " + this.currentSong.ArtistName;
+        document.getElementById("pause" + song.SongID).style.display = "block";
+        document.getElementById("play" + song.SongID).style.display = "none";
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
       }
       // If a song has been selected before, but it's not the same song
       else {
         document.title = "Fury Music";
-        document.getElementById("play" + this.currentSongID).style.display =
+        document.getElementById("play" + this.currentSong.SongID).style.display =
           "block";
-        document.getElementById("pause" + this.currentSongID).style.display =
+        document.getElementById("pause" + this.currentSong.SongID).style.display =
           "none";
-        document.getElementById("load" + this.currentSongID).style.display =
+        document.getElementById("load" + this.currentSong.SongID).style.display =
           "none";
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
         document.getElementById(
-          "play" + this.currentSongID
+          "play" + this.currentSong.SongID
         ).parentElement.parentElement.style.backgroundColor = "white";
         document.getElementById(
-          "play" + this.currentSongID
+          "play" + this.currentSong.SongID
         ).parentElement.parentElement.style.color = "black";
-        this.songHistory.push({
-          SongURL: SongURL,
-          SongID: SongID,
-          SongName: SongName,
-          ArtistName: ArtistName,
-          Length: Length,
-          Album: Album,
-          SongImageURL: SongImageURL
-        });
         this.historyIndex++;
-        this.currentSongID = SongID;
-        this.currentSongName = SongName;
-        this.currentArtistName = ArtistName;
-        this.currentSongAlbum = Album;
-        this.currentSongLength = Length;
-        this.currentSongImageURL = SongImageURL;
-        this.wavesurfer.load(SongURL);
+        this.currentSong = song;
+        this.wavesurfer.load(song.SongURL);
         document.getElementById(
-          "play" + SongID
+          "play" + song.SongID
         ).parentElement.parentElement.style.backgroundColor =
           "rgba(0, 0, 0, 0.7)";
         document.getElementById(
-          "play" + SongID
+          "play" + song.SongID
         ).parentElement.parentElement.style.color = "white";
-        document.getElementById("load" + SongID).style.display = "block";
-        document.getElementById("play" + SongID).style.display = "none";
+        document.getElementById("load" + song.SongID).style.display = "block";
+        document.getElementById("play" + song.SongID).style.display = "none";
       }
     },
     pauseSong(SongID) {
@@ -658,15 +595,7 @@ export default {
     playRandom() {
       console.log("Playing random song...");
       let next = this.songs[Math.floor(Math.random() * this.songs.length)];
-      this.playSong(
-        next.SongURL,
-        next.SongID,
-        next.SongName,
-        next.ArtistName,
-        next.Length,
-        next.Album,
-        next.SongImageURL
-      );
+      this.playSong(next);
     },
     muteUnmute(mode) {
       if (mode == "mute") {
@@ -715,19 +644,20 @@ export default {
     playLinkedSong() {
       const urlParams = new URLSearchParams(window.location.search);
       let songlink = urlParams.get("songlink");
-      if (songlink != undefined) {
+      if (songlink != null) {
         let song;
         for (let i = 0; i < this.songs.length; i++) {
           if(this.songs[i].SongID == songlink) {
             song = this.songs[i];
           }
         }
-        this.playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName, song.Length, song.Album, song.SongImageURL); 
+        this.playSong(song); 
+        window.history.pushState("", "", "/");
       }
-      window.history.pushState("", "", "/");
+      
     },
     copySongLink(songid) {
-      let link = window.location.origin + "?songlink=" + songid; 
+      let link = window.location.origin + "/?songlink=" + songid; 
       navigator.clipboard.writeText(link).then(function() {
           /* clipboard successfully set */
           Ozone.fire("success", "Song link has been copied","top-right");
@@ -739,7 +669,7 @@ export default {
     signOut() {
       localStorage.removeItem("username");
       localStorage.removeItem("password");
-      window.location.replace(location + "?signedout=true");
+      window.location.replace(location + "/?signedout=true");
     }
   },
   watch: {
@@ -784,21 +714,23 @@ export default {
     // Event for when song finishes
     this.wavesurfer.on("finish", function() {
       document.title = "Fury Music";
-      self.elapsedPlaytime = self.currentSongLength;
-      document.getElementById("play" + self.currentSongID).style.display =
+      self.elapsedPlaytime = self.currentSong.Length;
+      document.getElementById("play" + self.currentSong.SongID).style.display =
         "block";
-      document.getElementById("pause" + self.currentSongID).style.display =
+      document.getElementById("pause" + self.currentSong.SongID).style.display =
         "none";
       document.getElementById("divPlay").style.display = "block";
       document.getElementById("divPause").style.display = "none";
 
       if (self.toggleShuffle) {
         setTimeout(function() {
-          self.playRandom();
+          if(!self.wavesurfer.isPlaying() && !self.loading)
+            self.playRandom();
         }, 3000);
       } else {
         setTimeout(function() {
-          self.playNext();
+          if(!self.wavesurfer.isPlaying() && !self.loading)
+            self.playNext();
         }, 3000);
       }
     });
@@ -817,7 +749,7 @@ export default {
       self.loading = true;
       document.title = "Fury Music";
       self.elapsedPlaytime = "0:00";
-      document.getElementById("play" + self.currentSongID).style.display =
+      document.getElementById("play" + self.currentSong.SongID).style.display =
         "none";
       document.getElementById("divPlay").style.opacity = "0.25";
       document.getElementById("divPlay").style.pointerEvents = "none";
@@ -831,7 +763,7 @@ export default {
       document.getElementById("stepBackwards").style.pointerEvents = "none";
       document.getElementById("volumeUp").style.opacity = "0.25";
       document.getElementById("volumeUp").style.pointerEvents = "none";
-      document.getElementById("load" + self.currentSongID).style.display =
+      document.getElementById("load" + self.currentSong.SongID).style.display =
         "block";
       document.getElementById("songLoader").style.display = "block";
       document.getElementById("songLoaderProgress").innerHTML = progress + "%";
@@ -859,9 +791,9 @@ export default {
       document.getElementById("volumeMute").style.pointerEvents = "auto";
       document.getElementById("volumeUp").style.opacity = "1";
       document.getElementById("volumeUp").style.pointerEvents = "auto";
-      document.getElementById("play" + self.currentSongID).style.display =
+      document.getElementById("play" + self.currentSong.SongID).style.display =
         "block";
-      document.getElementById("load" + self.currentSongID).style.display =
+      document.getElementById("load" + self.currentSong.SongID).style.display =
         "none";
       self.elapsedPlaytime = "0:00";
       self.wavePlayPauseToggle("play");
