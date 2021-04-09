@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUser,faLock,faUserSecret,faAt,faPlay,faPause,faTimesCircle,faUserCircle,faPlus,faCircleNotch,faImage,faSortDown,faSearch,faTimes,faSortUp,faVolumeMute,faVolumeUp,faMusic,
-faRecordVinyl,faCloudDownloadAlt,faTrashAlt,faRandom,faStepBackward,faStepForward} from '@fortawesome/free-solid-svg-icons'
+faRecordVinyl,faCloudDownloadAlt,faTrashAlt,faRandom,faStepBackward,faStepForward,faShareAlt} from '@fortawesome/free-solid-svg-icons'
 
 Vue.use(Vuex)
 
@@ -42,7 +42,7 @@ const store = new Vuex.Store({
 })
 
 library.add(faUser,faLock,faUserSecret,faAt,faPlay,faPause,faTimesCircle,faUserCircle,faPlus,faCircleNotch,faImage,faSortDown,faSearch,faTimes,faSortUp,faVolumeMute,faVolumeUp
-  ,faRecordVinyl,faMusic,faCloudDownloadAlt,faTrashAlt,faRandom,faStepBackward,faStepForward)
+  ,faRecordVinyl,faMusic,faCloudDownloadAlt,faTrashAlt,faRandom,faStepBackward,faStepForward,faShareAlt)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false

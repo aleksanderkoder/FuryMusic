@@ -147,11 +147,18 @@
           </div>
           <font-awesome-icon
             id="fontDownloadSong"
-            style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 50px;"
+            style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 30px;"
             :icon="['fas', 'cloud-download-alt']"
             title="Download"
             v-on:click="downloadSong(song.SongURL)"
           />
+          <font-awesome-icon
+              id="fontShareSong"
+              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
+              :icon="['fas', 'share-alt']"
+              title="Copy song link"
+              v-on:click="copySongLink(song.SongID)"
+            />
           <font-awesome-icon
             v-if="$store.state.username == song.Publisher"
             id="fontDeleteSong"
@@ -717,14 +724,16 @@ export default {
         }
         this.playSong(song.SongURL, song.SongID, song.SongName, song.ArtistName, song.Length, song.Album, song.SongImageURL); 
       }
+      window.history.pushState("", "", "/");
     },
     copySongLink(songid) {
-      navigator.permissions.query({name: "clipboard-write"}).then(result => {
-        if (result.state == "granted" || result.state == "prompt") {
-          /* write to the clipboard now */
-          alert("granted"); 
-        }
-      });
+      let link = window.location.origin + "?songlink=" + songid; 
+      navigator.clipboard.writeText(link).then(function() {
+          /* clipboard successfully set */
+          Ozone.fire("success", "Song link has been copied","top-right");
+        }, function() {
+          /* clipboard write failed */
+        });
 
     },
     signOut() {
@@ -734,8 +743,7 @@ export default {
     }
   },
   watch: {
-    loggedIn: function() {
-      this.copySongLink(); 
+    loggedIn: function() { 
       console.log("Fetching all songs...");
       var self = this;
       fetch(self.apiURL + "getAllSongs.php", {
@@ -745,6 +753,9 @@ export default {
           return response.json().then(function(text) {
             if (text != "Error") {
               self.populateSongList(text);
+              setTimeout(function() {
+                self.playLinkedSong(); 
+              }, 1500); 
             } else {
               console.log("ERROR: " + text);
             }
@@ -1241,6 +1252,10 @@ font-awesome-icon {
 
 #SongCoverImage {
   box-shadow: 2px 4px 10px #000000;
+}
+
+#fontShareSong:hover {
+  color: grey !important; 
 }
 
 #fontDownloadSong:hover {
