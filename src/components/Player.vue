@@ -891,7 +891,7 @@ export default {
 
 .divSongsSongName {
   flex: 0 0 335px;
-  padding-right: 50px;
+  padding-right: 45px;
 }
 
 .divSongsArtistName {
@@ -934,19 +934,19 @@ export default {
 }
 
 .tableSongsHeaderLength {
-  padding-left: 190px;
+  padding-left: 192px;
 }
 
 .tableSongsHeaderPublisher {
-  padding-left: 130px;
+  padding-left: 128px;
 }
 
 .tableSongsHeaderArtist {
-  padding-left: 350px;
+  padding-left: 347px;
 }
 
 .tableSongsHeaderAlbum {
-  padding-left: 260px;
+  padding-left: 258px;
 }
 
 #divSongPane {
