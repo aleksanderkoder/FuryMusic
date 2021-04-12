@@ -1076,7 +1076,7 @@ font-awesome-icon {
   position: absolute;
   left: 170px;
   right: 0px;
-  bottom: 30px;
+  bottom: 85px;
   top: 78px;
   z-index: 0;
   overflow-y: scroll;
