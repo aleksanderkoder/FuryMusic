@@ -3,35 +3,37 @@
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
       <img
         id="logo"
-        :src="logo"
+        src="src/assets/fury logo favicon5.png"
         width="65px"
-        v-on:click="showEasteregg()"
+        title="Fury Music"
         alt="Fury Music logo"
         class="animate__animated animate__pulse animate__infinite animate__slow"
       />
-      <div id="divSearchSong">
-        <font-awesome-icon style="color: white" :icon="['fas', 'search']" />
-        <input
-          type="text"
-          id="searchSong"
-          @change="searchSong()"
-          placeholder="Search"
-        />
+      <div id="divTopItems">
+        <div id="divSearchSong">
+          <font-awesome-icon style="color: white" :icon="['fas', 'search']" />
+          <input
+            type="text"
+            id="searchSong"
+            @change="searchSong()"
+            placeholder="Search"
+          />
+        </div>
+        <div id="divUser">
+          <font-awesome-icon
+            style="color: black"
+            :icon="['fas', 'user-circle']"
+          />
+          {{ $store.state.username }}
+        </div>
+        <button id="btnSignOut" v-on:click="signOut()">
+          <font-awesome-icon
+            style="color: white"
+            :icon="['fas', 'times-circle']"
+          />
+          Sign out
+        </button>
       </div>
-      <div id="divUser">
-        <font-awesome-icon
-          style="color: black"
-          :icon="['fas', 'user-circle']"
-        />
-        {{ $store.state.username }}
-      </div>
-      <button id="btnSignOut" v-on:click="signOut()">
-        <font-awesome-icon
-          style="color: white"
-          :icon="['fas', 'times-circle']"
-        />
-        Sign out
-      </button>
     </div>
 
     <div id="divSidebar" class="animate__animated animate__fadeInLeft">
@@ -128,16 +130,16 @@
             <span v-bind:title="song.SongName">{{ song.SongName }}</span>
           </div>
           <div class="divSongsArtistName ellipsis">
-            <span v-bind:title="song.ArtistName">{{ song.ArtistName }}</span>
+            <span class="songPaneItem" v-bind:title="song.ArtistName" v-on:click="searchSong(song.ArtistName)">{{ song.ArtistName }}</span>
           </div>
           <div class="divSongsSongAlbum ellipsis">
-            <span v-bind:title="song.Album">{{ song.Album }}</span>
+            <span class="songPaneItem" v-bind:title="song.Album" v-on:click="searchSong(song.Album)">{{ song.Album }}</span>
           </div>
           <div class="divSongsSongLength">
             <span v-bind:title="song.Length">{{ song.Length }}</span>
           </div>
           <div class="divSongsPublisher ellipsis">
-            <span v-bind:title="song.Publisher">{{ song.Publisher }}</span>
+            <span class="songPaneItem" v-bind:title="song.Publisher" v-on:click="searchSong(song.Publisher)">{{ song.Publisher }}</span>
           </div>
           <font-awesome-icon
             id="fontDownloadSong"
@@ -327,9 +329,6 @@ export default {
       loading: false,
       oldVol: 0,
       toggleShuffle: false,
-      logo: "src/assets/fury logo favicon5.png",
-      logoImage: "src/assets/fury logo favicon5.png",
-      easterImage: "src/assets/east long.gif",
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -494,21 +493,12 @@ export default {
     },
     searchSong(value) {
       let searchQuery = "";
-      // Determines wether to search using query from search field or parameter/find user's self uploaded songs
+
+      // Determines wether to search using query from search field or parameter
       if (value == undefined) {
         searchQuery = document.getElementById("searchSong").value.toLowerCase();
       } else {
-        searchQuery = value;
-
-        for (let i = 0; i < this.songs.length; i++) {
-          let string = this.songs[i].Publisher.toLowerCase();
-          if (string.includes(searchQuery)) {
-            this.songs[i].Show = true;
-          } else {
-            this.songs[i].Show = false;
-          }
-        }
-        return;
+        searchQuery = value.toLowerCase();
       }
 
       this.resetSearch();
@@ -629,17 +619,6 @@ export default {
         }, 1000);
         document.getElementById("divPlayerControls").style.display = "block";
       }
-    },
-    showEasteregg() {
-      let self = this;
-      this.logo = this.easterImage;
-      let dask = new Audio("src/assets/easteregg.mp3");
-      setTimeout(function() {
-        dask.play();
-      }, 400);
-      setTimeout(function() {
-        self.logo = self.logoImage;
-      }, 1900);
     },
     playLinkedSong() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -850,10 +829,8 @@ export default {
 }
 
 #divSearchSong {
-  position: absolute;
-  right: 285px;
-  top: 6px;
   background-color: rgba(0, 0, 0, 0.65);
+  height: 26px; 
   border-radius: 100px;
   padding-left: 10px;
   padding-right: 10px;
@@ -869,6 +846,40 @@ export default {
 
 #searchSong::placeholder {
   color: white;
+}
+
+#divUser {
+  right: 165px;
+  top: 5px;
+  border: none;
+  padding: 60px;
+}
+
+#btnSignOut {
+  /* position: absolute; */
+  right: 35px;
+  top: 7px;
+  border: none;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  transition: 0.3s;
+}
+
+#divTopItems {
+  display: flex;
+  position: absolute;
+  height: inherit;
+  width: 550px;
+  right: 0; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.songPaneItem:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 #spanTotalPlaytime {
@@ -1223,29 +1234,9 @@ font-awesome-icon {
   cursor: pointer;
 }
 
-#btnSignOut {
-  position: absolute;
-  right: 35px;
-  top: 7px;
-  border: none;
-  padding: 5px;
-  border-radius: 3px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  transition: 0.3s;
-}
-
 #btnSignOut:hover {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   background-color: #8b0000;
-}
-
-#divUser {
-  position: absolute;
-  right: 165px;
-  top: 5px;
-  border: none;
-  padding: 5px;
 }
 
 #divPlayerWrapper {
