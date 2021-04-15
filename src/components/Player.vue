@@ -395,6 +395,7 @@ export default {
 
       // If no song is selected, load selected song
       if (this.currentSong.SongID == "") {
+        this.songHistory.push(song);
         this.historyIndex++;
         this.currentSong = song; 
         this.wavesurfer.load(song.SongURL);
@@ -436,6 +437,7 @@ export default {
           "play" + this.currentSong.SongID
         ).parentElement.parentElement.style.color = "black";
         this.historyIndex++;
+        this.songHistory.push(song);
         this.currentSong = song;
         this.wavesurfer.load(song.SongURL);
         document.getElementById(
