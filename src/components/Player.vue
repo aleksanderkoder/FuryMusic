@@ -1,14 +1,6 @@
 <template>
   <div id="divPlayerWrapper">
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
-      <img
-        id="logo"
-        src="src/assets/fury logo favicon5.png"
-        width="65px"
-        title="Fury Music"
-        alt="Fury Music logo"
-        class="animate__animated animate__pulse animate__infinite animate__slow"
-      />
       <div id="divTopItems">
         <div id="divSearchSong">
           <font-awesome-icon style="color: white" :icon="['fas', 'search']" />
@@ -37,6 +29,14 @@
     </div>
 
     <div id="divSidebar" class="animate__animated animate__fadeInLeft">
+      <img
+        id="logo"
+        src="src/assets/fury logo favicon5.png"
+        width="65px"
+        title="Fury Music"
+        alt="Fury Music logo"
+        class="animate__animated animate__pulse animate__infinite animate__slow"
+      />
       <h3 id="h3Library">Your library</h3>
 
       <span class="sidebarLink" v-on:click="resetSearch()"
@@ -733,17 +733,11 @@ export default {
       document.getElementById("divPlay").style.display = "block";
       document.getElementById("divPause").style.display = "none";
 
-      if (self.toggleShuffle) {
-        setTimeout(function() {
-          if(!self.wavesurfer.isPlaying() && !self.loading)
-            self.playRandom();
-        }, 3000);
-      } else {
         setTimeout(function() {
           if(!self.wavesurfer.isPlaying() && !self.loading)
             self.playNext();
         }, 3000);
-      }
+      
     });
 
     this.wavesurfer.on("audioprocess", function(progress) {
@@ -1029,7 +1023,7 @@ font-awesome-icon {
   position: absolute;
   background-color: white;
   height: 35px;
-  left: 0;
+  left: 171px;
   right: 0;
   /* box-shadow: 0 4px 2px -2px gray; */
   z-index: 1;
@@ -1041,7 +1035,7 @@ font-awesome-icon {
   position: absolute;
   /* border-radius: 100%;  */
   left: 50px;
-  top: 5px;
+  top: 10px;
 }
 
 #divSidebarCurrentSongInfo {
@@ -1057,7 +1051,7 @@ font-awesome-icon {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.8);
   width: 170px;
-  top: 39px;
+  top: 0;
   bottom: 0;
   z-index: 0;
   border-right: 1px solid white;
@@ -1076,7 +1070,7 @@ font-awesome-icon {
 }
 
 #h3Library {
-  margin-top: 120px;
+  margin-top: 150px;
 }
 
 #songLoader {
