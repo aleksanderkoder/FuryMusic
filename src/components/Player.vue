@@ -388,6 +388,33 @@ export default {
           "block";
       }
     },
+    setMediaMetaData(song) {
+      let self = this; 
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: song.SongName,
+          artist: song.ArtistName,
+          album: song.Album,
+          // artwork: {src: song.SongImageURL, type: 'image'} TO DO: FIX THIS SO IT WORKS!
+        });
+
+        navigator.mediaSession.setActionHandler('play', function() {
+          self.wavePlayPauseToggle("play"); 
+        });
+        navigator.mediaSession.setActionHandler('pause', function() {
+          self.wavePlayPauseToggle(); 
+        });
+        navigator.mediaSession.setActionHandler('previoustrack', function() {
+          self.playPrevious(); 
+        });
+        navigator.mediaSession.setActionHandler('nexttrack', function() {
+          self.playNext();
+        });
+
+        // navigator.mediaSession.setActionHandler('seekbackward', function() {});
+        // navigator.mediaSession.setActionHandler('seekforward', function() {});
+      }
+    },
     playSong(song) {
       if (this.loading) return; // If something is already loading, don't do anything
 
@@ -395,6 +422,7 @@ export default {
 
       // If no song is selected, load selected song
       if (this.currentSong.SongID == "") {
+        this.setMediaMetaData(song); 
         this.songHistory.push(song);
         this.historyIndex++;
         this.currentSong = song; 
@@ -422,6 +450,7 @@ export default {
       // If a song has been selected before, but it's not the same song
       else {
         document.title = "Fury Music";
+        this.setMediaMetaData(song); 
         document.getElementById("play" + this.currentSong.SongID).style.display =
           "block";
         document.getElementById("pause" + this.currentSong.SongID).style.display =
@@ -683,6 +712,7 @@ export default {
     // Initializes the WaveSurfer object
     this.wavesurfer = WaveSurfer.create({
       container: "#waveform",
+      backend: "MediaElement",
       waveColor: "white",
       progressColor: "black",
       barWidth: 2,
@@ -755,7 +785,7 @@ export default {
     });
 
     // Fires when wavesurfer is ready
-    this.wavesurfer.on("ready", function() {
+    this.wavesurfer.on("waveform-ready", function() {
       self.loading = false;
       document.getElementById("songLoader").style.display = "none";
       document.getElementById("divPlay").style.opacity = "1";
@@ -799,6 +829,7 @@ export default {
         document.getElementById("volumeUp").style.display = "block";
       }
     };
+
   }
 };
 </script>
