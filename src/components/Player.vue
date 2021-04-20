@@ -39,11 +39,11 @@
       />
       <h3 id="h3Library">Your library</h3>
 
-      <span class="sidebarLink" v-on:click="resetSearch()"
+      <span class="sidebarTitle" v-on:click="resetSearch()"
         >All public songs</span
       >
       <br />
-      <span class="sidebarLink" v-on:click="searchSong($store.state.username)"
+      <span class="sidebarTitle" v-on:click="searchSong($store.state.username)"
         >My uploaded songs</span
       >
 
@@ -62,10 +62,10 @@
         <img
           id="SongCoverImage"
           v-bind:src="currentSong.SongImageURL"
-          width="95px"
+          width="65%"
         />
-        <p style="font-weight: bold">{{ currentSong.SongName }}</p>
-        <p>{{ currentSong.ArtistName }}</p>
+        <p class="clickToSearch" style="font-weight: bold" v-bind:title="currentSong.SongName" v-on:click="searchSong(currentSong.SongName)">{{ currentSong.SongName }}</p>
+        <p class="clickToSearch" v-bind:title="currentSong.ArtistName" v-on:click="searchSong(currentSong.ArtistName)">{{ currentSong.ArtistName }}</p>
       </div>
     </div>
 
@@ -75,25 +75,23 @@
           id="divCenterTableHeader"
           class="animate__animated animate__fadeInRight"
         >
-          <table class="tableSongsHeader">
-            <tr>
-              <td class="tableSongsHeaderTitle">
-                <span>Title</span>
-              </td>
-              <td class="tableSongsHeaderArtist">
-                <span>Artist</span>
-              </td>
-              <td class="tableSongsHeaderAlbum">
-                <span>Album</span>
-              </td>
-              <td class="tableSongsHeaderLength">
-                <span>Length</span>
-              </td>
-              <td class="tableSongsHeaderPublisher">
-                <span>Published by</span>
-              </td>
-            </tr>
-          </table>
+          <div class="divSongsHeader">
+            <div class="divSongsHeaderTitle">
+              <span>Title</span>
+            </div>
+            <div class="divSongsHeaderArtist">
+              <span>Artist</span>
+            </div>
+            <div class="divSongsHeaderAlbum">
+              <span>Album</span>
+            </div>
+            <div class="divSongsHeaderLength">
+              <span>Length</span>
+            </div>
+            <div class="divSongsHeaderPublisher">
+              <span>Published by</span>
+            </div>
+          </div>
         </div>
         <div
           id="divSongPane"
@@ -105,11 +103,7 @@
           <div class="divSongsPlay">
             <font-awesome-icon
               v-bind:id="'play' + song.SongID"
-              v-on:click="
-                playSong(
-                  song
-                )
-              "
+              v-on:click="playSong(song)"
               style="color: black; cursor: pointer; filter: drop-shadow(0px 0px 7px #FFFFFF);"
               :icon="['fas', 'play']"
             />
@@ -130,40 +124,57 @@
             <span v-bind:title="song.SongName">{{ song.SongName }}</span>
           </div>
           <div class="divSongsArtistName ellipsis">
-            <span class="songPaneItem" v-bind:title="song.ArtistName" v-on:click="searchSong(song.ArtistName)">{{ song.ArtistName }}</span>
+            <span
+              class="clickToSearch"
+              v-bind:title="song.ArtistName"
+              v-on:click="searchSong(song.ArtistName)"
+              >{{ song.ArtistName }}</span
+            >
           </div>
           <div class="divSongsSongAlbum ellipsis">
-            <span class="songPaneItem" v-bind:title="song.Album" v-on:click="searchSong(song.Album)">{{ song.Album }}</span>
+            <span
+              class="clickToSearch"
+              v-bind:title="song.Album"
+              v-on:click="searchSong(song.Album)"
+              >{{ song.Album }}</span
+            >
           </div>
           <div class="divSongsSongLength">
             <span v-bind:title="song.Length">{{ song.Length }}</span>
           </div>
           <div class="divSongsPublisher ellipsis">
-            <span class="songPaneItem" v-bind:title="song.Publisher" v-on:click="searchSong(song.Publisher)">{{ song.Publisher }}</span>
+            <span
+              class="clickToSearch"
+              v-bind:title="song.Publisher"
+              v-on:click="searchSong(song.Publisher)"
+              >{{ song.Publisher }}</span
+            >
           </div>
-          <font-awesome-icon
-            id="fontDownloadSong"
-            style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 30px;"
-            :icon="['fas', 'cloud-download-alt']"
-            title="Download"
-            v-on:click="downloadSong(song.SongURL)"
-          />
-          <font-awesome-icon
+          <div class="divSongsOptions ellipsis">
+            <font-awesome-icon
+              v-if="$store.state.username == song.Publisher"
+              id="fontDeleteSong"
+              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 30px;"
+              style:hover="color: red;"
+              :icon="['fas', 'trash-alt']"
+              title="Delete"
+              v-on:click="deleteSong(song.SongID, song.SongURL)"
+            />
+            <font-awesome-icon
               id="fontShareSong"
               style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
               :icon="['fas', 'share-alt']"
               title="Copy song link"
               v-on:click="copySongLink(song.SongID)"
             />
-          <font-awesome-icon
-            v-if="$store.state.username == song.Publisher"
-            id="fontDeleteSong"
-            style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
-            style:hover="color: red;"
-            :icon="['fas', 'trash-alt']"
-            title="Delete"
-            v-on:click="deleteSong(song.SongID, song.SongURL)"
-          />
+            <font-awesome-icon
+              id="fontDownloadSong"
+              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
+              :icon="['fas', 'cloud-download-alt']"
+              title="Download"
+              v-on:click="downloadSong(song.SongURL)"
+            />
+          </div>
         </div>
       </div>
 
@@ -262,7 +273,6 @@
     >
       <span id="spanPlayerMinimize">Minimize</span>
       <font-awesome-icon id="fontPlayerMinimize" :icon="['fas', 'sort-down']" />
-      
     </div>
 
     <div
@@ -270,11 +280,8 @@
       v-on:click="minimizeMaximizePlayer('max')"
       class="animate__animated animate__flipInY"
     >
-    <span id="spanPlayerMaximize">Maximize</span>
-    <font-awesome-icon
-        id="fontPlayerMaximize"
-        :icon="['fas', 'sort-up']"
-      />
+      <span id="spanPlayerMaximize">Maximize</span>
+      <font-awesome-icon id="fontPlayerMaximize" :icon="['fas', 'sort-up']" />
     </div>
 
     <div id="divPlayerOptions" class="animate__animated animate__flipInY">
@@ -319,7 +326,15 @@ export default {
     return {
       wavesurfer: null,
       songs: [],
-      currentSong: {SongID: "", SongURL: "", SongName: "", ArtistName: "", Length: 0, Album: "", SongImageURL: ""}, 
+      currentSong: {
+        SongID: "",
+        SongURL: "",
+        SongName: "",
+        ArtistName: "",
+        Length: 0,
+        Album: "",
+        SongImageURL: ""
+      },
       songHistory: [],
       historyIndex: 0,
       elapsedPlaytime: 0,
@@ -369,45 +384,52 @@ export default {
       if (mode == "play") {
         this.wavesurfer.play();
         document.title =
-          "Playing '" + this.currentSong.SongName + "' by " + this.currentSong.ArtistName;
+          "Playing '" +
+          this.currentSong.SongName +
+          "' by " +
+          this.currentSong.ArtistName;
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
-        document.getElementById("play" + this.currentSong.SongID).style.display =
-          "none";
-        document.getElementById("pause" + this.currentSong.SongID).style.display =
-          "block";
+        document.getElementById(
+          "play" + this.currentSong.SongID
+        ).style.display = "none";
+        document.getElementById(
+          "pause" + this.currentSong.SongID
+        ).style.display = "block";
       } else {
         this.wavesurfer.pause();
         document.title = "Paused";
         document.getElementById("divPause").style.display = "none";
         document.getElementById("divPlay").style.display = "block";
 
-        document.getElementById("pause" + this.currentSong.SongID).style.display =
-          "none";
-        document.getElementById("play" + this.currentSong.SongID).style.display =
-          "block";
+        document.getElementById(
+          "pause" + this.currentSong.SongID
+        ).style.display = "none";
+        document.getElementById(
+          "play" + this.currentSong.SongID
+        ).style.display = "block";
       }
     },
     setMediaMetaData(song) {
-      let self = this; 
-      if ('mediaSession' in navigator) {
+      let self = this;
+      if ("mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: song.SongName,
           artist: song.ArtistName,
-          album: song.Album,
+          album: song.Album
           // artwork: {src: song.SongImageURL, type: 'image'} TO DO: FIX THIS SO IT WORKS!
         });
 
-        navigator.mediaSession.setActionHandler('play', function() {
-          self.wavePlayPauseToggle("play"); 
+        navigator.mediaSession.setActionHandler("play", function() {
+          self.wavePlayPauseToggle("play");
         });
-        navigator.mediaSession.setActionHandler('pause', function() {
-          self.wavePlayPauseToggle(); 
+        navigator.mediaSession.setActionHandler("pause", function() {
+          self.wavePlayPauseToggle();
         });
-        navigator.mediaSession.setActionHandler('previoustrack', function() {
-          self.playPrevious(); 
+        navigator.mediaSession.setActionHandler("previoustrack", function() {
+          self.playPrevious();
         });
-        navigator.mediaSession.setActionHandler('nexttrack', function() {
+        navigator.mediaSession.setActionHandler("nexttrack", function() {
           self.playNext();
         });
 
@@ -422,10 +444,10 @@ export default {
 
       // If no song is selected, load selected song
       if (this.currentSong.SongID == "") {
-        this.setMediaMetaData(song); 
+        this.setMediaMetaData(song);
         this.songHistory.push(song);
         this.historyIndex++;
-        this.currentSong = song; 
+        this.currentSong = song;
         this.wavesurfer.load(song.SongURL);
         document.getElementById(
           "play" + song.SongID
@@ -441,7 +463,10 @@ export default {
       else if (this.currentSong.SongID == song.SongID) {
         this.wavesurfer.play();
         document.title =
-          "Playing '" + this.currentSong.SongName + "' by " + this.currentSong.ArtistName;
+          "Playing '" +
+          this.currentSong.SongName +
+          "' by " +
+          this.currentSong.ArtistName;
         document.getElementById("pause" + song.SongID).style.display = "block";
         document.getElementById("play" + song.SongID).style.display = "none";
         document.getElementById("divPlay").style.display = "none";
@@ -450,13 +475,16 @@ export default {
       // If a song has been selected before, but it's not the same song
       else {
         document.title = "Fury Music";
-        this.setMediaMetaData(song); 
-        document.getElementById("play" + this.currentSong.SongID).style.display =
-          "block";
-        document.getElementById("pause" + this.currentSong.SongID).style.display =
-          "none";
-        document.getElementById("load" + this.currentSong.SongID).style.display =
-          "none";
+        this.setMediaMetaData(song);
+        document.getElementById(
+          "play" + this.currentSong.SongID
+        ).style.display = "block";
+        document.getElementById(
+          "pause" + this.currentSong.SongID
+        ).style.display = "none";
+        document.getElementById(
+          "load" + this.currentSong.SongID
+        ).style.display = "none";
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
         document.getElementById(
@@ -637,8 +665,8 @@ export default {
       if (mode == "min") {
         document.getElementById("divCenter").style.bottom = "85px";
         document.getElementById("divPlayerControls").style.display = "none";
-        document.getElementById("divPlayerMinimize").style.display = "none"; 
-        document.getElementById("divPlayerMaximize").style.display = "block"; 
+        document.getElementById("divPlayerMinimize").style.display = "none";
+        document.getElementById("divPlayerMaximize").style.display = "block";
         document.getElementById("divPlayerOptions").style.display = "none";
       } else if (mode == "max") {
         document.getElementById("divCenter").style.bottom = "190px";
@@ -657,24 +685,25 @@ export default {
       if (songlink != null) {
         let song;
         for (let i = 0; i < this.songs.length; i++) {
-          if(this.songs[i].SongID == songlink) {
+          if (this.songs[i].SongID == songlink) {
             song = this.songs[i];
           }
         }
-        this.playSong(song); 
+        this.playSong(song);
         window.history.pushState("", "", "/");
       }
-      
     },
     copySongLink(songid) {
-      let link = window.location.origin + "/?songlink=" + songid; 
-      navigator.clipboard.writeText(link).then(function() {
+      let link = window.location.origin + "/?songlink=" + songid;
+      navigator.clipboard.writeText(link).then(
+        function() {
           /* clipboard successfully set */
-          Ozone.fire("success", "Song link has been copied","top-right");
-        }, function() {
+          Ozone.fire("success", "Song link has been copied", "top-right");
+        },
+        function() {
           /* clipboard write failed */
-        });
-
+        }
+      );
     },
     signOut() {
       localStorage.removeItem("username");
@@ -683,7 +712,7 @@ export default {
     }
   },
   watch: {
-    loggedIn: function() { 
+    loggedIn: function() {
       console.log("Fetching all songs...");
       var self = this;
       fetch(self.apiURL + "getAllSongs.php", {
@@ -694,8 +723,8 @@ export default {
             if (text != "Error") {
               self.populateSongList(text);
               setTimeout(function() {
-                self.playLinkedSong(); 
-              }, 1500); 
+                self.playLinkedSong();
+              }, 1500);
             } else {
               console.log("ERROR: " + text);
             }
@@ -733,11 +762,9 @@ export default {
       document.getElementById("divPlay").style.display = "block";
       document.getElementById("divPause").style.display = "none";
 
-        setTimeout(function() {
-          if(!self.wavesurfer.isPlaying() && !self.loading)
-            self.playNext();
-        }, 3000);
-      
+      setTimeout(function() {
+        if (!self.wavesurfer.isPlaying() && !self.loading) self.playNext();
+      }, 3000);
     });
 
     this.wavesurfer.on("audioprocess", function(progress) {
@@ -823,7 +850,6 @@ export default {
         document.getElementById("volumeUp").style.display = "block";
       }
     };
-
   }
 };
 </script>
@@ -857,7 +883,7 @@ export default {
 
 #divSearchSong {
   background-color: rgba(0, 0, 0, 0.65);
-  height: 26px; 
+  height: 26px;
   border-radius: 100px;
   padding-left: 10px;
   padding-right: 10px;
@@ -899,12 +925,12 @@ export default {
   position: absolute;
   height: inherit;
   width: 550px;
-  right: 0; 
-  justify-content: center; 
+  right: 0;
+  justify-content: center;
   align-items: center;
 }
 
-.songPaneItem:hover {
+.clickToSearch:hover {
   text-decoration: underline;
   cursor: pointer;
 }
@@ -924,31 +950,36 @@ export default {
 }
 
 .divSongsPlay {
-  flex: 0 0 45px;
+  flex: 0 0 2.5%;
 }
 
 .divSongsSongName {
-  flex: 0 0 335px;
-  padding-right: 45px;
+  flex: 0 0 15%;
+  padding-right: 5%;
 }
 
 .divSongsArtistName {
-  flex: 0 0 250px;
-  padding-right: 50px;
+  flex: 0 0 15%;
+  padding-right: 5%;
 }
 
 .divSongsSongLength {
-  flex: 0 0 125px;
+  flex: 0 0 5%;
 }
 
 .divSongsPublisher {
-  flex: 0 0 175px;
-  padding-left: 55px;
+  flex: 0 0 17.5%;
+  padding-left: 5%;
 }
 
 .divSongsSongAlbum {
-  flex: 0 0 190px;
-  padding-right: 50px;
+  flex: 0 0 15%;
+  padding-right: 5%;
+}
+
+.divSongsOptions {
+  position: absolute;
+  right: 25px;
 }
 
 #divCenterTableHeader {
@@ -957,34 +988,43 @@ export default {
   left: 170px;
   right: 0;
   background-color: rgba(0, 0, 0, 0.8);
-  padding: 7px;
+  padding-top: 7px;
+  padding-bottom: 7px;
   margin-left: 1px;
   color: white;
   white-space: nowrap;
 }
 
-.tableSongsHeader {
+.divSongsHeader {
   text-align: left;
+  display: flex;
+  width: 95%;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
-.tableSongsHeaderTitle {
-  padding-left: 60px;
+.divSongsHeaderTitle {
+  flex: 0 0 15%;
+  padding-left: 2.8%;
 }
 
-.tableSongsHeaderLength {
-  padding-left: 192px;
+.divSongsHeaderLength {
+  flex: 0 0 5%;
 }
 
-.tableSongsHeaderPublisher {
-  padding-left: 128px;
+.divSongsHeaderPublisher {
+  flex: 0 0 17.5%;
+  padding-left: 5%;
 }
 
-.tableSongsHeaderArtist {
-  padding-left: 347px;
+.divSongsHeaderArtist {
+  flex: 0 0 20%;
+  padding-left: 5%;
 }
 
-.tableSongsHeaderAlbum {
-  padding-left: 258px;
+.divSongsHeaderAlbum {
+  flex: 0 0 15%;
+  padding-right: 4.75%;
 }
 
 #divSongPane {
@@ -993,7 +1033,7 @@ export default {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
-  width: 1435px;
+  width: 95%;
   margin-top: 15px;
   margin-left: 15px;
   transition: 0.2s;
@@ -1115,7 +1155,7 @@ font-awesome-icon {
   left: 170px;
   right: 0px;
   bottom: 85px;
-  top: 78px;
+  top: 71px;
   z-index: 0;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -1208,7 +1248,7 @@ font-awesome-icon {
   cursor: pointer;
 }
 
-.sidebarLink {
+.sidebarTitle {
   display: block;
   color: white;
   padding: 3px;
@@ -1216,7 +1256,7 @@ font-awesome-icon {
   transition: 0.3s;
 }
 
-.sidebarLink:hover {
+.sidebarTitle:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -1225,7 +1265,7 @@ font-awesome-icon {
 }
 
 #fontShareSong:hover {
-  color: grey !important; 
+  color: grey !important;
 }
 
 #fontDownloadSong:hover {

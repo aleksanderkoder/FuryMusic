@@ -80,6 +80,10 @@ body {
   background-color: black;
   font-family: "Wals";
   overflow: hidden; 
+  -webkit-user-select: none;        
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
 }
 
 input:focus {
