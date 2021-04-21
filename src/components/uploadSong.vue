@@ -134,8 +134,9 @@ export default {
     },
     regEx() {
       let regEx = /^[0-9a-zæøåA-ZÆØÅ%!?=&/'-:+,\s]{1,55}$/;
+      let regExAlbum = /^[0-9a-zæøåA-ZÆØÅ%!?=&/'-:+,\s]{0,55}$/;
       let regExImgCover = /^[0-9a-zA-Z\w\W\s\d\D]{0,255}$/; 
-      if(regEx.test(this.songName) && regEx.test(this.songArtist) && regEx.test(this.songAlbum) && regExImgCover.test(this.songCover)) {
+      if(regEx.test(this.songName) && regEx.test(this.songArtist) && regExAlbum.test(this.songAlbum) && regExImgCover.test(this.songCover)) {
         this.showError = false; 
         return true; 
       }

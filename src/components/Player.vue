@@ -64,12 +64,25 @@
           v-bind:src="currentSong.SongImageURL"
           width="65%"
         />
-        <p class="clickToSearch" style="font-weight: bold" v-bind:title="currentSong.SongName" v-on:click="searchSong(currentSong.SongName)">{{ currentSong.SongName }}</p>
-        <p class="clickToSearch" v-bind:title="currentSong.ArtistName" v-on:click="searchSong(currentSong.ArtistName)">{{ currentSong.ArtistName }}</p>
+        <p
+          class="clickToSearch"
+          style="font-weight: bold"
+          v-bind:title="currentSong.SongName"
+          v-on:click="searchSong(currentSong.SongName)"
+        >
+          {{ currentSong.SongName }}
+        </p>
+        <p
+          class="clickToSearch"
+          v-bind:title="currentSong.ArtistName"
+          v-on:click="searchSong(currentSong.ArtistName)"
+        >
+          {{ currentSong.ArtistName }}
+        </p>
       </div>
     </div>
 
-    <div id="divCenter">
+    <div id="divCenter" class="divCenter">
       <div v-if="loggedIn">
         <div
           id="divCenterTableHeader"
@@ -177,20 +190,6 @@
           </div>
         </div>
       </div>
-
-      <div
-        id="customBackgroundImagePanel"
-        @mouseover="uploadImgLabel = true"
-        @mouseleave="uploadImgLabel = false"
-        v-on:click="showCustomBackImg = true"
-      >
-        <span
-          v-show="uploadImgLabel"
-          class="animate__animated animate__bounceIn"
-          >Change background image</span
-        >
-        <font-awesome-icon :icon="['fas', 'image']" />
-      </div>
     </div>
 
     <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
@@ -261,27 +260,36 @@
       <span id="spanTotalPlaytime">{{ currentSong.Length }}</span>
     </div>
 
-    <div id="songLoader">
-      <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
-      <span id="songLoaderProgress"></span>
-    </div>
+    <div id="divForefrontWrapper">
+      <p id="pZeroMatches" class="animate__animated animate__wobble">
+        No matches were found
+      </p>
 
-    <div
-      id="divPlayerMinimize"
-      v-on:click="minimizeMaximizePlayer('min')"
-      class="animate__animated animate__flipInY"
-    >
-      <span id="spanPlayerMinimize">Minimize</span>
-      <font-awesome-icon id="fontPlayerMinimize" :icon="['fas', 'sort-down']" />
-    </div>
+      <div id="songLoader">
+        <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
+        <span id="songLoaderProgress"></span>
+      </div>
+  
+      <div
+        id="divPlayerMinimize"
+        v-on:click="minimizeMaximizePlayer('min')"
+        class="animate__animated animate__flipInY"
+      >
+        <span id="spanPlayerMinimize">Minimize</span>
+        <font-awesome-icon
+          id="fontPlayerMinimize"
+          :icon="['fas', 'sort-down']"
+        />
+      </div>
 
-    <div
-      id="divPlayerMaximize"
-      v-on:click="minimizeMaximizePlayer('max')"
-      class="animate__animated animate__flipInY"
-    >
-      <span id="spanPlayerMaximize">Maximize</span>
-      <font-awesome-icon id="fontPlayerMaximize" :icon="['fas', 'sort-up']" />
+      <div
+        id="divPlayerMaximize"
+        v-on:click="minimizeMaximizePlayer('max')"
+        class="animate__animated animate__flipInY"
+      >
+        <span id="spanPlayerMaximize">Maximize</span>
+        <font-awesome-icon id="fontPlayerMaximize" :icon="['fas', 'sort-up']" />
+      </div>
     </div>
 
     <div id="divPlayerOptions" class="animate__animated animate__flipInY">
@@ -292,6 +300,18 @@
         v-on:click="toggleShufflePlay()"
         :icon="['fas', 'random']"
       />
+    </div>
+
+    <div
+      id="customBackgroundImagePanel"
+      @mouseover="uploadImgLabel = true"
+      @mouseleave="uploadImgLabel = false"
+      v-on:click="showCustomBackImg = true"
+    >
+      <span v-show="uploadImgLabel" class="animate__animated animate__bounceIn"
+        >Change background image</span
+      >
+      <font-awesome-icon :icon="['fas', 'image']" />
     </div>
 
     <UploadBackImg
@@ -546,6 +566,7 @@ export default {
     },
     resetSearch() {
       document.getElementById("searchSong").value = "";
+      document.getElementById("pZeroMatches").style.display = "none";
       for (let i = 0; i < this.songs.length; i++) {
         this.songs[i].Show = true;
       }
@@ -563,6 +584,7 @@ export default {
       this.resetSearch();
 
       // Loops through songs and filters out any entries who doesn't fit search query
+      document.getElementById("pZeroMatches").style.display = "flex";
       for (let i = 0; i < this.songs.length; i++) {
         let string = this.songs[i].SongName.toLowerCase();
         let hit = 0;
@@ -586,6 +608,8 @@ export default {
         }
         if (hit < 1) {
           this.songs[i].Show = false;
+        } else {
+          document.getElementById("pZeroMatches").style.display = "none";
         }
       }
     },
@@ -663,13 +687,13 @@ export default {
     },
     minimizeMaximizePlayer(mode) {
       if (mode == "min") {
-        document.getElementById("divCenter").style.bottom = "85px";
+        document.getElementById("divCenter").classList.toggle("divCenterRetrackted"); 
         document.getElementById("divPlayerControls").style.display = "none";
         document.getElementById("divPlayerMinimize").style.display = "none";
         document.getElementById("divPlayerMaximize").style.display = "block";
         document.getElementById("divPlayerOptions").style.display = "none";
       } else if (mode == "max") {
-        document.getElementById("divCenter").style.bottom = "190px";
+        document.getElementById("divCenter").classList.toggle("divCenterRetrackted");
         document.getElementById("divPlayerMaximize").style.display = "none";
 
         setTimeout(function() {
@@ -778,51 +802,43 @@ export default {
 
     // Fires when a song is loading
     this.wavesurfer.on("loading", function(progress) {
-      self.loading = true;
-      document.title = "Fury Music";
-      self.elapsedPlaytime = "0:00";
-      document.getElementById("play" + self.currentSong.SongID).style.display =
-        "none";
-      document.getElementById("divPlay").style.opacity = "0.25";
-      document.getElementById("divPlay").style.pointerEvents = "none";
-      document.getElementById("wavesurferVolume").style.opacity = "0.25";
-      document.getElementById("wavesurferVolume").style.pointerEvents = "none";
-      document.getElementById("volumeMute").style.opacity = "0.25";
-      document.getElementById("volumeMute").style.pointerEvents = "none";
-      document.getElementById("stepForward").style.opacity = "0.25";
-      document.getElementById("stepForward").style.pointerEvents = "none";
-      document.getElementById("stepBackwards").style.opacity = "0.25";
-      document.getElementById("stepBackwards").style.pointerEvents = "none";
-      document.getElementById("volumeUp").style.opacity = "0.25";
-      document.getElementById("volumeUp").style.pointerEvents = "none";
-      document.getElementById("load" + self.currentSong.SongID).style.display =
-        "block";
-      document.getElementById("songLoader").style.display = "block";
-      document.getElementById("songLoaderProgress").innerHTML = progress + "%";
+        document.title = "Fury Music";
+        self.elapsedPlaytime = "0:00";
+        document.getElementById("play" + self.currentSong.SongID).style.display =
+          "none";
+        document.getElementById("divPlay").classList.toggle("disabled"); 
+        document.getElementById("wavesurferVolume").classList.toggle("disabled"); 
+        document.getElementById("volumeMute").classList.toggle("disabled"); 
+        document.getElementById("stepForward").classList.toggle("disabled");
+        
+          document.getElementById("stepBackwards").setAttribute("class", "disabled");
+        
+        document.getElementById("volumeUp").classList.toggle("disabled");
+        document.getElementById("load" + self.currentSong.SongID).style.display =
+          "block";
+        document.getElementById("songLoader").style.display = "block";
+        
 
-      if (localStorage.getItem("volumeLog")) {
-        self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
-      }
+        if (localStorage.getItem("volumeLog")) {
+          self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
+        }
+  
+      document.getElementById("songLoaderProgress").innerHTML = progress + "%";
+      self.loading = true;
     });
 
     // Fires when wavesurfer is ready
     this.wavesurfer.on("waveform-ready", function() {
       self.loading = false;
       document.getElementById("songLoader").style.display = "none";
-      document.getElementById("divPlay").style.opacity = "1";
-      document.getElementById("divPlay").style.pointerEvents = "auto";
-      document.getElementById("wavesurferVolume").style.opacity = "1";
-      document.getElementById("wavesurferVolume").style.pointerEvents = "auto";
-      document.getElementById("stepForward").style.opacity = "1";
-      document.getElementById("stepForward").style.pointerEvents = "auto";
+      document.getElementById("divPlay").classList.toggle("disabled");
+      document.getElementById("wavesurferVolume").classList.toggle("disabled"); 
+      document.getElementById("stepForward").classList.toggle("disabled");
       if (self.historyIndex > 1) {
-        document.getElementById("stepBackwards").style.opacity = "1";
-        document.getElementById("stepBackwards").style.pointerEvents = "auto";
+        document.getElementById("stepBackwards").classList.toggle("disabled");
       }
-      document.getElementById("volumeMute").style.opacity = "1";
-      document.getElementById("volumeMute").style.pointerEvents = "auto";
-      document.getElementById("volumeUp").style.opacity = "1";
-      document.getElementById("volumeUp").style.pointerEvents = "auto";
+      document.getElementById("volumeMute").classList.toggle("disabled"); 
+      document.getElementById("volumeUp").classList.toggle("disabled");
       document.getElementById("play" + self.currentSong.SongID).style.display =
         "block";
       document.getElementById("load" + self.currentSong.SongID).style.display =
@@ -855,6 +871,15 @@ export default {
 </script>
 
 <style scoped>
+
+#pZeroMatches {
+  display: none; 
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+}
+
 #customBackgroundImagePanel {
   position: fixed;
   right: 20px;
@@ -863,6 +888,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.6);
   padding: 5px;
   border-radius: 3px;
+  z-index: 1;
   cursor: pointer;
 }
 
@@ -878,6 +904,7 @@ export default {
   padding-left: 10px;
   padding-right: 10px;
   border-top-right-radius: 5px;
+  z-index: 1;
   cursor: pointer;
 }
 
@@ -908,6 +935,11 @@ export default {
   padding: 60px;
 }
 
+.disabled {
+  pointer-events: none;
+  opacity: 0.25;
+}
+
 #btnSignOut {
   /* position: absolute; */
   right: 35px;
@@ -915,7 +947,7 @@ export default {
   border: none;
   padding: 5px;
   border-radius: 3px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
   color: white;
   transition: 0.3s;
 }
@@ -1048,11 +1080,6 @@ font-awesome-icon {
   background-color: transparent !important;
 }
 
-.divSongPaneHover:hover {
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-}
-
 .ellipsis {
   white-space: nowrap;
   overflow: hidden;
@@ -1073,9 +1100,8 @@ font-awesome-icon {
 
 #logo {
   position: absolute;
-  /* border-radius: 100%;  */
   left: 50px;
-  top: 10px;
+  top: 20px;
 }
 
 #divSidebarCurrentSongInfo {
@@ -1093,7 +1119,7 @@ font-awesome-icon {
   width: 170px;
   top: 0;
   bottom: 0;
-  z-index: 0;
+  z-index: 1;
   border-right: 1px solid white;
 }
 
@@ -1105,7 +1131,7 @@ font-awesome-icon {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 0;
+  z-index: 1;
   display: none;
 }
 
@@ -1118,20 +1144,32 @@ font-awesome-icon {
   position: absolute;
   color: white;
   font-size: 40px;
-  bottom: 40px;
-  margin-left: 48.5%;
+  bottom: 60px;
+  z-index: 1;
+}
+
+#divForefrontWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 #songLoaderProgress {
   position: absolute;
+  display: block; 
   font-size: 20px;
-  padding-left: 15px;
-  margin-top: 10px;
+  padding-top: 10px; 
+}
+
+#songLoaderWrapper {
+  padding-right: 20px;
 }
 
 #btnUploadSong {
   position: absolute;
-  bottom: 250px;
+  bottom: 265px;
   left: 0;
   background-color: transparent;
   border: none;
@@ -1150,15 +1188,19 @@ font-awesome-icon {
   color: white;
 }
 
-#divCenter {
+.divCenter {
   position: absolute;
   left: 170px;
   right: 0px;
-  bottom: 85px;
+  bottom: 90px;
   top: 71px;
   z-index: 0;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.divCenterRetrackted {
+  bottom: 195px;
 }
 
 #waveform {
@@ -1184,7 +1226,6 @@ font-awesome-icon {
   position: absolute;
   text-align: center;
   bottom: 130px;
-  left: 48%;
   color: white;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 5px;
@@ -1194,6 +1235,7 @@ font-awesome-icon {
   border-top-right-radius: 5px;
   animation-duration: 1s;
   animation-iteration-count: 1;
+  z-index: 1;
   cursor: pointer;
 }
 
@@ -1202,7 +1244,6 @@ font-awesome-icon {
   position: absolute;
   text-align: center;
   bottom: 0px;
-  left: 48%;
   color: white;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 5px;
@@ -1212,6 +1253,7 @@ font-awesome-icon {
   border-top-right-radius: 5px;
   animation-duration: 1s;
   animation-iteration-count: 1;
+  z-index: 1;
   cursor: pointer;
 }
 
@@ -1302,7 +1344,6 @@ font-awesome-icon {
 }
 
 #btnSignOut:hover {
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   background-color: #8b0000;
 }
 
