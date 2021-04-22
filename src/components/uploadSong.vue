@@ -205,12 +205,11 @@ export default {
   right: 0;
   text-align: center;
   background-color: white;
-  margin-top: 10%;
   border-radius: 1%;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Wals";
-  z-index: 2;
+  z-index: 1000;
 }
 
 #loadingSpinnerUS {
@@ -222,10 +221,13 @@ export default {
 
 #backgroundFade {
   position: absolute;
+  display: flex; 
+  align-items: center;
   width: 100%;
   height: 100%;
+  top: 0; 
   background-color: rgba(0, 0, 0, 0.5); 
-  z-index: 1;
+  z-index: 999;
 }
 
 input[type="text"] {

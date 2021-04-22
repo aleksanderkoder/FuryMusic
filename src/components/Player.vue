@@ -32,17 +32,15 @@
       <img
         id="logo"
         src="src/assets/fury logo favicon5.png"
-        width="65px"
         title="Fury Music"
         alt="Fury Music logo"
         class="animate__animated animate__pulse animate__infinite animate__slow"
       />
-      <h3 id="h3Library">Your library</h3>
+      <h3>Your library</h3>
 
       <span class="sidebarTitle" v-on:click="resetSearch()"
         >All public songs</span
       >
-      <br />
       <span class="sidebarTitle" v-on:click="searchSong($store.state.username)"
         >My uploaded songs</span
       >
@@ -117,18 +115,20 @@
             <font-awesome-icon
               v-bind:id="'play' + song.SongID"
               v-on:click="playSong(song)"
-              style="color: black; cursor: pointer; filter: drop-shadow(0px 0px 7px #FFFFFF);"
+              class="fontSongPane"
               :icon="['fas', 'play']"
             />
             <font-awesome-icon
               v-bind:id="'pause' + song.SongID"
               v-on:click="pauseSong(song.SongID)"
-              style="color: black; cursor: pointer; display: none; filter: drop-shadow(0px 0px 7px #FFFFFF);"
+              class="fontSongPane"
+              style="display: none;"
               :icon="['fas', 'pause']"
             />
             <font-awesome-icon
               v-bind:id="'load' + song.SongID"
-              style="color: black; display: none; filter: drop-shadow(0px 0px 4px #FFFFFF);"
+              class="fontSongPane"
+              style="display: none;"
               :icon="['fas', 'circle-notch']"
               spin
             />
@@ -167,22 +167,18 @@
             <font-awesome-icon
               v-if="$store.state.username == song.Publisher"
               id="fontDeleteSong"
-              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 30px;"
-              style:hover="color: red;"
               :icon="['fas', 'trash-alt']"
               title="Delete"
               v-on:click="deleteSong(song.SongID, song.SongURL)"
             />
             <font-awesome-icon
               id="fontShareSong"
-              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
               :icon="['fas', 'share-alt']"
               title="Copy song link"
               v-on:click="copySongLink(song.SongID)"
             />
             <font-awesome-icon
               id="fontDownloadSong"
-              style="color: lightgrey; transition: 0.3s; cursor: pointer; padding-left: 10px;"
               :icon="['fas', 'cloud-download-alt']"
               title="Download"
               v-on:click="downloadSong(song.SongURL)"
@@ -260,7 +256,7 @@
       <span id="spanTotalPlaytime">{{ currentSong.Length }}</span>
     </div>
 
-    <div id="divForefrontWrapper">
+    <div id="divHorizontalCenter">
       <p id="pZeroMatches" class="animate__animated animate__wobble">
         No matches were found
       </p>
@@ -476,11 +472,7 @@ export default {
         this.wavesurfer.load(song.SongURL);
         document.getElementById(
           "play" + song.SongID
-        ).parentElement.parentElement.style.backgroundColor =
-          "rgba(0, 0, 0, 0.7)";
-        document.getElementById(
-          "play" + song.SongID
-        ).parentElement.parentElement.style.color = "white";
+        ).parentElement.parentElement.classList.toggle("divSongPaneSelected"); 
         document.getElementById("play" + song.SongID).style.display = "none";
         document.getElementById("load" + song.SongID).style.display = "block";
       }
@@ -514,21 +506,14 @@ export default {
         document.getElementById("divPause").style.display = "none";
         document.getElementById(
           "play" + this.currentSong.SongID
-        ).parentElement.parentElement.style.backgroundColor = "white";
-        document.getElementById(
-          "play" + this.currentSong.SongID
-        ).parentElement.parentElement.style.color = "black";
+        ).parentElement.parentElement.classList.toggle("divSongPaneSelected"); 
         this.historyIndex++;
         this.songHistory.push(song);
         this.currentSong = song;
         this.wavesurfer.load(song.SongURL);
         document.getElementById(
           "play" + song.SongID
-        ).parentElement.parentElement.style.backgroundColor =
-          "rgba(0, 0, 0, 0.7)";
-        document.getElementById(
-          "play" + song.SongID
-        ).parentElement.parentElement.style.color = "white";
+        ).parentElement.parentElement.classList.toggle("divSongPaneSelected");
         document.getElementById("load" + song.SongID).style.display = "block";
         document.getElementById("play" + song.SongID).style.display = "none";
       }
@@ -653,12 +638,14 @@ export default {
             .then(function(response) {
               return response.text().then(function(text) {
                 if (text == "OK") {
-                  self.songs.splice(self.songs.indexOf(songurl), 1);
                   Ozone.fire(
                     "success",
                     "Song has been deleted",
                     "bottom-middle"
                   );
+                  setTimeout(function () {
+                    location.reload(); 
+                  }, 3000); 
                 } else {
                   Ozone.fire("error", "Something went wrong", "bottom-middle");
                 }
@@ -960,6 +947,8 @@ export default {
   opacity: 0.25;
 }
 
+
+
 #btnSignOut {
   /* position: absolute; */
   right: 35px;
@@ -999,6 +988,12 @@ export default {
   color: white;
   left: 210px;
   bottom: 55px;
+}
+
+.fontSongPane {
+  color: black; 
+  cursor: pointer; 
+  filter: drop-shadow(0px 0px 7px #FFFFFF);
 }
 
 .divSongsPlay {
@@ -1096,6 +1091,11 @@ export default {
   color: white !important;
 }
 
+.divSongPaneSelected {
+  color: white !important; 
+  background-color: rgba(0, 0, 0, 0.7) !important; 
+}
+
 font-awesome-icon {
   background-color: transparent !important;
 }
@@ -1119,22 +1119,23 @@ font-awesome-icon {
 }
 
 #logo {
-  position: absolute;
-  left: 50px;
-  top: 20px;
+  margin-top: 20px;
+  margin-bottom: 45px;
+  width: 65px;
 }
 
 #divSidebarCurrentSongInfo {
   color: white;
   position: absolute;
-  left: 5%;
   bottom: 0;
-  text-align: center;
   width: 90%;
 }
 
 #divSidebar {
   position: absolute;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.8);
   width: 170px;
   top: 0;
@@ -1155,10 +1156,6 @@ font-awesome-icon {
   display: none;
 }
 
-#h3Library {
-  margin-top: 150px;
-}
-
 #songLoader {
   display: none;
   position: absolute;
@@ -1168,7 +1165,7 @@ font-awesome-icon {
   z-index: 1;
 }
 
-#divForefrontWrapper {
+#divHorizontalCenter {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1312,6 +1309,8 @@ font-awesome-icon {
 
 .sidebarTitle {
   display: block;
+  width: 100%;
+  position: relative;
   color: white;
   padding: 3px;
   cursor: pointer;
@@ -1326,6 +1325,13 @@ font-awesome-icon {
   box-shadow: 2px 4px 10px #000000;
 }
 
+#fontDeleteSong, #fontShareSong, #fontDownloadSong {
+  color: lightgrey;
+  transition: 0.3s; 
+  cursor: pointer;
+  padding-left: 10px;
+}
+
 #fontShareSong:hover {
   color: grey !important;
 }
@@ -1333,7 +1339,6 @@ font-awesome-icon {
 #fontDownloadSong:hover {
   color: rgb(71, 158, 187) !important;
 }
-
 #fontDeleteSong:hover {
   color: #8b0000 !important;
 }
