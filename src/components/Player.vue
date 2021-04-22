@@ -269,7 +269,7 @@
         <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
         <span id="songLoaderProgress"></span>
       </div>
-  
+
       <div
         id="divPlayerMinimize"
         v-on:click="minimizeMaximizePlayer('min')"
@@ -460,7 +460,11 @@ export default {
     playSong(song) {
       if (this.loading) return; // If something is already loading, don't do anything
 
-      if(!document.getElementById("divCenter").classList.contains("divCenterRetrackted"))
+      if (
+        !document
+          .getElementById("divCenter")
+          .classList.contains("divCenterRetrackted")
+      )
         this.minimizeMaximizePlayer("max");
 
       // If no song is selected, load selected song
@@ -688,13 +692,17 @@ export default {
     },
     minimizeMaximizePlayer(mode) {
       if (mode == "min") {
-        document.getElementById("divCenter").classList.toggle("divCenterRetrackted"); 
+        document
+          .getElementById("divCenter")
+          .classList.toggle("divCenterRetrackted");
         document.getElementById("divPlayerControls").style.display = "none";
         document.getElementById("divPlayerMinimize").style.display = "none";
         document.getElementById("divPlayerMaximize").style.display = "block";
         document.getElementById("divPlayerOptions").style.display = "none";
       } else if (mode == "max") {
-        document.getElementById("divCenter").classList.toggle("divCenterRetrackted");
+        document
+          .getElementById("divCenter")
+          .classList.toggle("divCenterRetrackted");
         document.getElementById("divPlayerMaximize").style.display = "none";
 
         setTimeout(function() {
@@ -802,30 +810,38 @@ export default {
     });
 
     // Fires when a song is loading
-    let runOnce = false; 
+    let runOnce = false;
     this.wavesurfer.on("loading", function(progress) {
-      if(!runOnce) {
+      if (!runOnce) {
         document.title = "Fury Music";
         self.elapsedPlaytime = "0:00";
-        document.getElementById("play" + self.currentSong.SongID).style.display =
-          "none";
-        document.getElementById("divPlay").classList.toggle("disabled"); 
-        document.getElementById("wavesurferVolume").classList.toggle("disabled"); 
-        document.getElementById("volumeMute").classList.toggle("disabled"); 
+        document.getElementById(
+          "play" + self.currentSong.SongID
+        ).style.display = "none";
+        document.getElementById("divPlay").classList.toggle("disabled");
+        document
+          .getElementById("wavesurferVolume")
+          .classList.toggle("disabled");
+        document.getElementById("volumeMute").classList.toggle("disabled");
         document.getElementById("stepForward").classList.toggle("disabled");
-        if(!document.getElementById("stepBackwards").classList.contains("disabled")) {
-           document.getElementById("stepBackwards").classList.toggle("disabled");
-           console.log("test")
+        if (
+          !document
+            .getElementById("stepBackwards")
+            .classList.contains("disabled")
+        ) {
+          document.getElementById("stepBackwards").classList.toggle("disabled");
+          console.log("test");
         }
-         
+
         document.getElementById("volumeUp").classList.toggle("disabled");
-        document.getElementById("load" + self.currentSong.SongID).style.display =
-          "block";
+        document.getElementById(
+          "load" + self.currentSong.SongID
+        ).style.display = "block";
         document.getElementById("songLoader").style.display = "block";
         if (localStorage.getItem("volumeLog")) {
           self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
         }
-        runOnce = true; 
+        runOnce = true;
         self.loading = true;
       }
       document.getElementById("songLoaderProgress").innerHTML = progress + "%";
@@ -837,12 +853,12 @@ export default {
       runOnce = false;
       document.getElementById("songLoader").style.display = "none";
       document.getElementById("divPlay").classList.toggle("disabled");
-      document.getElementById("wavesurferVolume").classList.toggle("disabled"); 
+      document.getElementById("wavesurferVolume").classList.toggle("disabled");
       document.getElementById("stepForward").classList.toggle("disabled");
       if (self.historyIndex > 1) {
         document.getElementById("stepBackwards").classList.toggle("disabled");
       }
-      document.getElementById("volumeMute").classList.toggle("disabled"); 
+      document.getElementById("volumeMute").classList.toggle("disabled");
       document.getElementById("volumeUp").classList.toggle("disabled");
       document.getElementById("play" + self.currentSong.SongID).style.display =
         "block";
@@ -876,9 +892,8 @@ export default {
 </script>
 
 <style scoped>
-
 #pZeroMatches {
-  display: none; 
+  display: none;
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 10px;
   padding: 10px;
@@ -1163,9 +1178,9 @@ font-awesome-icon {
 
 #songLoaderProgress {
   position: absolute;
-  display: block; 
+  display: block;
   font-size: 20px;
-  padding-top: 10px; 
+  padding-top: 10px;
 }
 
 #songLoaderWrapper {
