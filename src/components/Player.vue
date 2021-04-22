@@ -460,7 +460,8 @@ export default {
     playSong(song) {
       if (this.loading) return; // If something is already loading, don't do anything
 
-      this.minimizeMaximizePlayer("max");
+      if(!document.getElementById("divCenter").classList.contains("divCenterRetrackted"))
+        this.minimizeMaximizePlayer("max");
 
       // If no song is selected, load selected song
       if (this.currentSong.SongID == "") {
@@ -801,7 +802,9 @@ export default {
     });
 
     // Fires when a song is loading
+    let runOnce = false; 
     this.wavesurfer.on("loading", function(progress) {
+      if(!runOnce) {
         document.title = "Fury Music";
         self.elapsedPlaytime = "0:00";
         document.getElementById("play" + self.currentSong.SongID).style.display =
@@ -810,26 +813,28 @@ export default {
         document.getElementById("wavesurferVolume").classList.toggle("disabled"); 
         document.getElementById("volumeMute").classList.toggle("disabled"); 
         document.getElementById("stepForward").classList.toggle("disabled");
-        
-          document.getElementById("stepBackwards").setAttribute("class", "disabled");
-        
+        if(!document.getElementById("stepBackwards").classList.contains("disabled")) {
+           document.getElementById("stepBackwards").classList.toggle("disabled");
+           console.log("test")
+        }
+         
         document.getElementById("volumeUp").classList.toggle("disabled");
         document.getElementById("load" + self.currentSong.SongID).style.display =
           "block";
         document.getElementById("songLoader").style.display = "block";
-        
-
         if (localStorage.getItem("volumeLog")) {
           self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
         }
-  
+        runOnce = true; 
+        self.loading = true;
+      }
       document.getElementById("songLoaderProgress").innerHTML = progress + "%";
-      self.loading = true;
     });
 
     // Fires when wavesurfer is ready
     this.wavesurfer.on("waveform-ready", function() {
       self.loading = false;
+      runOnce = false;
       document.getElementById("songLoader").style.display = "none";
       document.getElementById("divPlay").classList.toggle("disabled");
       document.getElementById("wavesurferVolume").classList.toggle("disabled"); 
