@@ -3,7 +3,7 @@
     <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
       <img
         id="logo"
-        class="animate__animated animate__jackInTheBox animate__slow"
+        class="animate__animated animate__rotateIn animate__slow"
         src="../assets/fury music logo ferdig.png"
       />
       <br />
@@ -173,7 +173,7 @@ export default {
           "class",
           "animate__animated animate__pulse animate__slow animate__infinite"
         );
-    }, 2000);
+    }, 2500);
   }
 };
 </script>

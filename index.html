@@ -19,12 +19,20 @@
       integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
       crossorigin="anonymous"
     />
-    <meta property="og:site_name" content="Fury Music">
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Listen to free music now!" /> 
-    <meta property="og:description" content="A web-application for playing music. Users can upload their own music to the server for all to enjoy, and of course listen to what's already there." />   
-    <meta property="og:image" content="https://furymusicplayer.000webhostapp.com/src/assets/fury logo favicon5.png" />  
-    <meta property="og:url" content="https://furymusicplayer.000webhostapp.com/" />
+    <!-- <?php if(!empty($_GET["title"]) && !empty($_GET["url"]) && !empty($_GET["artist"])) { ?>
+      <meta property="og:title" content="<?php echo htmlspecialchars($_GET["title"] . " - " . $_GET["artist"]); ?>" />
+      <meta property="og:type" content="music.song" />
+      <meta property="og:audio" content="<?php echo $_GET["url"]; ?>" />
+      <meta property="og:audio:secure_url" content="<?php echo $_GET["url"]; ?>" />
+      <meta property="og:audio:type" content="audio/mpeg" /> -->
+    <!-- <?php } else { ?> -->
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="Listen to free music now!" /> 
+      <meta property="og:description" content="A web-application for playing music. Users can upload their own music to the server for all to enjoy, and of course listen to what's already there." />   
+      <meta property="og:url" content="https://furymusicplayer.000webhostapp.com/" />
+  <!-- <?php } ?>  -->
+  <meta property="og:site_name" content="Fury Music" />
+  <meta property="og:image" content="https://furymusicplayer.000webhostapp.com/src/assets/fury logo favicon5.png" />
   </head>
   <body>
     <div id="app"></div>

@@ -175,7 +175,7 @@
               id="fontShareSong"
               :icon="['fas', 'share-alt']"
               title="Copy song link"
-              v-on:click="copySongLink(song.SongID)"
+              v-on:click="copySongLink(song)"
             />
             <font-awesome-icon
               id="fontDownloadSong"
@@ -470,9 +470,9 @@ export default {
         this.historyIndex++;
         this.currentSong = song;
         this.wavesurfer.load(song.SongURL);
-        document.getElementById(
-          "play" + song.SongID
-        ).parentElement.parentElement.classList.toggle("divSongPaneSelected"); 
+        document
+          .getElementById("play" + song.SongID)
+          .parentElement.parentElement.classList.toggle("divSongPaneSelected");
         document.getElementById("play" + song.SongID).style.display = "none";
         document.getElementById("load" + song.SongID).style.display = "block";
       }
@@ -504,16 +504,16 @@ export default {
         ).style.display = "none";
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
-        document.getElementById(
-          "play" + this.currentSong.SongID
-        ).parentElement.parentElement.classList.toggle("divSongPaneSelected"); 
+        document
+          .getElementById("play" + this.currentSong.SongID)
+          .parentElement.parentElement.classList.toggle("divSongPaneSelected");
         this.historyIndex++;
         this.songHistory.push(song);
         this.currentSong = song;
         this.wavesurfer.load(song.SongURL);
-        document.getElementById(
-          "play" + song.SongID
-        ).parentElement.parentElement.classList.toggle("divSongPaneSelected");
+        document
+          .getElementById("play" + song.SongID)
+          .parentElement.parentElement.classList.toggle("divSongPaneSelected");
         document.getElementById("load" + song.SongID).style.display = "block";
         document.getElementById("play" + song.SongID).style.display = "none";
       }
@@ -643,9 +643,9 @@ export default {
                     "Song has been deleted",
                     "bottom-middle"
                   );
-                  setTimeout(function () {
-                    location.reload(); 
-                  }, 3000); 
+                  setTimeout(function() {
+                    location.reload();
+                  }, 3000);
                 } else {
                   Ozone.fire("error", "Something went wrong", "bottom-middle");
                 }
@@ -701,11 +701,11 @@ export default {
     },
     playLinkedSong() {
       const urlParams = new URLSearchParams(window.location.search);
-      let songlink = urlParams.get("songlink");
-      if (songlink != null) {
+      let songid= urlParams.get("songid");
+      if (songid != null) {
         let song;
         for (let i = 0; i < this.songs.length; i++) {
-          if (this.songs[i].SongID == songlink) {
+          if (this.songs[i].SongID == songid) {
             song = this.songs[i];
           }
         }
@@ -713,8 +713,18 @@ export default {
         window.history.pushState("", "", "/");
       }
     },
-    copySongLink(songid) {
-      let link = window.location.origin + "/?songlink=" + songid;
+    copySongLink(song) {
+      //let link = window.location.origin + "/?songlink=" + songid;
+      let link =
+        window.location.origin +
+        "/?songid=" +
+        encodeURIComponent(song.SongID) +
+        "&url=" +
+        encodeURIComponent(song.SongURL) +
+        "&title=" +
+        encodeURIComponent(song.SongName) +
+        "&artist=" +
+        encodeURIComponent(song.ArtistName);
       navigator.clipboard.writeText(link).then(
         function() {
           /* clipboard successfully set */
@@ -722,6 +732,7 @@ export default {
         },
         function() {
           /* clipboard write failed */
+          Ozone.fire("error", "Couldn't copy to clipboard", "top-right");
         }
       );
     },
@@ -947,8 +958,6 @@ export default {
   opacity: 0.25;
 }
 
-
-
 #btnSignOut {
   /* position: absolute; */
   right: 35px;
@@ -991,9 +1000,9 @@ export default {
 }
 
 .fontSongPane {
-  color: black; 
-  cursor: pointer; 
-  filter: drop-shadow(0px 0px 7px #FFFFFF);
+  color: black;
+  cursor: pointer;
+  filter: drop-shadow(0px 0px 7px #ffffff);
 }
 
 .divSongsPlay {
@@ -1092,8 +1101,8 @@ export default {
 }
 
 .divSongPaneSelected {
-  color: white !important; 
-  background-color: rgba(0, 0, 0, 0.7) !important; 
+  color: white !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
 }
 
 font-awesome-icon {
@@ -1133,7 +1142,7 @@ font-awesome-icon {
 
 #divSidebar {
   position: absolute;
-  display: flex; 
+  display: flex;
   flex-direction: column;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.8);
@@ -1325,9 +1334,11 @@ font-awesome-icon {
   box-shadow: 2px 4px 10px #000000;
 }
 
-#fontDeleteSong, #fontShareSong, #fontDownloadSong {
+#fontDeleteSong,
+#fontShareSong,
+#fontDownloadSong {
   color: lightgrey;
-  transition: 0.3s; 
+  transition: 0.3s;
   cursor: pointer;
   padding-left: 10px;
 }
