@@ -28,6 +28,7 @@ The main interface where songs are played, playlists are made, songs are searche
 - Delete music you have uploaded yourself 
 - Copy song links and share the music with others 
 - Play/pause current played song
+- Automatically plays next song 
 - Toggle shuffling of next played song 
 - Skip to next song 
 - Jump to previously played song or further back in history  
