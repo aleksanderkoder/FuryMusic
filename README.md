@@ -18,6 +18,20 @@ The sign in page where users can sign into their personal accounts.
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
+## Features (as of writing)
+
+- Create your own account and sign in
+- Browse and play user submitted music 
+- Upload your own music for other users to listen to
+- Customize the look of the app by changing the background image to your own choosing 
+- Download submitted music to your own machine 
+- Delete music you have uploaded yourself 
+- Copy song links and share the music with others 
+- Play/pause current played song
+- Toggle shuffling of next played song 
+- Skip to next song 
+- Jump to previously played song or further back in history  
+- Search for song title, artist, album and publisher (the user who uploaded the music) by search field or clicking the fields in each song tile 
 
 ## Build Setup
 
