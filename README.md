@@ -30,6 +30,8 @@ The main interface where songs are played, playlists are made, songs are searche
 - Play/pause current played song
 - Automatically plays next song 
 - Toggle shuffling of next played song 
+- Seek to different time in current played song by interacting with the waveform
+- Manipulate volume (exponetial volume curve) 
 - Skip to next song 
 - Jump to previously played song or further back in history  
 - Search for song title, artist, album and publisher (the user who uploaded the music) by search field or clicking the fields in each song tile 
