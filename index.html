@@ -24,8 +24,14 @@
       <meta property="og:type" content="music.song" />
       <meta property="og:audio" content="<?php echo $_GET["url"]; ?>" />
       <meta property="og:audio:secure_url" content="<?php echo $_GET["url"]; ?>" />
-      <meta property="og:audio:type" content="audio/mpeg" /> -->
-    <!-- <?php } else { ?> -->
+      <meta property="og:audio:type" content="audio/mpeg" />
+      <meta property="og:description" content="Click to play song" />
+      <?php if(!empty($_GET["image"])) { ?>
+          <meta property="og:image" content="<?php echo $_GET["image"]; ?>" />
+      <?php } else { ?>
+          <meta property="og:image" content="https://furymusicplayer.000webhostapp.com/src/assets/fury logo favicon5.png" /> -->
+      <!-- <?php } ?> -->
+  <!-- <?php } else { ?> -->
       <meta property="og:type" content="website" />
       <meta property="og:title" content="Listen to free music now!" /> 
       <meta property="og:description" content="A web-application for playing music. Users can upload their own music to the server for all to enjoy, and of course listen to what's already there." />   

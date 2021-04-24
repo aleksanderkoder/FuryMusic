@@ -724,7 +724,8 @@ export default {
         "&title=" +
         encodeURIComponent(song.SongName) +
         "&artist=" +
-        encodeURIComponent(song.ArtistName);
+        encodeURIComponent(song.ArtistName) +
+        "&image=" + encodeURIComponent(song.SongImageURL); 
       navigator.clipboard.writeText(link).then(
         function() {
           /* clipboard successfully set */
