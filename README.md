@@ -18,7 +18,7 @@ The sign in page where users can sign into their personal accounts.
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
-## Features (as of writing)
+## Current features 
 
 - Create your own account and sign in
 - Browse and play user submitted music 
