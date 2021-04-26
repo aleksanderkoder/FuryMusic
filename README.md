@@ -35,6 +35,7 @@ The main interface where songs are played, playlists are made, songs are searche
 - Skip to next song 
 - Jump to previously played song or further back in history  
 - Search for song title, artist, album and publisher (the user who uploaded the music) by search field or clicking the fields in each song tile 
+- Support for hardware media keys
 
 ## Build Setup
 
