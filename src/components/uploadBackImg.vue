@@ -5,7 +5,7 @@
       id="divCustomBackImgWrapper"
     >
       <font-awesome-icon
-        style="color: #8b0000; font-size: 25px; position: fixed; right: 25px; top: 15px; cursor: pointer;"
+        style="font-size: 25px; position: fixed; right: 25px; top: 15px; cursor: pointer;"
         :icon="['fas', 'times']"
         v-on:click="cancel()"
       />

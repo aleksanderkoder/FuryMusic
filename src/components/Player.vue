@@ -83,7 +83,7 @@
     <div id="divCenter" class="divCenter">
       <div v-if="loggedIn">
         <div
-          id="divCenterTableHeader"
+          id="divCenterHeader"
           class="animate__animated animate__fadeInRight"
         >
           <div class="divSongsHeader">
@@ -678,6 +678,7 @@ export default {
       }
     },
     minimizeMaximizePlayer(mode) {
+      let self = this;
       if (mode == "min") {
         document
           .getElementById("divCenter")
@@ -697,6 +698,7 @@ export default {
           document.getElementById("divPlayerOptions").style.display = "block";
         }, 1000);
         document.getElementById("divPlayerControls").style.display = "block";
+        self.wavesurfer.drawBuffer(); 
       }
     },
     playLinkedSong() {
@@ -829,7 +831,6 @@ export default {
             .classList.contains("disabled")
         ) {
           document.getElementById("stepBackwards").classList.toggle("disabled");
-          console.log("test");
         }
 
         document.getElementById("volumeUp").classList.toggle("disabled");
@@ -1001,9 +1002,9 @@ export default {
 }
 
 .fontSongPane {
-  color: black;
+  color: white;
   cursor: pointer;
-  filter: drop-shadow(0px 0px 7px #ffffff);
+  filter: drop-shadow(0px 0px 7px #000000); 
 }
 
 .divSongsPlay {
@@ -1039,12 +1040,12 @@ export default {
   right: 25px;
 }
 
-#divCenterTableHeader {
+#divCenterHeader {
   position: fixed;
-  top: 39px;
+  top: 32px;
   left: 170px;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
   padding-top: 7px;
   padding-bottom: 7px;
   margin-left: 1px;
@@ -1087,7 +1088,8 @@ export default {
 #divSongPane {
   display: flex;
   text-align: left;
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0.7); 
+  color: white; 
   box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
   width: 95%;
@@ -1097,13 +1099,13 @@ export default {
 }
 
 #divSongPane:hover {
-  background-color: rgba(0, 0, 0, 0.8) !important;
-  color: white !important;
+  background-color: rgb(255, 255, 255, 0.8) !important;
+  color: black !important;
 }
 
 .divSongPaneSelected {
-  color: white !important;
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgb(255, 255, 255, 0.8) !important;
+  color: black !important;
 }
 
 font-awesome-icon {
@@ -1118,8 +1120,8 @@ font-awesome-icon {
 
 #divTopbar {
   position: absolute;
-  background-color: white;
-  height: 35px;
+  background-color: white;  
+  height: 27px;
   left: 171px;
   right: 0;
   /* box-shadow: 0 4px 2px -2px gray; */
@@ -1219,15 +1221,15 @@ font-awesome-icon {
   position: absolute;
   left: 170px;
   right: 0px;
-  bottom: 90px;
-  top: 71px;
+  bottom: 105px;
+  top: 64px;
   z-index: 0;
   overflow-y: scroll;
   overflow-x: hidden;
 }
 
 .divCenterRetrackted {
-  bottom: 195px;
+  bottom: 210px;
 }
 
 #waveform {
@@ -1338,7 +1340,7 @@ font-awesome-icon {
 #fontDeleteSong,
 #fontShareSong,
 #fontDownloadSong {
-  color: lightgrey;
+  color: grey;
   transition: 0.3s;
   cursor: pointer;
   padding-left: 10px;
