@@ -721,8 +721,8 @@ export default {
         window.location.origin +
         "/?songid=" +
         encodeURIComponent(song.SongID) +
-        "&url=" +
-        encodeURIComponent(song.SongURL) +
+        //"&url=" +
+        // encodeURIComponent(song.SongURL) +
         "&title=" +
         encodeURIComponent(song.SongName) +
         "&artist=" +
@@ -1347,11 +1347,11 @@ font-awesome-icon {
 }
 
 #fontShareSong:hover {
-  color: grey !important;
+  color: black !important;
 }
 
 #fontDownloadSong:hover {
-  color: rgb(71, 158, 187) !important;
+  color: rgb(49, 113, 134) !important;
 }
 #fontDeleteSong:hover {
   color: #8b0000 !important;
