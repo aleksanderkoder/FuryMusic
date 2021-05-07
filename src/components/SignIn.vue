@@ -3,7 +3,7 @@
     <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
       <img
         id="logo"
-        class="animate__animated animate__rotateIn animate__slow"
+        class="animate__animated animate__pulse animate__slow animate__infinite"
         src="../assets/fury music logo ferdig.png"
       />
       <br />
@@ -165,15 +165,6 @@ export default {
       this.logIn();
     }
 
-    // Logo start animation toggling
-    setTimeout(function() {
-      document
-        .getElementById("logo")
-        .setAttribute(
-          "class",
-          "animate__animated animate__pulse animate__slow animate__infinite"
-        );
-    }, 2500);
   }
 };
 </script>

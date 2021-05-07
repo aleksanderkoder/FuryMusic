@@ -137,12 +137,12 @@ class Ozone
             setTimeout(function () 
             {
               el.style.animation = "ozfadeOut ease 1s";
-            }, 7000);
+            }, 5000);
 
             setTimeout(function () 
             {
                 el.parentNode.removeChild(el);
-            }, 8000); 
+            }, 6000); 
           }
           else if (type == "dialog")
           {

@@ -109,7 +109,8 @@
           v-for="song in songs"
           :key="song.SongID"
           v-show="song.Show"
-          class="animate__animated animate__fadeInRight"
+          v-on:click="dblclickPlay(song)"
+          class="animate__animated animate__slideInRight"
         >
           <div class="divSongsPlay">
             <font-awesome-icon
@@ -128,7 +129,7 @@
             <font-awesome-icon
               v-bind:id="'load' + song.SongID"
               class="fontSongPane"
-              style="display: none;"
+              style="display: none; filter:"
               :icon="['fas', 'circle-notch']"
               spin
             />
@@ -190,7 +191,7 @@
 
     <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
       <div id="controlsWrapper">
-        <div id="divPlay" v-on:click="wavePlayPauseToggle('play')">
+        <div id="divPlay" title="Play" v-on:click="wavePlayPauseToggle('play')" class="animation-pulse">
           <font-awesome-icon
             id="playButton"
             style="
@@ -202,7 +203,7 @@
             :icon="['fas', 'play']"
           />
         </div>
-        <div id="divPause" v-on:click="wavePlayPauseToggle('pause')">
+        <div id="divPause" title="Pause" v-on:click="wavePlayPauseToggle('pause')" class="animation-pulse">
           <font-awesome-icon
             id="pauseButton"
             style="
@@ -216,14 +217,14 @@
         </div>
         <font-awesome-icon
           id="stepForward"
-          title="Skip"
+          title="Next"
           v-on:click="playNext()"
           style="position: absolute; bottom: 55px; left: 153px; color: white; font-size: 17px; cursor: pointer;"
           :icon="['fas', 'step-forward']"
         />
         <font-awesome-icon
           id="stepBackwards"
-          title="Step backwards"
+          title="Previous"
           v-on:click="playPrevious()"
           style="position: absolute; bottom: 55px; left: 30px; color: white; font-size: 17px; cursor: pointer;"
           :icon="['fas', 'step-backward']"
@@ -261,6 +262,12 @@
         No matches were found
       </p>
 
+      <font-awesome-icon
+        id="centerLoader"
+        :icon="['fas', 'circle-notch']"
+        spin
+      />
+
       <div id="songLoader">
         <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
         <span id="songLoaderProgress"></span>
@@ -268,6 +275,7 @@
 
       <div
         id="divPlayerMinimize"
+        title="Minimize player"
         v-on:click="minimizeMaximizePlayer('min')"
         class="animate__animated animate__flipInY"
       >
@@ -280,6 +288,7 @@
 
       <div
         id="divPlayerMaximize"
+        title="Maximize player"
         v-on:click="minimizeMaximizePlayer('max')"
         class="animate__animated animate__flipInY"
       >
@@ -360,6 +369,7 @@ export default {
       loading: false,
       oldVol: 0,
       toggleShuffle: false,
+      dblclickCounter: 0,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -367,6 +377,22 @@ export default {
     loggedIn: Boolean
   },
   methods: {
+    dblclickPlay(song) {
+      this.dblclickCounter++;
+      let self = this;
+      setTimeout(function() {
+        self.dblclickCounter = 0; 
+      }, 200);
+      if(this.dblclickCounter >= 2) {
+        if (this.currentSong.SongID != song.SongID) {
+          this.playSong(song); 
+        } else if(this.wavesurfer.isPlaying()){
+          this.wavePlayPauseToggle("pause"); 
+        } else {
+          this.wavePlayPauseToggle("play"); 
+        }
+      }
+    },
     playNext() {
       let index;
       let nextSong;
@@ -412,7 +438,7 @@ export default {
         document.getElementById(
           "pause" + this.currentSong.SongID
         ).style.display = "block";
-      } else {
+      } else if (mode == "pause") {
         this.wavesurfer.pause();
         document.title = "Paused";
         document.getElementById("divPause").style.display = "none";
@@ -454,7 +480,7 @@ export default {
       }
     },
     playSong(song) {
-      if (this.loading) return; // If something is already loading, don't do anything
+      if (this.loading) return; // If something is already loading, don't do anything, temp workaround for an issue
 
       if (
         !document
@@ -716,7 +742,6 @@ export default {
       }
     },
     copySongLink(song) {
-      //let link = window.location.origin + "/?songlink=" + songid;
       let link =
         window.location.origin +
         "/?songid=" +
@@ -755,6 +780,7 @@ export default {
         .then(function(response) {
           return response.json().then(function(text) {
             if (text != "Error") {
+              document.getElementById("centerLoader").style.display = "none";
               self.populateSongList(text);
               setTimeout(function() {
                 self.playLinkedSong();
@@ -948,6 +974,14 @@ export default {
   color: white;
 }
 
+#centerLoader {
+  background-color: rgba(0, 0, 0, 0.8); 
+  padding: 10px;
+  color: white; 
+  border-radius: 100%; 
+  font-size: 37px;
+}
+
 #divUser {
   right: 165px;
   top: 5px;
@@ -1005,6 +1039,11 @@ export default {
   color: white;
   cursor: pointer;
   filter: drop-shadow(0px 0px 7px #000000); 
+  transition: 0.2s;
+}
+
+.fontSongPane:hover {
+  color: rgba(255,255,255, 0.7); 
 }
 
 .divSongsPlay {
@@ -1099,7 +1138,7 @@ export default {
 }
 
 #divSongPane:hover {
-  background-color: rgb(255, 255, 255, 0.8) !important;
+  background-color: rgb(255, 255, 255, 0.65) !important;
   color: black !important;
 }
 
@@ -1391,16 +1430,21 @@ font-awesome-icon {
   height: 100%;
 }
 
-.animation-move-up {
-  animation: move-up 1s ease 1;
+.animation-pulse {
+  animation: btnpulse 1s; 
 }
 
-@keyframes move-up {
+@keyframes btnpulse {
   0% {
-    bottom: 0;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.25);
   }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+
   100% {
-    bottom: 130px;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
   }
 }
 
