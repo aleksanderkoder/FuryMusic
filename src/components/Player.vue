@@ -466,7 +466,7 @@ export default {
           self.wavePlayPauseToggle("play");
         });
         navigator.mediaSession.setActionHandler("pause", function() {
-          self.wavePlayPauseToggle();
+          self.wavePlayPauseToggle("pause");
         });
         navigator.mediaSession.setActionHandler("previoustrack", function() {
           self.playPrevious();
