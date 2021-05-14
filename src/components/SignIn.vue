@@ -60,14 +60,14 @@ export default {
     };
   },
   methods: {
-    logIn() {
+    signIn() {
       let self = this;
       document.getElementById("loadingSpinner").style.display = "block";
       document.getElementById("btnLogIn").style.display = "none";
       document.getElementById("btnGoToSignUp").style.display = "none";
       document.getElementById("error").style.display = "none";
 
-      if (this.regExLogIn()) {
+      if (this.regExSignIn()) {
         let fd = new FormData();
         fd.append("username", this.username);
         fd.append("password", this.password);
@@ -139,7 +139,8 @@ export default {
         document.getElementById("btnGoToSignUp").style.display = "block";
       }
     },
-    regExLogIn() {
+    regExSignIn() {
+      // Regular expression for sign in form
       let regEx1 = /^[0-9a-zæøåA-ZÆØÅ]{3,99}$/;
       let regEx2 = /^[0-9a-zæøåA-ZÆØÅ!?,.-]{6,99}$/;
 
@@ -155,14 +156,23 @@ export default {
     goToSignUp() {
       document.getElementById("error").style.display = "none";
       this.$store.commit("showSignUp");
-    }
+    },
   },
   mounted() {
     // Checks if user information has been already entered, and logs user in if true
     if (localStorage.getItem("username") && localStorage.getItem("password")) {
       this.username = localStorage.getItem("username");
       this.password = localStorage.getItem("password");
-      this.logIn();
+      this.signIn();
+    } else {
+      // Shows alert if song is linked, but user is not signed in
+      const urlParams = new URLSearchParams(window.location.search);
+      let songid= urlParams.get("songid");
+      if (songid != null) {
+        setTimeout(function() {
+          Ozone.fire("info", "Linked song will play after sign in", "top-right");
+        }, 1500);
+      }
     }
 
   }
