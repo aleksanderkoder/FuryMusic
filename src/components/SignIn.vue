@@ -28,7 +28,7 @@
         <p id="error" class="animate__animated animate__shakeX"></p>
         <input
           type="submit"
-          v-on:click="logIn()"
+          v-on:click="signIn()"
           value="Sign in"
           id="btnLogIn"
         />
