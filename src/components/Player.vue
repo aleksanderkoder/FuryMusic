@@ -268,7 +268,7 @@
         spin
       />
 
-      <div id="songLoader">
+      <div id="songLoader" class="animate__animated animate__fadeInUp">
         <font-awesome-icon :icon="['fas', 'circle-notch']" spin />
         <span id="songLoaderProgress"></span>
       </div>
@@ -1102,7 +1102,7 @@ export default {
 
 .divSongsHeaderTitle {
   flex: 0 0 15%;
-  padding-left: 2.8%;
+  padding-left: 3%;
 }
 
 .divSongsHeaderLength {
@@ -1134,7 +1134,7 @@ export default {
   width: 95%;
   margin-top: 15px;
   margin-left: 15px;
-  transition: 0.2s;
+  transition: 0.1s;
 }
 
 #divSongPane:hover {
@@ -1211,7 +1211,7 @@ font-awesome-icon {
   display: none;
   position: absolute;
   color: white;
-  font-size: 40px;
+  font-size: 36px;
   bottom: 60px;
   z-index: 1;
 }
@@ -1229,10 +1229,6 @@ font-awesome-icon {
   display: block;
   font-size: 20px;
   padding-top: 10px;
-}
-
-#songLoaderWrapper {
-  padding-right: 20px;
 }
 
 #btnUploadSong {
@@ -1373,7 +1369,7 @@ font-awesome-icon {
 }
 
 #SongCoverImage {
-  box-shadow: 2px 4px 10px #000000;
+  box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.75);
 }
 
 #fontDeleteSong,
