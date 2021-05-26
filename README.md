@@ -10,11 +10,11 @@
 
 ***This project is still work-in-progress*** 
 
-  <img src="https://furymusicplayer.000webhostapp.com/githubpics/fury signin showcase.JPG" width="600"> 
+  <img src="https://user-images.githubusercontent.com/49065176/119743979-4e667080-be8b-11eb-8b44-68291b63aa53.JPG" width="600"> 
 
 The sign in page where users can sign into their personal accounts. 
 
-  <img src="https://furymusicplayer.000webhostapp.com/githubpics/fury player1.JPG" width="600">
+  <img src="https://user-images.githubusercontent.com/49065176/119744075-82419600-be8b-11eb-91cd-9be99ff45629.JPG" width="600">
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
