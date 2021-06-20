@@ -23,9 +23,9 @@ The main interface where songs are played, playlists are made, songs are searche
 - Create your own account and sign in
 - Browse and play user submitted music 
 - Upload your own music for other users to listen to
-- Customize the look of the app by changing the background image to your own choosing 
+- Customize the look of the app by changing the background image to your own liking 
 - Download submitted music to your own machine 
-- Delete music you have uploaded yourself 
+- Delete music you have uploaded
 - Copy song links and share the music with others 
 - Play/pause current played song
 - Automatically plays next song 
