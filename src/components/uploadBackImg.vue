@@ -68,13 +68,16 @@ export default {
           localStorage.setItem("custom_background_image", reader.result);
           Ozone.fire(
             "info",
-            "Background image changed, please refresh",
+            "Background image changed",
             "bottom-middle"
           );
           URL.revokeObjectURL(this.objectURL);
           document.getElementById("imageShowcase").src = "";
           self.showConfirm = false;
           self.$emit("hideCustomBackgroundImageComponent");
+          setTimeout( () => {
+            location.reload(); 
+          }, 3000);
         } catch (e) {
           console.log("Error: " + e);
           Ozone.fire("error", "Image file size is too large", "bottom-middle");
@@ -86,10 +89,13 @@ export default {
       document.getElementById("imageShowcase").src = "";
       Ozone.fire(
         "info",
-        "Background image has been reverted to default, please refresh",
+        "Background image has been reverted to default",
         "bottom-middle"
       );
       this.$emit("hideCustomBackgroundImageComponent");
+      setTimeout( () => {
+        location.reload(); 
+      }, 3000);
     },
     cancel() {
       this.showConfirm = false;

@@ -3,7 +3,7 @@
     <div id="divTopbar" class="animate__animated animate__fadeInDown">
       <div id="divTopItems">
         <div id="divSearchSong">
-          <font-awesome-icon style="color: white" :icon="['fas', 'search']" />
+          <font-awesome-icon style="color: black" :icon="['fas', 'search']" />
           <input
             type="text"
             id="searchSong"
@@ -13,14 +13,14 @@
         </div>
         <div id="divUser">
           <font-awesome-icon
-            style="color: black"
+            style="color: white"
             :icon="['fas', 'user-circle']"
           />
           {{ $store.state.username }}
         </div>
         <button id="btnSignOut" v-on:click="signOut()">
           <font-awesome-icon
-            style="color: white"
+            style="color: black"
             :icon="['fas', 'times-circle']"
           />
           Sign out
@@ -55,7 +55,7 @@
       <div
         id="divSidebarCurrentSongInfo"
         v-if="currentSong.SongName != ''"
-        class="animate__animated animate__fadeInLeft ellipsis"
+        class="animate__animated animate__fadeInLeft"
       >
         <img
           id="SongCoverImage"
@@ -63,15 +63,16 @@
           width="65%"
         />
         <p
-          class="clickToSearch"
+          class="clickToSearch two-line"
           style="font-weight: bold"
+          id="pSidebarTitle"
           v-bind:title="currentSong.SongName"
           v-on:click="searchSong(currentSong.SongName)"
         >
           {{ currentSong.SongName }}
         </p>
         <p
-          class="clickToSearch"
+          class="clickToSearch ellipsis"
           v-bind:title="currentSong.ArtistName"
           v-on:click="searchSong(currentSong.ArtistName)"
         >
@@ -669,7 +670,7 @@ export default {
                     "Song has been deleted",
                     "bottom-middle"
                   );
-                  setTimeout(function() {
+                  setTimeout( () => {
                     location.reload();
                   }, 3000);
                 } else {
@@ -955,8 +956,8 @@ export default {
 }
 
 #divSearchSong {
-  background-color: rgba(0, 0, 0, 0.65);
-  height: 26px;
+  background-color: white;
+  height: 24px;
   border-radius: 100px;
   padding-left: 10px;
   padding-right: 10px;
@@ -964,14 +965,14 @@ export default {
 
 #searchSong {
   border: none;
-  color: white;
+  color: rgb(0, 0, 0);
   background-color: transparent;
   /* box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px; */
   height: 25px;
 }
 
 #searchSong::placeholder {
-  color: white;
+  color: black;
 }
 
 #centerLoader {
@@ -983,10 +984,8 @@ export default {
 }
 
 #divUser {
-  right: 165px;
-  top: 5px;
-  border: none;
-  padding: 60px;
+  padding: 0px 60px 0px 60px;
+  color: white; 
 }
 
 .disabled {
@@ -995,15 +994,13 @@ export default {
 }
 
 #btnSignOut {
-  /* position: absolute; */
-  right: 35px;
-  top: 7px;
+  height: 24px;
   border: none;
   padding: 5px;
   border-radius: 3px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  transition: 0.3s;
+  background-color: white;
+  color: black;
+  transition: 0.2s;
 }
 
 #divTopItems {
@@ -1038,8 +1035,8 @@ export default {
 .fontSongPane {
   color: white;
   cursor: pointer;
-  filter: drop-shadow(0px 0px 7px #000000); 
-  transition: 0.2s;
+  filter: drop-shadow(0px 0px 5px #000000); 
+  transition: 0.3s;
 }
 
 .fontSongPane:hover {
@@ -1081,11 +1078,11 @@ export default {
 
 #divCenterHeader {
   position: fixed;
-  top: 32px;
+  top: 31px;
   left: 170px;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding-top: 7px;
+  background-color: rgba(0, 0, 0, 0.25);
+  padding-top: 6px;
   padding-bottom: 7px;
   margin-left: 1px;
   color: white;
@@ -1127,28 +1124,36 @@ export default {
 #divSongPane {
   display: flex;
   text-align: left;
-  background-color: rgba(0, 0, 0, 0.7); 
+  background-color: rgba(0, 0, 0, 0.8); 
   color: white; 
   box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
   width: 95%;
   margin-top: 15px;
   margin-left: 15px;
-  transition: 0.1s;
+  transition: 0.2s;
 }
 
 #divSongPane:hover {
-  background-color: rgb(255, 255, 255, 0.65) !important;
+  background-color: white !important;
   color: black !important;
 }
 
 .divSongPaneSelected {
-  background-color: rgb(255, 255, 255, 0.8) !important;
+  background-color: white !important;
   color: black !important;
 }
 
 font-awesome-icon {
   background-color: transparent !important;
+}
+
+#pSidebarTitle {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+   -webkit-box-orient: vertical;
 }
 
 .ellipsis {
@@ -1159,7 +1164,7 @@ font-awesome-icon {
 
 #divTopbar {
   position: absolute;
-  background-color: white;  
+  background-color: rgba(0, 0, 0, 0.9);  
   height: 27px;
   left: 171px;
   right: 0;
@@ -1240,7 +1245,7 @@ font-awesome-icon {
   border-top: 1px solid grey;
   border-bottom: 1px solid grey;
   color: grey;
-  width: 170px;
+  width: inherit;
   padding: 10px;
   font-family: "Monsterrat", sans-serif;
   transition: 0.3s;
@@ -1257,7 +1262,7 @@ font-awesome-icon {
   left: 170px;
   right: 0px;
   bottom: 105px;
-  top: 64px;
+  top: 62px;
   z-index: 0;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -1283,6 +1288,10 @@ font-awesome-icon {
 #controlsWrapper {
   width: 200px;
   /* border: 1px solid red;  */
+}
+
+.two-line {
+  overflow-wrap: break-word;
 }
 
 #divPlayerMinimize {
@@ -1418,7 +1427,7 @@ font-awesome-icon {
 }
 
 #btnSignOut:hover {
-  background-color: #8b0000;
+  background-color: rgb(230, 65, 65);
 }
 
 #divPlayerWrapper {

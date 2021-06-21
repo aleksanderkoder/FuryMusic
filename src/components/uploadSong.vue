@@ -116,6 +116,9 @@ export default {
               if (response.status == 1) {
                 Ozone.fire("success", response.message, "bottom-middle");
                 self.$emit("hideUploadSongComponent");
+                setTimeout( () => {
+                  location.reload(); 
+                }, 3000);
               } else {
                 Ozone.fire("error", response.message, "bottom-middle");
               }
