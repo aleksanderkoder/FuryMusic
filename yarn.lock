@@ -5442,11 +5442,6 @@
     "spdx-correct" "^3.0.0"
     "spdx-expression-parse" "^3.0.0"
 
-"vanilla-tilt@^1.7.0":
-  "integrity" "sha512-u9yUhpSasFeqQCuiTon+RSb0aHzcj9stvWVXQIswzKL5oG491lkYk7U1GmhOAEZt7yPT6EiYZRJhIh2MFBncOA=="
-  "resolved" "https://registry.npmjs.org/vanilla-tilt/-/vanilla-tilt-1.7.0.tgz"
-  "version" "1.7.0"
-
 "vary@~1.1.2":
   "integrity" "sha1-IpnwLG3tMNSllhsLn3RSShj2NPw="
   "resolved" "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
@@ -5506,13 +5501,6 @@
   "integrity" "sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw=="
   "resolved" "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
-
-"vue-tilt.js@^1.1.1":
-  "integrity" "sha512-Tsc+01E9tO5TprUFplYEScU+DxQVY1sWiGlsqYb03R1fpSM5SWzBDeq1cb3Mj1vl+VbD/rlUM0vj5xW0DzUTRw=="
-  "resolved" "https://registry.npmjs.org/vue-tilt.js/-/vue-tilt.js-1.1.1.tgz"
-  "version" "1.1.1"
-  dependencies:
-    "vanilla-tilt" "^1.7.0"
 
 "vue@^2.0.0", "vue@^2.6.14", "vue@~2":
   "integrity" "sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ=="

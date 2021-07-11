@@ -7,7 +7,7 @@
           <input
             type="text"
             id="searchSong"
-            @change="searchSong()"
+            v-on:input="searchSong()"
             placeholder="Search"
           />
         </div>
@@ -582,7 +582,7 @@ export default {
       }
     },
     resetSearch() {
-      document.getElementById("searchSong").value = "";
+      //document.getElementById("searchSong").value = "";
       document.getElementById("pZeroMatches").style.display = "none";
       for (let i = 0; i < this.songs.length; i++) {
         this.songs[i].Show = true;
@@ -1427,7 +1427,7 @@ font-awesome-icon {
 }
 
 #btnSignOut:hover {
-  background-color: rgb(230, 65, 65);
+  background-color: rgb(194, 79, 79);
 }
 
 #divPlayerWrapper {
