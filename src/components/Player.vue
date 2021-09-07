@@ -186,6 +186,8 @@
               v-on:click="downloadSong(song.SongURL)"
             />
           </div>
+
+          <img v-if="song.SongImageURL != undefined && song.SongImageURL != '' && song.SongImageURL != null" class="songPaneImage" v-bind:src="song.SongImageURL">
         </div>
       </div>
     </div>
@@ -927,6 +929,16 @@ export default {
   color: white;
 }
 
+.songPaneImage {
+  position: absolute;
+  margin-top: -10px;
+  margin-left: -10px;
+  padding: -10px;
+  height: 40px; 
+  width: 40px;
+  right: 0;  
+}
+
 #customBackgroundImagePanel {
   position: fixed;
   right: 20px;
@@ -1045,6 +1057,7 @@ export default {
 
 .divSongsPlay {
   flex: 0 0 2.5%;
+  /* padding-left: 75px;  */
 }
 
 .divSongsSongName {
@@ -1062,7 +1075,7 @@ export default {
 }
 
 .divSongsPublisher {
-  flex: 0 0 17.5%;
+  flex: 0 0 15%;
   padding-left: 5%;
 }
 
@@ -1073,7 +1086,7 @@ export default {
 
 .divSongsOptions {
   position: absolute;
-  right: 25px;
+  right: 70px;
 }
 
 #divCenterHeader {
@@ -1129,6 +1142,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
   width: 95%;
+  height: 20px;
   margin-top: 15px;
   margin-left: 15px;
   transition: 0.2s;
