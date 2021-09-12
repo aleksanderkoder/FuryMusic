@@ -934,8 +934,8 @@ export default {
   margin-top: -10px;
   margin-left: -10px;
   padding: -10px;
-  height: 40px; 
-  width: 40px;
+  height: 37px; 
+  width: 37px;
   right: 0;  
 }
 
@@ -1142,7 +1142,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
   width: 95%;
-  height: 20px;
+  height: 17px;
   margin-top: 15px;
   margin-left: 15px;
   transition: 0.2s;
