@@ -1,5 +1,5 @@
 <template>
-  <div id="backgroundFade" v-on:click.self="cancel()" class="animate__animated animate__fadeIn">
+  <div v-tilt="{max: 5}" id="background" v-on:click.self="cancel()">
     <div
       class="animate__animated animate__fadeInDownBig"
       id="divCustomBackImgWrapper"
@@ -171,15 +171,15 @@ export default {
   display: none;
 }
 
-#backgroundFade {
+#background {
   position: absolute;
-  width: 100%;
-  height: 100%;
   display: flex; 
   align-items: center;
+  width: 100%;
+  height: 100%;
   top: 0; 
-  background-color: rgba(0, 0, 0, 0.5); 
-  z-index: 999999;
+  /* background-color: rgba(0, 0, 0, 0.5);  */
+  z-index: 999;
 }
 
 input[type="file"] {

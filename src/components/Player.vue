@@ -57,10 +57,9 @@
         v-if="currentSong.SongName != ''"
         class="animate__animated animate__fadeInLeft"
       >
-        <img
+        <img v-tilt="{speed: 400, perspective: 500}"
           id="SongCoverImage"
           v-bind:src="currentSong.SongImageURL"
-          width="65%"
         />
         <p
           class="clickToSearch two-line"
@@ -194,7 +193,7 @@
 
     <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
       <div id="controlsWrapper">
-        <div id="divPlay" title="Play" v-on:click="wavePlayPauseToggle('play')" class="animation-pulse">
+        <div id="divPlay" v-tilt="{max: 25, perspective: 200}" title="Play" v-on:click="wavePlayPauseToggle('play')" class="animation-pulse">
           <font-awesome-icon
             id="playButton"
             style="
@@ -206,7 +205,7 @@
             :icon="['fas', 'play']"
           />
         </div>
-        <div id="divPause" title="Pause" v-on:click="wavePlayPauseToggle('pause')" class="animation-pulse">
+        <div id="divPause" v-tilt="{max: 25, perspective: 200}" title="Pause" v-on:click="wavePlayPauseToggle('pause')" class="animation-pulse">
           <font-awesome-icon
             id="pauseButton"
             style="
@@ -256,7 +255,7 @@
         />
       </div>
       <span id="spanElapsedPlaytime">{{ elapsedPlaytime }}</span>
-      <div id="waveform" v-on:click="waveformInteraction()"></div>
+      <div v-tilt="{max: 2, perspective: 2500}" id="waveform" v-on:click="waveformInteraction()"></div>
       <span id="spanTotalPlaytime">{{ currentSong.Length }}</span>
     </div>
 
@@ -934,8 +933,8 @@ export default {
   margin-top: -10px;
   margin-left: -10px;
   padding: -10px;
-  height: 37px; 
-  width: 37px;
+  height: 38px; 
+  width: 38px;
   right: 0;  
 }
 
@@ -1052,7 +1051,7 @@ export default {
 }
 
 .fontSongPane:hover {
-  color: rgba(255,255,255, 0.7); 
+  color: rgba(0, 0, 0, 0.7); 
 }
 
 .divSongsPlay {
@@ -1142,7 +1141,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
   padding: 10px;
   width: 95%;
-  height: 17px;
+  height: 18px;
   margin-top: 15px;
   margin-left: 15px;
   transition: 0.2s;
@@ -1393,6 +1392,12 @@ font-awesome-icon {
 
 #SongCoverImage {
   box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.75);
+  max-width: 120px;
+  transition: 0.4s; 
+}
+
+#SongCoverImage:hover {
+  box-shadow: 4px 6px 8px rgba(138, 138, 138, 0.35);
 }
 
 #fontDeleteSong,

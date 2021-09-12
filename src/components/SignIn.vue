@@ -1,5 +1,5 @@
 <template>
-  <div id="pageWrapper">
+  <div v-tilt="{max: 5}" id="pageWrapper">
     <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
       <img
         id="logo"
@@ -186,6 +186,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
+    transform-style: preserve-3d;
   }
 
   #logo {
@@ -278,7 +279,7 @@ export default {
     display: block;
     text-align: center;
     width: 100%;
-    bottom: 0;
+    bottom: 15px;
     color: white;
   }
 
