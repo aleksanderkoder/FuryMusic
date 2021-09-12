@@ -1,5 +1,5 @@
 <template>
-  <div v-tilt="{max: 5}" id="background" v-on:click.self="cancel()">
+  <div id="background" v-tilt="{max: 5}" v-on:click.self="cancel()">
     <div
       class="animate__animated animate__fadeInDownBig"
       id="divUploadSongWrapper"
@@ -229,7 +229,6 @@ export default {
   width: 100%;
   height: 100%;
   top: 0; 
-  /* background-color: rgba(0, 0, 0, 0.5);  */
   z-index: 999;
 }
 
