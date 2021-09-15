@@ -1,5 +1,5 @@
 <template>
-  <div id="background" v-tilt="{max: 5}" v-on:click.self="cancel()">
+  <div id="background" v-on:click.self="cancel()" class="animate__animated animate__fadeIn">
     <div
       class="animate__animated animate__fadeInDownBig"
       id="divCustomBackImgWrapper"
@@ -178,6 +178,7 @@ export default {
   width: 100%;
   height: 100%;
   top: 0; 
+  background-color: rgba(0, 0, 0, 0.25);
   z-index: 999;
 }
 
