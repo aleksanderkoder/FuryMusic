@@ -1,5 +1,5 @@
 <template>
-  <div v-tilt="{max: 5}" id="pageWrapper">
+  <div id="pageWrapper">
     <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
       <img
         class="animate__animated animate__pulse animate__slow animate__infinite"
@@ -154,7 +154,6 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  transform-style: preserve-3d;
 }
 
 #divSignUpWrapper {
