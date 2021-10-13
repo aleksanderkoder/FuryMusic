@@ -14,12 +14,11 @@
 
 The sign in page where users can sign into their personal accounts. 
 
-  <img src="https://user-images.githubusercontent.com/49065176/137125704-e0259407-cc6c-49ad-849c-e2765ea4bab0.png" width="600">
+  <img src="https://user-images.githubusercontent.com/49065176/137128477-0e3aa972-71ce-42f2-8d75-7503f3e749a9.png" width="600">
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
 ## Current features 
-
 
 - Create your own account and sign in
 - Browse and play user submitted music 
