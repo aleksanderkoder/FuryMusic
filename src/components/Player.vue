@@ -255,7 +255,7 @@
         />
       </div>
       <span id="spanElapsedPlaytime">{{ elapsedPlaytime }}</span>
-      <div v-tilt="{max: 2, perspective: 2500}" id="waveform" v-on:click="waveformInteraction()"></div>
+      <div id="waveform" v-on:click="waveformInteraction()"></div>
       <span id="spanTotalPlaytime">{{ currentSong.Length }}</span>
     </div>
 
@@ -1144,10 +1144,11 @@ export default {
   height: 18px;
   margin-top: 15px;
   margin-left: 15px;
-  transition: 0.2s;
+  transition: 0.05s;
 }
 
 #divSongPane:hover {
+  transform: scale(1.009) !important;
   background-color: white !important;
   color: black !important;
 }
@@ -1393,11 +1394,6 @@ font-awesome-icon {
 #SongCoverImage {
   box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.75);
   max-width: 120px;
-  transition: 0.4s; 
-}
-
-#SongCoverImage:hover {
-  box-shadow: 4px 6px 8px rgba(138, 138, 138, 0.35);
 }
 
 #fontDeleteSong,
