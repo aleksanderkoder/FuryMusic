@@ -1144,12 +1144,12 @@ export default {
   height: 18px;
   margin-top: 15px;
   margin-left: 15px;
-  transition: 0.05s;
+  transition: 0.2s;
 }
 
 #divSongPane:hover {
-  transform: scale(1.009) !important;
   background-color: white !important;
+  border-left: 5px solid rgba(0, 0, 0, 0.2) !important;
   color: black !important;
 }
 

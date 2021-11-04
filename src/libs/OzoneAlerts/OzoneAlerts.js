@@ -1,172 +1,144 @@
-class Ozone 
-      {
-        static fire(icon, message, position, type = "notification", confirmButtonText = "Confirm", cancelButtonText = "Cancel", onConfirm = function() {}, onCancel = function () {}) 
-        {
-          console.log("Firing Ozone..."); 
+class Ozone {
+  static fire(
+    icon,
+    message,
+    position,
+    type = "notification",
+    confirmButtonText = "Confirm",
+    cancelButtonText = "Cancel",
+    onConfirm = function () {},
+    onCancel = function () {}
+  ) {
+    // Creates essential elements
+    const el = document.createElement("div");
+    el.className = "Ozone";
+    const divIcon = document.createElement("div");
+    divIcon.className = "OzoneIcon";
+    const divMessage = document.createElement("div");
+    divMessage.className = "OzoneMessage";
 
-          // Creates essential elements
-          const el = document.createElement("div");
-          el.className = "Ozone";
-          const content = document.createElement("table");
-          content.className = "OzoneTable"; 
-          const contentRow1 = document.createElement("tr");
-          const contentData1 = document.createElement("td");
-          const contentData2 = document.createElement("td");
-          contentData2.style.width = "100%";
+    // Appends elements to parent element
+    el.appendChild(divIcon);
+    el.appendChild(divMessage);
 
-          // Creates necessary remaining html elements
-          el.appendChild(content);
-          content.appendChild(contentRow1);
-          contentRow1.appendChild(contentData1);
+    // Sets message based on parameter "message"
+    divMessage.innerHTML = "<p>" + message + "</p>";
 
-          // Handles message based on parameter "message"
-          contentData2.innerHTML = message;
+    // Handles icon selection based on parameter "icon"
+    if (icon == "success") {
+      divIcon.innerHTML = '<i style=" color: white;" class="fas fa-check"></i>';
+    } else if (icon == "error") {
+      divIcon.innerHTML = '<i style="color: white;" class="fas fa-times"></i>';
+    } else if (icon == "info") {
+      divIcon.innerHTML = '<i style="color: white;" class="fas fa-info"></i>';
+    }
+    // Creates Ozone instance of type "dialog" based on "type" parameter
+    if (type == "dialog") {
+      // Necessary changes to styling for dialog
+      el.style.flexDirection = "column";
+      divIcon.style.position = "relative"; 
+      divIcon.style.left = "0px";
+      divIcon.style.marginTop = "15px";
 
-          // Handles icon selection based on parameter "icon"
-          if (icon == "success") 
-          {
-            contentData1.innerHTML =
-              '<i style=" color: white;" class="fas fa-check"></i>';
-          } 
-          else if (icon == "error") 
-          {
-            contentData1.innerHTML =
-              '<i style="color: white;" class="fas fa-times"></i>';
-          } 
-          else if (icon == "info") 
-          {
-            contentData1.innerHTML =
-              '<i style="color: white;" class="fas fa-info"></i>';
-          }
+      // Creates necessary table elements for dialog
+      const divControls = document.createElement("div");
+      divControls.className = "OzoneControls";
 
-          // Creates Ozone instance of type "notification" based on "type" parameter
-          if (type == "notification") 
-          {
-            // Appends second table data 
-            contentRow1.appendChild(contentData2);
-          }
-          else if (type == "dialog")  // Creates Ozone instance of type "dialog" based on "type" parameter
-          {
-            content.style.padding = "10px"; 
-            contentData2.style.padding = "15px";
+      const btnConfirm = document.createElement("button");
+      btnConfirm.id = "OzoneBtnConfirm";
+      btnConfirm.innerHTML = confirmButtonText;
+      const btnCancel = document.createElement("button");
+      btnCancel.id = "OzoneBtnCancel";
+      btnCancel.innerHTML = cancelButtonText;
 
-            // Creates necessary table elements for dialog
-            const contentRow2 = document.createElement("tr");
-            const contentRow3 = document.createElement("tr");
-            const contentData3 = document.createElement("td");
-            const contentData4 = document.createElement("td");
+      // Appends elements to parent element
+      el.appendChild(divControls);
+      divControls.appendChild(btnConfirm);
+      divControls.appendChild(btnCancel);
 
-             
-            const btnConfirm = document.createElement("button")
-            btnConfirm.id = "OzoneBtnConfirm"; 
-            btnConfirm.innerHTML = confirmButtonText; 
-            const btnCancel = document.createElement("button")
-            btnCancel.id = "OzoneBtnCancel";
-            btnCancel.innerHTML = cancelButtonText;
+      // Handles functions on dialog button click
+      btnConfirm.onclick = function () {
+        onConfirm();
+        removeOzoneAlert(el);
+      };
 
-            // Appends elements to parent element
-            content.appendChild(contentRow2);
-            content.appendChild(contentRow3);
-            contentRow2.appendChild(contentData2);
-            contentRow2.appendChild(contentData2);
-            contentRow3.appendChild(contentData3);
-            contentRow3.appendChild(contentData4);
-            contentData3.appendChild(btnConfirm);
-            contentData3.appendChild(btnCancel);
-             
-          }
-                       
-          // Handles position based on parameter "position"
-          switch (position)
-          {
-            case "top-left":  
-              el.style.left = 0;
-              el.style.top = 0;
-              break; 
+      btnCancel.onclick = function () {
+        onCancel();
+        removeOzoneAlert(el);
+      };
+    }
 
-            case "top-right":  
-              el.style.right = 0;
-              el.style.top = 0;
-              break; 
+    // Handles position based on parameter "position"
+    switch (position) {
+      case "top-left":
+        el.style.left = 0;
+        el.style.top = 0;
+        break;
 
-            case "top-middle":  
-              el.style.left = 0;
-              el.style.right = 0;
-              el.style.marginLeft = "auto";
-              el.style.marginRight = "auto";
-              break; 
+      case "top-right":
+        el.style.right = 0;
+        el.style.top = 0;
+        break;
 
-            case "bottom-left":  
-              el.style.left = 0;
-              el.style.bottom = 0;
-              break; 
+      case "top-middle":
+        el.style.left = 0;
+        el.style.right = 0;
+        el.style.marginLeft = "auto";
+        el.style.marginRight = "auto";
+        break;
 
-            case "bottom-middle":  
-              el.style.left = 0;
-              el.style.right = 0;
-              el.style.bottom = 0;
-              el.style.marginLeft = "auto";
-              el.style.marginRight = "auto";
-              break; 
+      case "bottom-left":
+        el.style.left = 0;
+        el.style.bottom = 0;
+        break;
 
-            case "bottom-right":  
-              el.style.right = 0;
-              el.style.bottom = 0;
-              break; 
+      case "bottom-middle":
+        el.style.left = 0;
+        el.style.right = 0;
+        el.style.bottom = 0;
+        el.style.marginLeft = "auto";
+        el.style.marginRight = "auto";
+        break;
 
-            case "center":  
-              el.style.left = 0;
-              el.style.right = 0;
-              el.style.marginLeft = "auto";
-              el.style.marginRight = "auto"; 
-              el.style.marginTop = "20%";
-              break; 
-          }
+      case "bottom-right":
+        el.style.right = 0;
+        el.style.bottom = 0;
+        break;
 
-          // Handles animations upon creation and deletion of Ozone element
-          setTimeout(function () {
-            el.style.animation = "ozpulse 2s infinite";
-          }, 1000);
+      case "center":
+        el.style.left = 0;
+        el.style.right = 0;
+        el.style.marginLeft = "auto";
+        el.style.marginRight = "auto";
+        el.style.marginTop = "20%";
+        break;
+    }
 
-          // Finally appends alert box element to document
-          document.body.appendChild(el);
-          
-          // Handles behavior of Ozone-alert upon deletion based on type
-          if (type == "notification")
-          {
-            setTimeout(function () 
-            {
-              el.style.animation = "ozfadeOut ease 1s";
-            }, 5000);
+    // Handles animations upon creation and deletion of Ozone element
+    setTimeout(() => {
+      el.style.animation = "ozpulse 2s infinite";
+    }, 1000);
 
-            setTimeout(function () 
-            {
-                el.parentNode.removeChild(el);
-            }, 6000); 
-          }
-          else if (type == "dialog")
-          {
-            OzoneBtnConfirm.onclick = function () 
-            {
-              onConfirm(); 
-              removeOzoneAlert(el); 
-            }
+    // Finally appends Ozone alert element to document body
+    document.body.appendChild(el);
 
-            OzoneBtnCancel.onclick = function () 
-            {
-              onCancel(); 
-              removeOzoneAlert(el);
-            }
-          }
-          
-          // Function that removes a given Ozone-element with a fadeOut-effect
-          function removeOzoneAlert(element)
-          {
-            element.style.animation = "ozfadeOut ease 0.5s";
-            setTimeout(function () 
-            {            
-                element.parentNode.removeChild(element);
-            }, 500);
-          }
-        }
-      }
+    // Handles behavior of Ozone alert upon deletion based on type
+    if (type == "notification") {
+      setTimeout(() => {
+        el.style.animation = "ozfadeOut ease 1s";
+      }, 7000);
+
+      setTimeout(() => {
+        el.parentNode.removeChild(el);
+      }, 8000);
+    }
+
+    // Function that removes a given Ozone-element with a fadeOut-effect
+    function removeOzoneAlert(element) {
+      element.style.animation = "ozfadeOut ease 0.5s";
+      setTimeout(() => {
+        element.parentNode.removeChild(element);
+      }, 500);
+    }
+  }
+}

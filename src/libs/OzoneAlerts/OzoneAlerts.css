@@ -1,28 +1,44 @@
 /* Styles the main div element  */
 .Ozone {
   position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   min-width: 310px;
   max-width: 20%;
   height: auto;
   margin: 20px;
-  padding: 10px;
   padding-left: 25px;
   padding-right: 25px;
   border-radius: 3px;
   font-size: 20px;
   text-align: center;
   color: white;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.75);
   font-family: "Roboto";
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
   animation: ozfadeIn ease 0.5s;
-  z-index: 99999999;
+  z-index: 999999;
 }
 
-/* Styles the table used within the main div  */
-.OzoneTable {
-  width: 100%;
-  margin: auto; 
+/* Styles the div container for the icon */
+.OzoneIcon {
+  position: absolute;
+  left: 25px;
+}
+
+/* Styles the div container for the message */
+.OzoneMessage {
+  height: auto;
+  width: 80%;
+  overflow-wrap: break-word;
+}
+
+/* Styles the div container for the controls */
+.OzoneControls {
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 /* Styles the buttons used for the dialog type */
@@ -66,7 +82,7 @@
 
 @font-face {
   font-family: "Roboto";
-  src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
+  src: url(fonts/Roboto-Light.ttf);
 }
 
 /* Specifies animations used upon initial appearance, persisting and deletion of alert */

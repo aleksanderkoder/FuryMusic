@@ -127,7 +127,7 @@ export default {
             console.error('Error:', error);
             document.getElementById("loadingSpinnerUS").style.display = "none";
             document.getElementById("btnConfirmUploadUS").style.display = "inline-block";
-            Ozone.fire("error", "Server out of reach", "center");
+            Ozone.fire("error", "Server out of reach", "top-right");
           });
       }
       
