@@ -11,7 +11,7 @@
 ***This project is still work-in-progress***
 
 
-  <img src="https://user-images.githubusercontent.com/49065176/140330651-62137b60-047b-46fb-b0f8-781e014318e2.png" width="600"> 
+  <img src="https://user-images.githubusercontent.com/49065176/141188411-7a34f794-ca1a-44db-80de-cde3e7d262b9.png" width="600"> 
 
 The sign in page where users can sign into their personal accounts. 
 
