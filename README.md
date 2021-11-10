@@ -15,7 +15,7 @@
 
 The sign in page where users can sign into their personal accounts. 
 
-  <img src="https://user-images.githubusercontent.com/49065176/140331300-dd363f05-2a1c-4e62-8dce-b378a0a192ed.png" width="600">
+  <img src="https://user-images.githubusercontent.com/49065176/141188081-8d0984d4-6a08-4cf3-ae3f-f1f765bbc269.png" width="600">
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
