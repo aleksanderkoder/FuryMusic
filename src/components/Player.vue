@@ -28,6 +28,14 @@
       </div>
     </div>
 
+    <div id="divArtistBanner" class="animate__animated animate__fadeInTopLeft">
+      <img id="imgArtistBannerImage" src="" />
+      <div id="divArtistBannerInfoWrapper">
+        <span id="spanArtistBannerHeader"></span>
+        <span id="spanArtistBannerDesc"></span>
+      </div>
+    </div>
+
     <div id="divSidebar" class="animate__animated animate__fadeInLeft">
       <img
         id="logo"
@@ -85,7 +93,7 @@
       <div v-if="loggedIn">
         <div
           id="divCenterHeader"
-          class="animate__animated animate__fadeInRight"
+          class="divCenterHeader animate__animated animate__fadeInRight"
         >
           <div class="divSongsHeader">
             <div class="divSongsHeaderTitle">
@@ -110,7 +118,7 @@
           v-for="song in songs"
           :key="song.SongID"
           v-show="song.Show"
-          v-on:click="dblclickPlay(song)"
+          v-on:click="dblClickPlay(song)"
           class="animate__animated animate__slideInRight"
           @mouseover="showRunningIcon(song.SongID)"
           @mouseleave="hideRunningIcon(song.SongID)"
@@ -149,7 +157,7 @@
             <span
               class="clickToSearch"
               v-bind:title="song.ArtistName"
-              v-on:click="searchSong(song.ArtistName)"
+              v-on:click="searchSong(song.ArtistName, song)"
               >{{ song.ArtistName }}</span
             >
           </div>
@@ -410,16 +418,16 @@ export default {
   },
   methods: {
     showRunningIcon(id) {
-      if(this.currentSong.SongID != id || !this.wavesurfer.isPlaying()) return; 
-      document.getElementById('running' + id).style.display = 'none';
-      document.getElementById('pause' + id).style.display = 'block';
+      if (this.currentSong.SongID != id || !this.wavesurfer.isPlaying()) return;
+      document.getElementById("running" + id).style.display = "none";
+      document.getElementById("pause" + id).style.display = "block";
     },
     hideRunningIcon(id) {
-      if(this.currentSong.SongID != id || !this.wavesurfer.isPlaying()) return; 
-      document.getElementById('running' + id).style.display = 'block';
-      document.getElementById('pause' + id).style.display = 'none';
+      if (this.currentSong.SongID != id || !this.wavesurfer.isPlaying()) return;
+      document.getElementById("running" + id).style.display = "block";
+      document.getElementById("pause" + id).style.display = "none";
     },
-    dblclickPlay(song) {
+    dblClickPlay(song) {
       this.dblclickCounter++;
       let self = this;
       setTimeout(function() {
@@ -533,7 +541,7 @@ export default {
       if (
         !document
           .getElementById("divCenter")
-          .classList.contains("divCenterRetrackted")
+          .classList.contains("divCenterRetractedBottom")
       )
         this.minimizeMaximizePlayer("max");
 
@@ -572,7 +580,9 @@ export default {
         document.getElementById(
           "play" + this.currentSong.SongID
         ).style.display = "block";
-        document.getElementById("running" + this.currentSong.SongID).style.display = "none";
+        document.getElementById(
+          "running" + this.currentSong.SongID
+        ).style.display = "none";
         document.getElementById(
           "pause" + this.currentSong.SongID
         ).style.display = "none";
@@ -631,14 +641,48 @@ export default {
         }, 1);
       }
     },
+    showOrHideArtistBanner(mode, showArtistBannerObj = {}) {
+      if (mode == "show") {
+        // Change styling of relevant HTML
+        document
+          .getElementById("divCenter")
+          .classList.add("divCenterRetractedTop");
+        document.getElementById("divArtistBanner").style.display = "flex";
+        document
+          .getElementById("divCenterHeader")
+          .classList.add("divCenterHeaderRetracted");
+
+        // Populate HTML with the information
+        if (showArtistBannerObj.SongImageURL) {
+          document.getElementById("imgArtistBannerImage").src =
+            showArtistBannerObj.SongImageURL;
+        } else {
+          document.getElementById("imgArtistBannerImage").src = "";
+        }
+        document.getElementById("spanArtistBannerHeader").innerHTML =
+          showArtistBannerObj.ArtistName;
+        document.getElementById("spanArtistBannerDesc").innerHTML =
+          "Showing songs by " + showArtistBannerObj.ArtistName;
+      } else if (mode == "hide") {
+        // Change styling of relevant HTML
+        document
+          .getElementById("divCenter")
+          .classList.remove("divCenterRetractedTop");
+        document.getElementById("divArtistBanner").style.display = "none";
+        document
+          .getElementById("divCenterHeader")
+          .classList.remove("divCenterHeaderRetracted");
+      }
+    },
     resetSearch() {
       //document.getElementById("searchSong").value = "";
       document.getElementById("pZeroMatches").style.display = "none";
+      this.showOrHideArtistBanner("hide");
       for (let i = 0; i < this.songs.length; i++) {
         this.songs[i].Show = true;
       }
     },
-    searchSong(value) {
+    searchSong(value, showArtistBannerObj = {}) {
       let searchQuery = "";
 
       // Determines wether to search using query from search field or parameter
@@ -678,6 +722,10 @@ export default {
         } else {
           document.getElementById("pZeroMatches").style.display = "none";
         }
+      }
+
+      if (Object.keys(showArtistBannerObj).length > 0) {
+        this.showOrHideArtistBanner("show", showArtistBannerObj);
       }
     },
     toggleShufflePlay() {
@@ -759,20 +807,27 @@ export default {
       if (mode == "min") {
         document
           .getElementById("divCenter")
-          .classList.toggle("divCenterRetrackted");
+          .classList.toggle("divCenterRetractedBottom");
         document.getElementById("divPlayerControls").style.display = "none";
         document.getElementById("divPlayerMinimize").style.display = "none";
         document.getElementById("divPlayerMaximize").style.display = "block";
         document.getElementById("divPlayerOptions").style.display = "none";
-      } else if (mode == "max") {
+      } else if (
+        mode ==
+        "max" /*&& document.getElementById("divPlayerControls").style.display == "none"*/
+      ) {
         document
           .getElementById("divCenter")
-          .classList.toggle("divCenterRetrackted");
+          .classList.toggle("divCenterRetractedBottom");
         document.getElementById("divPlayerMaximize").style.display = "none";
 
-        setTimeout(function() {
+        setTimeout(() => {
           document.getElementById("divPlayerMinimize").style.display = "block";
           document.getElementById("divPlayerOptions").style.display = "block";
+          // Scroll song pane into view if not visible. Needed because song pane might get hidden by the player controls wrapper sliding up.
+          document
+            .getElementById("play" + self.currentSong.SongID)
+            .parentElement.scrollIntoViewIfNeeded();
         }, 1000);
         document.getElementById("divPlayerControls").style.display = "block";
         self.wavesurfer.drawBuffer();
@@ -1105,7 +1160,7 @@ export default {
 
 .fontSongPane:hover {
   color: black;
-  filter: none; 
+  filter: none;
 }
 
 .divSongsPlay {
@@ -1142,7 +1197,7 @@ export default {
   right: 70px;
 }
 
-#divCenterHeader {
+.divCenterHeader {
   position: fixed;
   top: 31px;
   left: 170px;
@@ -1153,6 +1208,10 @@ export default {
   margin-left: 1px;
   color: white;
   white-space: nowrap;
+}
+
+.divCenterHeaderRetracted {
+  top: 228px;
 }
 
 .divSongsHeader {
@@ -1245,6 +1304,42 @@ font-awesome-icon {
   text-align: left;
 }
 
+#divArtistBanner {
+  position: absolute;
+  display: none; 
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  left: 171px;
+  right: 0;
+  top: 28px;
+  height: 200px;
+}
+
+#imgArtistBannerImage {
+  box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.75);
+  margin-left: 25px;
+  width: 150px;
+  max-height: 150px;
+}
+
+#divArtistBannerInfoWrapper {
+  margin-left: 25px;
+}
+
+#spanArtistBannerHeader {
+  position: absolute;
+  color: white;
+  font-size: 55px;
+  top: 55px;
+}
+
+#spanArtistBannerDesc {
+  position: absolute;
+  color: white;
+  font-size: 20px;
+  top: 120px;
+}
+
 #logo {
   margin-top: 20px;
   margin-bottom: 45px;
@@ -1272,6 +1367,7 @@ font-awesome-icon {
 }
 
 #divPlayerControls {
+  display: none;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.8);
   height: 130px;
@@ -1280,7 +1376,6 @@ font-awesome-icon {
   right: 0;
   bottom: 0;
   z-index: 1;
-  display: none;
 }
 
 #songLoader {
@@ -1334,13 +1429,18 @@ font-awesome-icon {
   right: 0px;
   bottom: 105px;
   top: 62px;
+  padding-bottom: 10px;
   z-index: 0;
   overflow-y: scroll;
   overflow-x: hidden;
 }
 
-.divCenterRetrackted {
+.divCenterRetractedBottom {
   bottom: 210px;
+}
+
+.divCenterRetractedTop {
+  top: 250px;
 }
 
 #waveform {

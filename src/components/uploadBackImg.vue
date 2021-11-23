@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: "uploadBackImg",
+  name: "UploadBackImg",
   data() {
     return {
       objectURL: "",
