@@ -19,14 +19,15 @@ The sign in page where users can sign into their personal accounts.
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
-  <img src="https://user-images.githubusercontent.com/49065176/143777989-d6c26a64-a757-48e9-992c-45b0550cc463.png" width="600">
+  <img src="https://user-images.githubusercontent.com/49065176/143778202-2695d86a-a082-40de-a05b-c982445e678e.png" width="600">
+  
   
 The banner showcasing the artist or album based on user selection. 
 
 ## Current features 
 
 - Create your own account and sign in
-- Browse and play user submitted music 
+- Browse and play user submitted music
 - Upload your own music for other users to listen to
 - Customize the look of the app by changing the background image to your own liking 
 - Download submitted music to your own machine 
