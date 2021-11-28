@@ -4,12 +4,17 @@
       <img
         id="logo"
         class="animate__animated animate__pulse animate__slow animate__infinite"
-        src="../assets/fury music logo ferdig.png"
+        src="../assets/fury-logo-prototype-full-dark.webp"
+        width="200"
       />
       <br />
       <h2 id="logInTittel">Sign in</h2>
       <form onSubmit="return false">
-        <font-awesome-icon class="fontAwesome" style="color: black" :icon="['fas', 'user']" />
+        <font-awesome-icon
+          class="fontAwesome"
+          style="color: black"
+          :icon="['fas', 'user']"
+        />
         <input
           type="text"
           v-model="username"
@@ -17,7 +22,11 @@
           id="username"
         />
         <br />
-        <font-awesome-icon class="fontAwesome" style="color: black" :icon="['fas', 'lock']" />
+        <font-awesome-icon
+          class="fontAwesome"
+          style="color: black"
+          :icon="['fas', 'lock']"
+        />
         <input
           type="password"
           v-model="password"
@@ -156,7 +165,7 @@ export default {
     goToSignUp() {
       document.getElementById("error").style.display = "none";
       this.$store.commit("showSignUp");
-    },
+    }
   },
   mounted() {
     // Checks if user information has been already entered, and logs user in if true
@@ -167,168 +176,170 @@ export default {
     } else {
       // Shows alert if song is linked, but user is not signed in
       const urlParams = new URLSearchParams(window.location.search);
-      let songid= urlParams.get("songid");
+      let songid = urlParams.get("songid");
       if (songid != null) {
         setTimeout(function() {
-          Ozone.fire("info", "Linked song will play after sign in", "top-right");
+          Ozone.fire(
+            "info",
+            "Linked song will play after sign in",
+            "top-right"
+          );
         }, 1500);
       }
     }
-
   }
 };
 </script>
 
 <style scoped>
-
 #pageWrapper {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
+#logo {
+  width: 200px;
+  margin: 25px 0 25px 0;
+}
+
+#divLogInWrapper {
+  text-align: center;
+  color: #2c3e50;
+  background-color: rgba(255, 255, 255, 1);
+  width: 400px;
+  min-height: 670px;
+  margin: auto;
+  /* margin-top: 6.5%; */
+  border-radius: 1%;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  font-family: "Monsterrat";
+}
+
+#loadingSpinner {
+  color: black;
+  font-size: 40px;
+  display: none;
+  margin: auto;
+}
+
+#username,
+#password {
+  border: none;
+  margin: 15px;
+  margin-right: 33px;
+  width: 155px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px;
+  height: 30px;
+  font-family: "Wals";
+  border-radius: 3px;
+}
+
+#error {
+  color: red;
+  display: none;
+  font-family: "Monsterrat";
+}
+
+#btnLogIn {
+  margin: auto;
+  margin-top: 20px;
+  background-color: black;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: white;
+  text-decoration: none;
+  border: none;
+  height: 35px;
+  width: 140px;
+  border-radius: 4px;
+  font-family: "Wals";
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+#btnGoToSignUp {
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: black;
+  text-decoration: none;
+  border: none;
+  height: 35px;
+  width: 140px;
+  border-radius: 4px;
+  font-family: "Wals";
+  transition: 0.3s;
+}
+
+#btnGoToSignUp:hover {
+  background-color: lightgrey;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+#btnLogIn:hover {
+  background-color: #2022259f;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+#makersMark {
+  position: absolute;
+  display: block;
+  text-align: center;
+  width: 100%;
+  bottom: 15px;
+  color: white;
+}
+
+#logInTittel {
+  border-bottom: 1px solid;
+  width: 75px;
+  margin: 20px auto;
+  font-family: "Wals";
+  color: black;
+}
+
+.fontAwesome {
+  font-size: 16px;
+}
+
+button {
+  outline: none;
+  cursor: pointer;
+}
+
+h1,
+h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  display: block;
+  color: black;
+  font-size: 12px;
+  font-family: "Monsterrat", sans-serif;
+  margin-top: 25px;
+}
+
+@media screen and (min-width: 3840px) {
   #logo {
-    width: 250px; 
+    width: 450px;
   }
 
   #divLogInWrapper {
-    text-align: center;
-    color: #2c3e50;
-    background-color: rgba(255, 255, 255, 1);
-    width: 400px;
-    min-height: 670px;
-    margin: auto;
-    /* margin-top: 6.5%; */
-    border-radius: 1%;
-    padding: 20px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    font-family: "Monsterrat";
-  }
-
-  #loadingSpinner {
-    color: black;
-    font-size: 40px;
-    display: none;
-    margin: auto;
-  }
-
-  #username,
-  #password {
-    border: none;
-    margin: 15px;
-    margin-right: 33px;
-    width: 155px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px;
-    height: 30px;
-    font-family: "Wals";
-    border-radius: 3px;
-  }
-
-  #error {
-    color: red;
-    display: none;
-    font-family: "Monsterrat";
-  }
-
-  #btnLogIn {
-    margin: auto;
-    margin-top: 20px;
-    background-color: black;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    color: white;
-    text-decoration: none;
-    border: none;
-    height: 35px;
-    width: 140px;
-    border-radius: 4px;
-    font-family: "Wals";
-    transition: 0.3s;
-    cursor: pointer;
-  }
-
-  #btnGoToSignUp {
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    color: black;
-    text-decoration: none;
-    border: none;
-    height: 35px;
-    width: 140px;
-    border-radius: 4px;
-    font-family: "Wals";
-    transition: 0.3s;
-  }
-
-  #btnGoToSignUp:hover {
-    background-color: lightgrey;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  }
-
-  #btnLogIn:hover {
-    background-color: #2022259f;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  }
-
-  #makersMark {
-    position: absolute;
-    display: block;
-    text-align: center;
-    width: 100%;
-    bottom: 15px;
-    color: white;
-  }
-
-  #logInTittel {
-    border-bottom: 1px solid;
-    width: 75px;
-    margin: 20px auto;
-    font-family: "Wals";
-    color: black;
-  }
-
-  .fontAwesome {
-    font-size: 16px;
-  }
-
-  button {
-    outline: none;
-    cursor: pointer;
-  }
-
-  h1,
-  h2 {
-    font-weight: normal;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-
-  a {
-    display: block;
-    color: black;
-    font-size: 12px;
-    font-family: "Monsterrat", sans-serif;
-    margin-top: 25px;
-  }
-
-  @media screen and (min-width: 3840px) {
- 
-#logo {
-  width: 500px;
-}
-
- #divLogInWrapper {
     width: 800px;
     min-height: 1340px;
     padding: 40px;
@@ -344,7 +355,7 @@ export default {
     margin-right: 66px;
     width: 310px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 4px 8px;
-    font-size: 24px; 
+    font-size: 24px;
     height: 60px;
   }
 
@@ -374,7 +385,7 @@ export default {
   }
 
   #makersMark {
-    font-size: 24px; 
+    font-size: 24px;
   }
 
   #logInTittel {
@@ -385,14 +396,12 @@ export default {
   }
 
   a {
-    margin-top: 40px; 
-    font-size: 24px; 
+    margin-top: 40px;
+    font-size: 24px;
   }
 
   .fontAwesome {
     font-size: 32px;
   }
-
 }
-
 </style>

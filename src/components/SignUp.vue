@@ -2,8 +2,10 @@
   <div id="pageWrapper">
     <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
       <img
+        id="logo"
         class="animate__animated animate__pulse animate__slow animate__infinite"
-        src="../assets/fury music logo ferdig.png"
+        src="../assets/fury-logo-prototype-full-dark.webp"
+        width="200"
       />
       <br />
       <h2 id="regUserTittel">Sign up</h2>
@@ -67,7 +69,7 @@ export default {
       password: "",
       email: "",
       errors: [],
-      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/",
+      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
   methods: {
@@ -83,27 +85,29 @@ export default {
         fetch(self.apiURL + "userSignUp.php", {
           method: "post",
           body: fd
-          }).then(function (response) {
-            return response.text().then(function (text) {
-              console.log(text)
+        })
+          .then(function(response) {
+            return response.text().then(function(text) {
+              console.log(text);
               document.getElementById("loadingSpinner").style.display = "none";
               if (text == "Username taken") {
-              document.getElementById("error2").style.display = "block";
-              document.getElementById("error2").innerHTML =
-                "Username or email has already been taken!";
-            } else if (text == "OK") {
-              document.getElementById("regUsername").value = "";
-              document.getElementById("regEmail").value = "";
-              document.getElementById("regPassword").value = "";
+                document.getElementById("error2").style.display = "block";
+                document.getElementById("error2").innerHTML =
+                  "Username or email has already been taken!";
+              } else if (text == "OK") {
+                document.getElementById("regUsername").value = "";
+                document.getElementById("regEmail").value = "";
+                document.getElementById("regPassword").value = "";
 
-              document.getElementById("error2").style.display = "block";
-              document.getElementById("error2").style.color = "green";
-              document.getElementById("error2").innerHTML =
-                "You have been registered!";
-            }
+                document.getElementById("error2").style.display = "block";
+                document.getElementById("error2").style.color = "green";
+                document.getElementById("error2").innerHTML =
+                  "You have been registered!";
+              }
+            });
           })
-          }).catch(function (error) {
-            console.error('Error:', error);
+          .catch(function(error) {
+            console.error("Error:", error);
             document.getElementById("loadingSpinner").style.display = "none";
           });
       }
@@ -142,18 +146,22 @@ export default {
       this.errors = [];
       document.getElementById("error2").style.display = "none";
       this.$store.commit("showSignIn");
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
-
 #pageWrapper {
   height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+#logo {
+  width: 200px;
+  margin: 25px 0 25px 0;
 }
 
 #divSignUpWrapper {

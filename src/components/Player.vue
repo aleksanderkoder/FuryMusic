@@ -28,36 +28,41 @@
       </div>
     </div>
 
-    <div id="divArtistBanner" class="animate__animated animate__fadeInTopLeft">
-      <img id="imgArtistBannerImage" src="" />
-      <div id="divArtistBannerInfoWrapper">
-        <span id="spanArtistBannerHeader"></span>
-        <span id="spanArtistBannerDesc"></span>
+    <div id="divBanner" class="animate__animated animate__fadeInUp">
+      <img
+        id="imgBannerImage"
+        src=""
+        v-tilt="{ speed: 400, perspective: 500 }"
+      />
+      <div id="divBannerInfoWrapper">
+        <span id="spanBannerHeader"></span>
+        <span id="spanBannerDesc"></span>
       </div>
     </div>
 
     <div id="divSidebar" class="animate__animated animate__fadeInLeft">
       <img
         id="logo"
-        src="src/assets/fury logo favicon5.png"
+        src="../assets/fury-logo-prototype.webp"
         title="Fury Music"
         alt="Fury Music logo"
         class="animate__animated animate__pulse animate__infinite animate__slow"
+        width="115"
       />
       <h3>Your library</h3>
 
       <span class="sidebarTitle" v-on:click="resetSearch()"
-        >All public songs</span
+        >All public tracks</span
       >
       <span class="sidebarTitle" v-on:click="searchSong($store.state.username)"
-        >My uploaded songs</span
+        >My uploaded tracks</span
       >
 
       <h3>Playlists</h3>
 
       <button id="btnUploadSong" v-on:click="showUploadSong = true">
         <font-awesome-icon style="color: grey" :icon="['fas', 'plus']" />
-        Upload song
+        Upload track
       </button>
 
       <div
@@ -82,7 +87,7 @@
         <p
           class="clickToSearch ellipsis"
           v-bind:title="currentSong.ArtistName"
-          v-on:click="searchSong(currentSong.ArtistName)"
+          v-on:click="searchSong(currentSong.ArtistName, currentSong, 'artist')"
         >
           {{ currentSong.ArtistName }}
         </p>
@@ -119,7 +124,7 @@
           :key="song.SongID"
           v-show="song.Show"
           v-on:click="dblClickPlay(song)"
-          class="animate__animated animate__slideInRight"
+          class="animate__animated animate__fadeInRight"
           @mouseover="showRunningIcon(song.SongID)"
           @mouseleave="hideRunningIcon(song.SongID)"
         >
@@ -157,7 +162,7 @@
             <span
               class="clickToSearch"
               v-bind:title="song.ArtistName"
-              v-on:click="searchSong(song.ArtistName, song)"
+              v-on:click="searchSong(song.ArtistName, song, 'artist')"
               >{{ song.ArtistName }}</span
             >
           </div>
@@ -165,7 +170,7 @@
             <span
               class="clickToSearch"
               v-bind:title="song.Album"
-              v-on:click="searchSong(song.Album)"
+              v-on:click="searchSong(song.Album, song, 'album')"
               >{{ song.Album }}</span
             >
           </div>
@@ -410,6 +415,7 @@ export default {
       oldVol: 0,
       toggleShuffle: false,
       dblclickCounter: 0,
+      muteStatus: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -432,7 +438,7 @@ export default {
       let self = this;
       setTimeout(function() {
         self.dblclickCounter = 0;
-      }, 200);
+      }, 250);
       if (this.dblclickCounter >= 2) {
         if (this.currentSong.SongID != song.SongID) {
           this.playSong(song);
@@ -641,34 +647,42 @@ export default {
         }, 1);
       }
     },
-    showOrHideArtistBanner(mode, showArtistBannerObj = {}) {
+    showOrHideBanner(mode, showBannerObj = null, type = null) {
+      let specific;
+      let text;
+      if (type == "artist") {
+        specific = showBannerObj.ArtistName;
+        text = "Showing tracks by " + showBannerObj.ArtistName;
+      } else if (type == "album") {
+        specific = showBannerObj.Album;
+        text = "Album";
+      }
+
       if (mode == "show") {
         // Change styling of relevant HTML
         document
           .getElementById("divCenter")
           .classList.add("divCenterRetractedTop");
-        document.getElementById("divArtistBanner").style.display = "flex";
+        document.getElementById("divBanner").style.display = "flex";
         document
           .getElementById("divCenterHeader")
           .classList.add("divCenterHeaderRetracted");
 
         // Populate HTML with the information
-        if (showArtistBannerObj.SongImageURL) {
-          document.getElementById("imgArtistBannerImage").src =
-            showArtistBannerObj.SongImageURL;
+        if (showBannerObj.SongImageURL) {
+          document.getElementById("imgBannerImage").src =
+            showBannerObj.SongImageURL;
         } else {
-          document.getElementById("imgArtistBannerImage").src = "";
+          document.getElementById("imgBannerImage").src = "";
         }
-        document.getElementById("spanArtistBannerHeader").innerHTML =
-          showArtistBannerObj.ArtistName;
-        document.getElementById("spanArtistBannerDesc").innerHTML =
-          "Showing songs by " + showArtistBannerObj.ArtistName;
+        document.getElementById("spanBannerHeader").innerHTML = specific;
+        document.getElementById("spanBannerDesc").innerHTML = text;
       } else if (mode == "hide") {
         // Change styling of relevant HTML
         document
           .getElementById("divCenter")
           .classList.remove("divCenterRetractedTop");
-        document.getElementById("divArtistBanner").style.display = "none";
+        document.getElementById("divBanner").style.display = "none";
         document
           .getElementById("divCenterHeader")
           .classList.remove("divCenterHeaderRetracted");
@@ -677,14 +691,14 @@ export default {
     resetSearch() {
       //document.getElementById("searchSong").value = "";
       document.getElementById("pZeroMatches").style.display = "none";
-      this.showOrHideArtistBanner("hide");
+      this.showOrHideBanner("hide");
       for (let i = 0; i < this.songs.length; i++) {
         this.songs[i].Show = true;
       }
     },
-    searchSong(value, showArtistBannerObj = {}) {
+    searchSong(value, showBannerObj = null, type = null) {
       let searchQuery = "";
-
+      console.log(showBannerObj);
       // Determines wether to search using query from search field or parameter
       if (value == undefined) {
         searchQuery = document.getElementById("searchSong").value.toLowerCase();
@@ -724,8 +738,8 @@ export default {
         }
       }
 
-      if (Object.keys(showArtistBannerObj).length > 0) {
-        this.showOrHideArtistBanner("show", showArtistBannerObj);
+      if (showBannerObj) {
+        this.showOrHideBanner("show", showBannerObj, type);
       }
     },
     toggleShufflePlay() {
@@ -783,23 +797,25 @@ export default {
       );
     },
     playRandom() {
-      console.log("Playing random song...");
+      // console.log("Playing random song...");
       let next = this.songs[Math.floor(Math.random() * this.songs.length)];
       this.playSong(next);
     },
     muteUnmute(mode) {
       if (mode == "mute") {
+        this.muteStatus = true;
         document.getElementById("volumeMute").style.display = "block";
         document.getElementById("volumeUp").style.display = "none";
         this.oldVol = document.getElementById("wavesurferVolume").value;
         document.getElementById("wavesurferVolume").value = 0;
-        this.wavesurfer.setVolume(0);
-      } else {
+        this.wavesurfer.setMute(true);
+      } else if (mode == "unmute") {
+        this.muteStatus = false;
         document.getElementById("volumeMute").style.display = "none";
         document.getElementById("volumeUp").style.display = "block";
-        document.getElementById("wavesurferVolume");
         document.getElementById("wavesurferVolume").value = this.oldVol;
         this.wavesurfer.setVolume((this.oldVol * this.oldVol) / 10000);
+        this.wavesurfer.setMute(false);
       }
     },
     minimizeMaximizePlayer(mode) {
@@ -879,7 +895,7 @@ export default {
   },
   watch: {
     loggedIn: function() {
-      console.log("Fetching all songs...");
+      console.log("Fetching all tracks...");
       var self = this;
       fetch(self.apiURL + "getAllSongs.php", {
         method: "post"
@@ -952,6 +968,7 @@ export default {
       if (!runOnce) {
         document.title = "Fury Music";
         self.elapsedPlaytime = "0:00";
+        self.wavesurfer.setMute(self.muteStatus);
         document.getElementById(
           "play" + self.currentSong.SongID
         ).style.display = "none";
@@ -1304,9 +1321,9 @@ font-awesome-icon {
   text-align: left;
 }
 
-#divArtistBanner {
+#divBanner {
   position: absolute;
-  display: none; 
+  display: none;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.6);
   left: 171px;
@@ -1315,25 +1332,25 @@ font-awesome-icon {
   height: 200px;
 }
 
-#imgArtistBannerImage {
+#imgBannerImage {
   box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.75);
   margin-left: 25px;
   width: 150px;
   max-height: 150px;
 }
 
-#divArtistBannerInfoWrapper {
+#divBannerInfoWrapper {
   margin-left: 25px;
 }
 
-#spanArtistBannerHeader {
+#spanBannerHeader {
   position: absolute;
   color: white;
   font-size: 55px;
   top: 55px;
 }
 
-#spanArtistBannerDesc {
+#spanBannerDesc {
   position: absolute;
   color: white;
   font-size: 20px;
@@ -1341,9 +1358,9 @@ font-awesome-icon {
 }
 
 #logo {
-  margin-top: 20px;
+  margin-top: 35px;
   margin-bottom: 45px;
-  width: 65px;
+  width: 115px;
 }
 
 #divSidebarCurrentSongInfo {
@@ -1440,7 +1457,7 @@ font-awesome-icon {
 }
 
 .divCenterRetractedTop {
-  top: 250px;
+  top: 260px;
 }
 
 #waveform {

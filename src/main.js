@@ -31,7 +31,6 @@ import {
   faShareAlt
 } from "@fortawesome/free-solid-svg-icons";
 import VueTilt from "vue-tilt.js"; 
-
 Vue.use(Vuex);
 Vue.use(VueTilt); 
 
