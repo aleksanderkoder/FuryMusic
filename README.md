@@ -11,16 +11,15 @@
 ***This project is still work-in-progress***
 
 
-  <img src="https://user-images.githubusercontent.com/49065176/141188411-7a34f794-ca1a-44db-80de-cde3e7d262b9.png" width="600"> 
+  <img src="https://user-images.githubusercontent.com/49065176/143778448-633e9b0c-efe3-4c63-a83a-588552f1d3e7.png" width="600"> 
 
 The sign in page where users can sign into their personal accounts. 
 
-  <img src="https://user-images.githubusercontent.com/49065176/141188081-8d0984d4-6a08-4cf3-ae3f-f1f765bbc269.png" width="600">
+  <img src="https://user-images.githubusercontent.com/49065176/143778426-b60e7c7e-4136-4f17-a886-f5ef3db7d507.png" width="600">
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
   <img src="https://user-images.githubusercontent.com/49065176/143778202-2695d86a-a082-40de-a05b-c982445e678e.png" width="600">
-  
   
 The banner showcasing the artist or album based on user selection. 
 
