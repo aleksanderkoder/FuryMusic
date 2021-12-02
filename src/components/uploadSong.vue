@@ -1,7 +1,7 @@
 <template>
   <div
     id="background"
-    v-on:click.self="cancel()"
+    v-on:click.self="$store.commit('hideUploadSongComponent');"
     class="animate__animated animate__fadeIn"
   >
     <div
@@ -11,7 +11,7 @@
       <font-awesome-icon
         style="font-size: 25px; position: fixed; right: 25px; top: 15px; cursor: pointer;"
         :icon="['fas', 'times']"
-        v-on:click="cancel()"
+        v-on:click="$store.commit('hideUploadSongComponent');"
       />
       <h1>Upload track</h1>
       <form onSubmit="return false">
@@ -136,7 +136,7 @@ export default {
                 "inline-block";
               if (response.status == 1) {
                 Ozone.fire("success", response.message, "bottom-middle");
-                self.$emit("hideUploadSongComponent");
+                self.$store.commit('hideUploadSongComponent');
                 setTimeout(() => {
                   location.reload();
                 }, 3000);
@@ -153,9 +153,6 @@ export default {
             Ozone.fire("error", "Server out of reach", "top-right");
           });
       }
-    },
-    cancel() {
-      this.$emit("hideUploadSongComponent");
     },
     regEx() {
       let regEx = /^[0-9a-zæøåA-ZÆØÅ%!?=&/'-:+,\s]{1,55}$/;
@@ -255,7 +252,7 @@ export default {
   width: 100%;
   height: 100%;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.35);
   z-index: 999;
 }
 

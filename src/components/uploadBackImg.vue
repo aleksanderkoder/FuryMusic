@@ -1,5 +1,9 @@
 <template>
-  <div id="background" v-on:click.self="cancel()" class="animate__animated animate__fadeIn">
+  <div
+    id="background"
+    v-on:click.self="$store.commit('hideCustomImageComponent')"
+    class="animate__animated animate__fadeIn"
+  >
     <div
       class="animate__animated animate__fadeInDownBig"
       id="divCustomBackImgWrapper"
@@ -7,7 +11,7 @@
       <font-awesome-icon
         style="font-size: 25px; position: fixed; right: 25px; top: 15px; cursor: pointer;"
         :icon="['fas', 'times']"
-        v-on:click="cancel()"
+        v-on:click="$store.commit('hideCustomImageComponent')"
       />
       <h1>Upload background image</h1>
       <label for="file" id="btnChooseImage"> Select image </label>
@@ -18,7 +22,7 @@
         v-on:change="uploadImage()"
       />
       <br />
-      <img src="" id="imageShowcase" width="350px"  />
+      <img src="" id="imageShowcase" width="350px" />
       <div v-show="showConfirm">
         <h2>Do you want to use this image?</h2>
         <button id="btnConfirmUpload" v-on:click="useImage()">
@@ -38,7 +42,7 @@ export default {
   data() {
     return {
       objectURL: "",
-      showConfirm: false,
+      showConfirm: false
     };
   },
   methods: {
@@ -63,20 +67,16 @@ export default {
       const image = document.getElementById("file").files[0];
       const reader = new FileReader();
       reader.readAsDataURL(image);
-      reader.addEventListener("loadend", function () {
+      reader.addEventListener("loadend", function() {
         try {
           localStorage.setItem("custom_background_image", reader.result);
-          Ozone.fire(
-            "info",
-            "Background image changed",
-            "bottom-middle"
-          );
+          Ozone.fire("info", "Background image changed", "bottom-middle");
           URL.revokeObjectURL(this.objectURL);
           document.getElementById("imageShowcase").src = "";
           self.showConfirm = false;
-          self.$emit("hideCustomBackgroundImageComponent");
-          setTimeout( () => {
-            location.reload(); 
+          self.$store.commit("hideCustomImageComponent");
+          setTimeout(() => {
+            location.reload();
           }, 3000);
         } catch (e) {
           console.log("Error: " + e);
@@ -92,22 +92,16 @@ export default {
         "Background image has been reverted to default",
         "bottom-middle"
       );
-      this.$emit("hideCustomBackgroundImageComponent");
-      setTimeout( () => {
-        location.reload(); 
+      this.$store.commit('hideCustomImageComponent'); 
+      setTimeout(() => {
+        location.reload();
       }, 3000);
-    },
-    cancel() {
-      this.showConfirm = false;
-      document.getElementById("imageShowcase").src = "";
-      this.$emit("hideCustomBackgroundImageComponent");
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
-
 #btnConfirmUpload,
 #btnChooseImage {
   margin: 20px;
@@ -173,12 +167,12 @@ export default {
 
 #background {
   position: absolute;
-  display: flex; 
+  display: flex;
   align-items: center;
   width: 100%;
   height: 100%;
-  top: 0; 
-  background-color: rgba(0, 0, 0, 0.25);
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.35);
   z-index: 999;
 }
 

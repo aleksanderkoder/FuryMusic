@@ -60,7 +60,7 @@
 
       <h3>Playlists</h3>
 
-      <button id="btnUploadSong" v-on:click="showUploadSong = true">
+      <button id="btnUploadSong" v-on:click="$store.commit('showUploadSongComponent')">
         <font-awesome-icon style="color: grey" :icon="['fas', 'plus']" />
         Upload track
       </button>
@@ -277,14 +277,14 @@
         <font-awesome-icon
           id="volumeUp"
           title="Mute"
-          v-on:click="muteUnmute('mute')"
+          v-on:click="mute()"
           style="position: absolute; bottom: 15px; left: 30px; color: white; font-size: 17px; cursor: pointer;"
           :icon="['fas', 'volume-up']"
         />
         <font-awesome-icon
           id="volumeMute"
           title="Unmute"
-          v-on:click="muteUnmute('unmute')"
+          v-on:click="unmute()"
           style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px; display: none; cursor: pointer;"
           :icon="['fas', 'volume-mute']"
         />
@@ -356,7 +356,7 @@
       id="customBackgroundImagePanel"
       @mouseover="uploadImgLabel = true"
       @mouseleave="uploadImgLabel = false"
-      v-on:click="showCustomBackImg = true"
+      v-on:click="$store.commit('showCustomImageComponent')"
     >
       <span v-show="uploadImgLabel" class="animate__animated animate__bounceIn"
         >Change background image</span
@@ -365,13 +365,11 @@
     </div>
 
     <UploadBackImg
-      v-show="showCustomBackImg"
-      @hideCustomBackgroundImageComponent="showCustomBackImg = false"
+      v-show="$store.state.showCustomImage"
     />
 
     <UploadSong
-      v-show="showUploadSong"
-      @hideUploadSongComponent="showUploadSong = false"
+      v-show="$store.state.showUploadSong"
     />
   </div>
 </template>
@@ -410,7 +408,7 @@ export default {
       elapsedPlaytime: 0,
       showCustomBackImg: false,
       uploadImgLabel: false,
-      showUploadSong: false,
+      // showUploadSong: false,
       loading: false,
       oldVol: 0,
       toggleShuffle: false,
@@ -648,14 +646,12 @@ export default {
       }
     },
     showOrHideBanner(mode, showBannerObj = null, type = null) {
-      let specific;
-      let text;
       if (type == "artist") {
-        specific = showBannerObj.ArtistName;
-        text = "Showing tracks by " + showBannerObj.ArtistName;
+        document.getElementById("spanBannerHeader").innerHTML = showBannerObj.ArtistName;
+        document.getElementById("spanBannerDesc").innerHTML = "Showing tracks by this artist";
       } else if (type == "album") {
-        specific = showBannerObj.Album;
-        text = "Album";
+        document.getElementById("spanBannerHeader").innerHTML = showBannerObj.Album;
+        document.getElementById("spanBannerDesc").innerHTML = "Album by " + showBannerObj.ArtistName;
       }
 
       if (mode == "show") {
@@ -675,8 +671,6 @@ export default {
         } else {
           document.getElementById("imgBannerImage").src = "";
         }
-        document.getElementById("spanBannerHeader").innerHTML = specific;
-        document.getElementById("spanBannerDesc").innerHTML = text;
       } else if (mode == "hide") {
         // Change styling of relevant HTML
         document
@@ -698,7 +692,6 @@ export default {
     },
     searchSong(value, showBannerObj = null, type = null) {
       let searchQuery = "";
-      console.log(showBannerObj);
       // Determines wether to search using query from search field or parameter
       if (value == undefined) {
         searchQuery = document.getElementById("searchSong").value.toLowerCase();
@@ -801,22 +794,21 @@ export default {
       let next = this.songs[Math.floor(Math.random() * this.songs.length)];
       this.playSong(next);
     },
-    muteUnmute(mode) {
-      if (mode == "mute") {
+    mute() {
         this.muteStatus = true;
         document.getElementById("volumeMute").style.display = "block";
         document.getElementById("volumeUp").style.display = "none";
         this.oldVol = document.getElementById("wavesurferVolume").value;
         document.getElementById("wavesurferVolume").value = 0;
         this.wavesurfer.setMute(true);
-      } else if (mode == "unmute") {
-        this.muteStatus = false;
-        document.getElementById("volumeMute").style.display = "none";
-        document.getElementById("volumeUp").style.display = "block";
-        document.getElementById("wavesurferVolume").value = this.oldVol;
-        this.wavesurfer.setVolume((this.oldVol * this.oldVol) / 10000);
-        this.wavesurfer.setMute(false);
-      }
+    },
+    unmute() {
+      this.muteStatus = false;
+      document.getElementById("volumeMute").style.display = "none";
+      document.getElementById("volumeUp").style.display = "block";
+      document.getElementById("wavesurferVolume").value = this.oldVol;
+      this.wavesurfer.setVolume((this.oldVol * this.oldVol) / 10000);
+      this.wavesurfer.setMute(false);
     },
     minimizeMaximizePlayer(mode) {
       let self = this;
@@ -931,7 +923,8 @@ export default {
       height: 100,
       normalize: false,
       fillParent: true,
-      responsive: true
+      responsive: true,
+      hideScrollbar: true
     });
 
     // Event for when song finishes
@@ -953,6 +946,7 @@ export default {
       }, 3000);
     });
 
+    // Event that fires continuously during audio playback 
     this.wavesurfer.on("audioprocess", function(progress) {
       let minutes = parseInt(progress / 60);
       let seconds = parseInt(progress - minutes * 60);
@@ -1311,7 +1305,7 @@ font-awesome-icon {
 
 #divTopbar {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.8);
   height: 27px;
   left: 171px;
   right: 0;
@@ -1471,6 +1465,7 @@ font-awesome-icon {
   margin-left: 260px;
   outline: none;
   cursor: pointer;
+  overflow: hidden;
 }
 
 #controlsWrapper {

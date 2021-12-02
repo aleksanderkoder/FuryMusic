@@ -40,7 +40,7 @@ const store = new Vuex.Store({
     showPlayer: false,
     showRegUser: false,
     showUploadSong: false,
-    showCustomImagePanel: false,
+    showCustomImage: false,
     username: ""
   },
   mutations: {
@@ -57,8 +57,17 @@ const store = new Vuex.Store({
       state.showRegUser = true;
       state.showLogIn = false;
     },
-    showUploadSong(state) {
+    showUploadSongComponent(state) {
       state.showUploadSong = true;
+    },
+    hideUploadSongComponent(state) {
+      state.showUploadSong = false;
+    },
+    showCustomImageComponent(state) {
+      state.showCustomImage = true;
+    },
+    hideCustomImageComponent(state) {
+      state.showCustomImage = false; 
     },
     updateUsername(state, inUsername) {
       state.username = inUsername;
