@@ -58,9 +58,19 @@
         >My uploaded tracks</span
       >
 
-      <h3>Playlists</h3>
+      <div id="divPlaylists">
+        <h3>Playlists</h3>
+        <!-- TODO: Make function for creating new playlist -->
+        <button id="btnNewPlaylist" v-on:click="createNewPlaylist()">
+          <font-awesome-icon style="color: grey" :icon="['fas', 'plus']" />
+          New playlist
+        </button>
+      </div>
 
-      <button id="btnUploadSong" v-on:click="$store.commit('showUploadSongComponent')">
+      <button
+        id="btnUploadSong"
+        v-on:click="$store.commit('showUploadSongComponent')"
+      >
         <font-awesome-icon style="color: grey" :icon="['fas', 'plus']" />
         Upload track
       </button>
@@ -298,7 +308,7 @@
         />
       </div>
       <span id="spanElapsedPlaytime">{{ elapsedPlaytime }}</span>
-      <div id="waveform" v-on:click="waveformInteraction()"></div>
+      <div id="waveform"></div>
       <span id="spanTotalPlaytime">{{ currentSong.Length }}</span>
     </div>
 
@@ -364,13 +374,9 @@
       <font-awesome-icon :icon="['fas', 'image']" />
     </div>
 
-    <UploadBackImg
-      v-show="$store.state.showCustomImage"
-    />
+    <UploadBackImg v-show="$store.state.showCustomImage" />
 
-    <UploadSong
-      v-show="$store.state.showUploadSong"
-    />
+    <UploadSong v-show="$store.state.showUploadSong" />
   </div>
 </template>
 
@@ -480,9 +486,9 @@ export default {
       if (mode == "play") {
         this.wavesurfer.play();
         document.title =
-          "Playing '" +
+          "Playing " +
           this.currentSong.SongName +
-          "' by " +
+          " by " +
           this.currentSong.ArtistName;
         document.getElementById("divPlay").style.display = "none";
         document.getElementById("divPause").style.display = "block";
@@ -566,9 +572,9 @@ export default {
       else if (this.currentSong.SongID == song.SongID) {
         this.wavesurfer.play();
         document.title =
-          "Playing '" +
+          "Playing " +
           this.currentSong.SongName +
-          "' by " +
+          " by " +
           this.currentSong.ArtistName;
         // document.getElementById("pause" + song.SongID).style.display = "block";
         document.getElementById("running" + song.SongID).style.display =
@@ -637,21 +643,17 @@ export default {
         });
       }
     },
-    waveformInteraction() {
-      let self = this;
-      if (this.wavesurfer.isPlaying()) {
-        setTimeout(function() {
-          self.wavesurfer.play();
-        }, 1);
-      }
-    },
     showOrHideBanner(mode, showBannerObj = null, type = null) {
       if (type == "artist") {
-        document.getElementById("spanBannerHeader").innerHTML = showBannerObj.ArtistName;
-        document.getElementById("spanBannerDesc").innerHTML = "Showing tracks by this artist";
+        document.getElementById("spanBannerHeader").innerHTML =
+          showBannerObj.ArtistName;
+        document.getElementById("spanBannerDesc").innerHTML =
+          "Showing tracks by this artist";
       } else if (type == "album") {
-        document.getElementById("spanBannerHeader").innerHTML = showBannerObj.Album;
-        document.getElementById("spanBannerDesc").innerHTML = "Album by " + showBannerObj.ArtistName;
+        document.getElementById("spanBannerHeader").innerHTML =
+          showBannerObj.Album;
+        document.getElementById("spanBannerDesc").innerHTML =
+          "Album by " + showBannerObj.ArtistName;
       }
 
       if (mode == "show") {
@@ -795,12 +797,12 @@ export default {
       this.playSong(next);
     },
     mute() {
-        this.muteStatus = true;
-        document.getElementById("volumeMute").style.display = "block";
-        document.getElementById("volumeUp").style.display = "none";
-        this.oldVol = document.getElementById("wavesurferVolume").value;
-        document.getElementById("wavesurferVolume").value = 0;
-        this.wavesurfer.setMute(true);
+      this.muteStatus = true;
+      document.getElementById("volumeMute").style.display = "block";
+      document.getElementById("volumeUp").style.display = "none";
+      this.oldVol = document.getElementById("wavesurferVolume").value;
+      document.getElementById("wavesurferVolume").value = 0;
+      this.wavesurfer.setMute(true);
     },
     unmute() {
       this.muteStatus = false;
@@ -928,7 +930,7 @@ export default {
     });
 
     // Event for when song finishes
-    this.wavesurfer.on("finish", function() {
+    this.wavesurfer.on("finish", () => {
       document.title = "Fury Music";
       self.elapsedPlaytime = self.currentSong.Length;
       document.getElementById("play" + self.currentSong.SongID).style.display =
@@ -946,8 +948,15 @@ export default {
       }, 3000);
     });
 
-    // Event that fires continuously during audio playback 
-    this.wavesurfer.on("audioprocess", function(progress) {
+    // Event for waveform interaction
+    this.wavesurfer.on("seek", () => {
+      if (this.wavesurfer.isPlaying()) {
+        this.wavesurfer.play();
+      }
+    });
+
+    // Event that fires continuously during audio playback
+    this.wavesurfer.on("audioprocess", progress => {
       let minutes = parseInt(progress / 60);
       let seconds = parseInt(progress - minutes * 60);
       if (seconds < 10) {
@@ -958,7 +967,7 @@ export default {
 
     // Fires when a song is loading
     let runOnce = false;
-    this.wavesurfer.on("loading", function(progress) {
+    this.wavesurfer.on("loading", progress => {
       if (!runOnce) {
         document.title = "Fury Music";
         self.elapsedPlaytime = "0:00";
@@ -995,7 +1004,7 @@ export default {
     });
 
     // Fires when wavesurfer is ready
-    this.wavesurfer.on("waveform-ready", function() {
+    this.wavesurfer.on("waveform-ready", () => {
       self.loading = false;
       runOnce = false;
       document.getElementById("songLoader").style.display = "none";
@@ -1020,7 +1029,7 @@ export default {
     if (localStorage.getItem("volume")) {
       volumeSlider.value = localStorage.getItem("volume");
     }
-    volumeSlider.oninput = function() {
+    volumeSlider.oninput = () => {
       let vol = (volumeSlider.value * volumeSlider.value) / 10000;
       self.wavesurfer.setVolume(vol);
       localStorage.setItem("volume", volumeSlider.value);
@@ -1222,7 +1231,7 @@ export default {
 }
 
 .divCenterHeaderRetracted {
-  top: 228px;
+  top: 231px;
 }
 
 .divSongsHeader {
@@ -1322,7 +1331,7 @@ font-awesome-icon {
   background-color: rgba(0, 0, 0, 0.6);
   left: 171px;
   right: 0;
-  top: 28px;
+  top: 31px;
   height: 200px;
 }
 
@@ -1432,6 +1441,27 @@ font-awesome-icon {
   border-top: 1px solid white;
   border-bottom: 1px solid white;
   color: white;
+}
+
+#btnNewPlaylist {
+  width: inherit;
+  background-color: transparent;
+  border: none;
+  color: grey;
+  padding: 10px;
+  font-family: "Monsterrat", sans-serif;
+  transition: 0.3s;
+}
+
+#btnNewPlaylist:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+#divPlaylists {
+  width: inherit;
+  /* border: 1px solid red;  */
+  height: calc(100% - 580px);
 }
 
 .divCenter {
@@ -1611,7 +1641,7 @@ font-awesome-icon {
 }
 
 #btnSignOut:hover {
-  background-color: rgb(194, 79, 79);
+  background-color: rgb(185, 32, 32);
 }
 
 #divPlayerWrapper {

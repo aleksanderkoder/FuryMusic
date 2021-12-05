@@ -122,12 +122,12 @@ a {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.7); 
+  background: white; 
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: rgb(184, 183, 183); 
 }
 
 @font-face {
@@ -145,6 +145,7 @@ a {
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
 
+/* To remove 000webhost label */
 img[src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"] {
   display: none; 
 }
