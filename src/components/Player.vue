@@ -46,6 +46,7 @@
         src="../assets/fury-logo-prototype.webp"
         title="Fury Music"
         alt="Fury Music logo"
+        v-on:click="resetSearch()"
         class="animate__animated animate__pulse animate__infinite animate__slow"
         width="115"
       />
@@ -83,7 +84,9 @@
         <img
           v-tilt="{ speed: 400, perspective: 500 }"
           id="SongCoverImage"
+          alt="Track cover image"
           v-bind:src="currentSong.SongImageURL"
+          v-show="currentSong.SongImageURL"
         />
         <p
           class="clickToSearch two-line"
@@ -428,12 +431,22 @@ export default {
   },
   methods: {
     showRunningIcon(id) {
-      if (this.currentSong.SongID != id || !this.wavesurfer.isPlaying()) return;
+      if (
+        this.currentSong.SongID != id ||
+        this.muteStatus ||
+        !this.wavesurfer.isPlaying()
+      )
+        return;
       document.getElementById("running" + id).style.display = "none";
       document.getElementById("pause" + id).style.display = "block";
     },
     hideRunningIcon(id) {
-      if (this.currentSong.SongID != id || !this.wavesurfer.isPlaying()) return;
+      if (
+        this.currentSong.SongID != id ||
+        this.muteStatus ||
+        !this.wavesurfer.isPlaying()
+      )
+        return;
       document.getElementById("running" + id).style.display = "block";
       document.getElementById("pause" + id).style.display = "none";
     },
@@ -484,7 +497,7 @@ export default {
     },
     wavePlayPauseToggle(mode) {
       if (mode == "play") {
-        this.wavesurfer.play();
+        this.volumeFadeIn();
         document.title =
           "Playing " +
           this.currentSong.SongName +
@@ -502,7 +515,8 @@ export default {
           "running" + this.currentSong.SongID
         ).style.display = "block";
       } else if (mode == "pause") {
-        this.wavesurfer.pause();
+        this.volumeFadeOut();
+        // this.wavesurfer.pause();
         document.title = "Paused";
         document.getElementById("divPause").style.display = "none";
         document.getElementById("divPlay").style.display = "block";
@@ -545,8 +559,36 @@ export default {
         // navigator.mediaSession.setActionHandler('seekforward', function() {});
       }
     },
+    // TODO: Make spammed clicks be ignored until fade is complete!
+    volumeFadeIn() {
+      this.wavesurfer.setVolume(0);
+      this.muteStatus = false;
+      this.wavesurfer.play();
+      let int = setInterval(() => {
+        if (
+          this.wavesurfer.getVolume() <
+          localStorage.getItem("volume") / 100 - 0.05
+        ) {
+          this.wavesurfer.setVolume(this.wavesurfer.getVolume() + 0.05);
+        } else {
+          clearInterval(int);
+        }
+      }, 50);
+    },
+    volumeFadeOut() {
+      this.muteStatus = true;
+      let int = setInterval(() => {
+        if (this.wavesurfer.getVolume() > 0.05) {
+          this.wavesurfer.setVolume(this.wavesurfer.getVolume() - 0.05);
+        } else {
+          this.wavesurfer.setVolume(0);
+          this.wavesurfer.pause();
+          clearInterval(int);
+        }
+      }, 50);
+    },
     playSong(song) {
-      if (this.loading) return; // If something is already loading, don't do anything, temp workaround for an issue
+      if (this.loading) return; // If something is already loading, don't do anything, temp work-around for an issue
 
       if (
         !document
@@ -570,7 +612,7 @@ export default {
       }
       // Continues paused song
       else if (this.currentSong.SongID == song.SongID) {
-        this.wavesurfer.play();
+        this.volumeFadeIn();
         document.title =
           "Playing " +
           this.currentSong.SongName +
@@ -616,11 +658,12 @@ export default {
       }
     },
     pauseSong(SongID) {
-      this.wavesurfer.pause();
+      this.volumeFadeOut();
       document.getElementById("play" + SongID).style.display = "block";
       document.getElementById("pause" + SongID).style.display = "none";
       document.getElementById("divPlay").style.display = "block";
       document.getElementById("divPause").style.display = "none";
+      document.getElementById("running" + SongID).style.display = "none";
       document.title = "Paused";
     },
     populateSongList(songs) {
@@ -943,7 +986,7 @@ export default {
       document.getElementById("divPlay").style.display = "block";
       document.getElementById("divPause").style.display = "none";
 
-      setTimeout(function() {
+      setTimeout(() => {
         if (!self.wavesurfer.isPlaying() && !self.loading) self.playNext();
       }, 3000);
     });
@@ -954,6 +997,16 @@ export default {
         this.wavesurfer.play();
       }
     });
+
+    // Event for when wavesurfer audio plays
+    // this.wavesurfer.on("play", () => {
+    //   self.volumeFadeIn();
+    // });
+
+    // Event for when wavesurfer audio pauses
+    // this.wavesurfer.on("pause", () => {
+    //   self.volumeFadeOut();
+    // });
 
     // Event that fires continuously during audio playback
     this.wavesurfer.on("audioprocess", progress => {
@@ -1043,6 +1096,18 @@ export default {
         document.getElementById("volumeUp").style.display = "block";
       }
     };
+
+    // Event for when space bar is pressed, mutes or plays track
+    document.addEventListener("keydown", key => {
+      if(this.currentSong.SongID == "") return;
+
+      key.preventDefault();
+      if (key.code == "Space" && this.wavesurfer.isPlaying()) {
+        this.wavePlayPauseToggle("pause");
+      } else if (key.code == "Space" && !this.wavesurfer.isPlaying()) {
+        this.wavePlayPauseToggle("play");
+      }
+    });
   }
 };
 </script>
@@ -1364,6 +1429,7 @@ font-awesome-icon {
   margin-top: 35px;
   margin-bottom: 45px;
   width: 115px;
+  cursor: pointer;
 }
 
 #divSidebarCurrentSongInfo {
