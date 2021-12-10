@@ -5,6 +5,8 @@
 > Live beta version: https://furymusicplayer.000webhostapp.com/ 
 
 > Test user credentials: testuser, testpass
+
+> NOTE: There are certain issues found in non-chromium browsers related to uploading tracks. This will be fixed. 
  
 ## Screenshots
 
