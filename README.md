@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/49065176/145634727-793e46fc-0cdd-4b18-b78f-c72859be1746.png" width="115"> 
+<img src="https://user-images.githubusercontent.com/49065176/145634727-793e46fc-0cdd-4b18-b78f-c72859be1746.png" style="margin-left: 10px" width="115"> 
 
 # Fury Music
 
