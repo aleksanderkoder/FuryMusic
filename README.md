@@ -1,10 +1,11 @@
-<img src="https://user-images.githubusercontent.com/49065176/145634727-793e46fc-0cdd-4b18-b78f-c72859be1746.png" width="115"> 
+<img src="https://user-images.githubusercontent.com/49065176/145635736-888ad854-d5c5-42b8-a3b2-43eb9aa26a0d.png" width="115"> 
 
 # Fury Music
 
 > A music player application built for the web.
 
-> Live beta version: https://furymusicplayer.000webhostapp.com/ 
+> Live beta version: https://furymusicplayer.000webhostapp.com/
+
 
 > Test user credentials: testuser, testpass
 
