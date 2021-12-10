@@ -1,3 +1,5 @@
+<img src="https://user-images.githubusercontent.com/49065176/145633959-3435afab-84fc-48eb-8b57-e0fc3090dce2.png" width="115"> 
+
 # Fury Music
 
 > A music player application built for the web.
@@ -7,7 +9,7 @@
 > Test user credentials: testuser, testpass
 
 > NOTE: There are certain issues found in non-chromium browsers related to uploading tracks. This will be fixed. 
- 
+
 ## Screenshots
 
 ***This project is still work-in-progress***
