@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/49065176/145633959-3435afab-84fc-48eb-8b57-e0fc3090dce2.png" width="115"> 
+<img src="https://user-images.githubusercontent.com/49065176/145634727-793e46fc-0cdd-4b18-b78f-c72859be1746.png" width="115"> 
 
 # Fury Music
 
@@ -7,6 +7,7 @@
 > Live beta version: https://furymusicplayer.000webhostapp.com/ 
 
 > Test user credentials: testuser, testpass
+
 
 > NOTE: There are certain issues found in non-chromium browsers related to uploading tracks. This will be fixed in later versions. 
 
