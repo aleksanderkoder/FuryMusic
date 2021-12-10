@@ -8,7 +8,7 @@
 
 > Test user credentials: testuser, testpass
 
-> NOTE: There are certain issues found in non-chromium browsers related to uploading tracks. This will be fixed. 
+> NOTE: There are certain issues found in non-chromium browsers related to uploading tracks. This will be fixed in later versions. 
 
 ## Screenshots
 
