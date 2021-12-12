@@ -53,6 +53,8 @@ An example of what the main interface looks like with a custom background image.
 - Search for song title, artist, album and publisher (the user who uploaded the music) by search field or clicking the fields in each song tile 
 - Support for hardware media keys
 - OpenGraph support for song links
+- Press space to pause or resume current song
+- Volume fade in or out for a smoother audio experience
 
 ## Build Setup
 
