@@ -415,9 +415,7 @@ export default {
       songHistory: [],
       historyIndex: 0,
       elapsedPlaytime: 0,
-      showCustomBackImg: false,
       uploadImgLabel: false,
-      // showUploadSong: false,
       loading: false,
       oldVol: 0,
       toggleShuffle: false,
@@ -562,30 +560,30 @@ export default {
         // navigator.mediaSession.setActionHandler('seekforward', function() {});
       }
     },
-    // TODO: Make spammed clicks be ignored until fade is complete!
     volumeFadeIn() {
       this.wavesurfer.setVolume(0);
+      this.wavesurfer.setMute(false);
       this.muteStatus = false;
-      this.isFading = true; 
+      this.isFading = true;
       this.wavesurfer.play();
       let int = setInterval(() => {
         if (
           this.wavesurfer.getVolume() <
-          localStorage.getItem("volume") / 100 - 0.075
+          localStorage.getItem("volume") / 100 - 0.1
         ) {
-          this.wavesurfer.setVolume(this.wavesurfer.getVolume() + 0.075);
+          this.wavesurfer.setVolume(this.wavesurfer.getVolume() + 0.1);
         } else {
-          this.isFading = false; 
+          this.isFading = false;
           clearInterval(int);
         }
       }, 50);
     },
     volumeFadeOut() {
       this.muteStatus = true;
-      this.isFading = true; 
+      this.isFading = true;
       let int = setInterval(() => {
-        if (this.wavesurfer.getVolume() > 0.075) {
-          this.wavesurfer.setVolume(this.wavesurfer.getVolume() - 0.075);
+        if (this.wavesurfer.getVolume() > 0.1) {
+          this.wavesurfer.setVolume(this.wavesurfer.getVolume() - 0.1);
         } else {
           this.isFading = false;
           this.wavesurfer.pause();
@@ -664,7 +662,7 @@ export default {
       }
     },
     pauseSong(SongID) {
-      if(!this.isFading) {
+      if (!this.isFading) {
         this.volumeFadeOut();
         document.getElementById("play" + SongID).style.display = "block";
         document.getElementById("pause" + SongID).style.display = "none";
@@ -673,7 +671,6 @@ export default {
         document.getElementById("running" + SongID).style.display = "none";
         document.title = "Paused";
       }
-      
     },
     populateSongList(songs) {
       for (var i = 0; i < songs.length; i += 8) {
@@ -1108,7 +1105,7 @@ export default {
 
     // Event for when space bar is pressed, mutes or plays track
     document.addEventListener("keydown", key => {
-      if(this.currentSong.SongID == "") return;
+      if (this.currentSong.SongID == "") return;
 
       key.preventDefault();
       if (key.code == "Space" && this.wavesurfer.isPlaying()) {
