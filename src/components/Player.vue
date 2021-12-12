@@ -423,6 +423,7 @@ export default {
       toggleShuffle: false,
       dblclickCounter: 0,
       muteStatus: false,
+      isFading: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -496,6 +497,8 @@ export default {
       }
     },
     wavePlayPauseToggle(mode) {
+      if (this.isFading) return;
+
       if (mode == "play") {
         this.volumeFadeIn();
         document.title =
@@ -563,32 +566,35 @@ export default {
     volumeFadeIn() {
       this.wavesurfer.setVolume(0);
       this.muteStatus = false;
+      this.isFading = true; 
       this.wavesurfer.play();
       let int = setInterval(() => {
         if (
           this.wavesurfer.getVolume() <
-          localStorage.getItem("volume") / 100 - 0.05
+          localStorage.getItem("volume") / 100 - 0.075
         ) {
-          this.wavesurfer.setVolume(this.wavesurfer.getVolume() + 0.05);
+          this.wavesurfer.setVolume(this.wavesurfer.getVolume() + 0.075);
         } else {
+          this.isFading = false; 
           clearInterval(int);
         }
       }, 50);
     },
     volumeFadeOut() {
       this.muteStatus = true;
+      this.isFading = true; 
       let int = setInterval(() => {
-        if (this.wavesurfer.getVolume() > 0.05) {
-          this.wavesurfer.setVolume(this.wavesurfer.getVolume() - 0.05);
+        if (this.wavesurfer.getVolume() > 0.075) {
+          this.wavesurfer.setVolume(this.wavesurfer.getVolume() - 0.075);
         } else {
-          this.wavesurfer.setVolume(0);
+          this.isFading = false;
           this.wavesurfer.pause();
           clearInterval(int);
         }
       }, 50);
     },
     playSong(song) {
-      if (this.loading) return; // If something is already loading, don't do anything, temp work-around for an issue
+      if (this.loading || this.isFading) return; // If something is already loading, don't do anything, temp work-around for an issue
 
       if (
         !document
@@ -658,13 +664,16 @@ export default {
       }
     },
     pauseSong(SongID) {
-      this.volumeFadeOut();
-      document.getElementById("play" + SongID).style.display = "block";
-      document.getElementById("pause" + SongID).style.display = "none";
-      document.getElementById("divPlay").style.display = "block";
-      document.getElementById("divPause").style.display = "none";
-      document.getElementById("running" + SongID).style.display = "none";
-      document.title = "Paused";
+      if(!this.isFading) {
+        this.volumeFadeOut();
+        document.getElementById("play" + SongID).style.display = "block";
+        document.getElementById("pause" + SongID).style.display = "none";
+        document.getElementById("divPlay").style.display = "block";
+        document.getElementById("divPause").style.display = "none";
+        document.getElementById("running" + SongID).style.display = "none";
+        document.title = "Paused";
+      }
+      
     },
     populateSongList(songs) {
       for (var i = 0; i < songs.length; i += 8) {
