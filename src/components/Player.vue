@@ -1107,8 +1107,8 @@ export default {
     document.addEventListener("keydown", key => {
       if (this.currentSong.SongID == "") return;
 
-      key.preventDefault();
       if (key.code == "Space" && this.wavesurfer.isPlaying()) {
+        key.preventDefault();
         this.wavePlayPauseToggle("pause");
       } else if (key.code == "Space" && !this.wavesurfer.isPlaying()) {
         this.wavePlayPauseToggle("play");
