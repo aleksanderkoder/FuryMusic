@@ -25,7 +25,7 @@ The sign in page where users can sign into their personal accounts.
 
 The main interface where songs are played, playlists are made, songs are searched for, and more. 
 
-  <img src="https://user-images.githubusercontent.com/49065176/143778202-2695d86a-a082-40de-a05b-c982445e678e.png" width="600">
+  <img src="https://user-images.githubusercontent.com/49065176/146278898-16c5e4f4-776c-452f-8e2f-971725d1808e.png" width="600">
   
 The banner showcasing the artist or album based on user selection. 
 
@@ -34,7 +34,6 @@ The banner showcasing the artist or album based on user selection.
 An example of what the main interface looks like with a custom background image.
 
 ## Current features
-
 
 - Create your own account and sign in
 - Browse and play user submitted music
