@@ -76,18 +76,22 @@
         Upload track
       </button>
 
+      <canvas id="canvasVisualizer"> </canvas>
+
       <div
         id="divSidebarCurrentSongInfo"
-        v-if="currentSong.SongName != ''"
+        v-show="currentSong.SongName"
         class="animate__animated animate__fadeInLeft"
       >
         <img
-          v-tilt="{ speed: 400, perspective: 500 }"
           id="SongCoverImage"
+          width="120"
           alt="Track cover image"
           v-bind:src="currentSong.SongImageURL"
           v-show="currentSong.SongImageURL"
+          v-tilt="{ speed: 400, perspective: 500 }"
         />
+        
         <p
           class="clickToSearch two-line"
           style="font-weight: bold"
@@ -98,6 +102,7 @@
           {{ currentSong.SongName }}
         </p>
         <p
+          id="pSidebarArtist"
           class="clickToSearch ellipsis"
           v-bind:title="currentSong.ArtistName"
           v-on:click="searchSong(currentSong.ArtistName, currentSong, 'artist')"
@@ -234,7 +239,13 @@
     </div>
 
     <div id="divPlayerControls" class="animate__animated animate__fadeInUp">
-      <div id="controlsWrapper">
+      <div id="divControlsWrapper">
+        <font-awesome-icon
+          id="stepBackwards"
+          title="Previous"
+          v-on:click="playPrevious()"
+          :icon="['fas', 'step-backward']"
+        />
         <div
           id="divPlay"
           v-tilt="{ max: 25, perspective: 200 }"
@@ -274,18 +285,10 @@
           />
         </div>
         <font-awesome-icon
-          id="stepForward"
+          id="stepForwards"
           title="Next"
           v-on:click="playNext()"
-          style="position: absolute; bottom: 55px; left: 153px; color: white; font-size: 17px; cursor: pointer;"
           :icon="['fas', 'step-forward']"
-        />
-        <font-awesome-icon
-          id="stepBackwards"
-          title="Previous"
-          v-on:click="playPrevious()"
-          style="position: absolute; bottom: 55px; left: 30px; color: white; font-size: 17px; cursor: pointer;"
-          :icon="['fas', 'step-backward']"
         />
         <font-awesome-icon
           id="volumeUp"
@@ -315,7 +318,7 @@
       <span id="spanTotalPlaytime">{{ currentSong.Length }}</span>
     </div>
 
-    <div id="divHorizontalCenter">
+    <div id="divAbsoluteCenter">
       <p id="pZeroMatches" class="animate__animated animate__wobble">
         No matches were found
       </p>
@@ -402,6 +405,7 @@ export default {
   data() {
     return {
       wavesurfer: null,
+      mediaElem: null,
       songs: [],
       currentSong: {
         SongID: "",
@@ -422,6 +426,7 @@ export default {
       dblclickCounter: 0,
       muteStatus: false,
       isFading: false,
+      finished: false,  // Is needed for an issue where the "finish" event is fired multiple times when using MediaElement
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -429,6 +434,58 @@ export default {
     loggedIn: Boolean
   },
   methods: {
+    visualizerInit() {
+      var context = new AudioContext();
+      var src = context.createMediaElementSource(this.mediaElem);
+      var analyser = context.createAnalyser();
+
+      var canvas = document.getElementById("canvasVisualizer");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      var ctx = canvas.getContext("2d");
+
+      src.connect(analyser);
+      analyser.connect(context.destination);
+
+      analyser.fftSize = 256;
+
+      var bufferLength = analyser.frequencyBinCount;
+      console.log(bufferLength);
+
+      var dataArray = new Uint8Array(bufferLength);
+
+      var WIDTH = canvas.width;
+      var HEIGHT = canvas.height;
+
+      var barWidth = Math.round((WIDTH / bufferLength) * 2.5);
+      var barHeight;
+      var x = 0;
+
+      let self = this;
+      function renderFrame() {
+        requestAnimationFrame(renderFrame);
+
+        x = 0;
+
+        analyser.getByteFrequencyData(dataArray);
+
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+        for (var i = 0; i < bufferLength; i++) {
+          barHeight = dataArray[i];
+
+          // var r = barHeight + 25 * (i / bufferLength);
+          // var g = 250 * (i / bufferLength);
+          // var b = 50;
+          // console.log(x)
+          ctx.fillStyle = "rgba(255, 255, 255, 1)";
+          ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+
+          x += barWidth;
+        }
+      }
+      renderFrame();
+    },
     showRunningIcon(id) {
       if (
         this.currentSong.SongID != id ||
@@ -607,7 +664,8 @@ export default {
         this.songHistory.push(song);
         this.historyIndex++;
         this.currentSong = song;
-        this.wavesurfer.load(song.SongURL);
+        this.mediaElem.src = song.SongURL;
+        this.wavesurfer.load(this.mediaElem);
         document
           .getElementById("play" + song.SongID)
           .parentElement.parentElement.classList.toggle("divSongPaneSelected");
@@ -653,7 +711,8 @@ export default {
         this.historyIndex++;
         this.songHistory.push(song);
         this.currentSong = song;
-        this.wavesurfer.load(song.SongURL);
+        this.mediaElem.src = song.SongURL;
+        this.wavesurfer.load(this.mediaElem);
         document
           .getElementById("play" + song.SongID)
           .parentElement.parentElement.classList.toggle("divSongPaneSelected");
@@ -964,6 +1023,11 @@ export default {
   mounted() {
     let self = this;
 
+    // Init media element used for rendering the audio visualizer
+    this.mediaElem = document.createElement("audio");
+    this.mediaElem.crossOrigin = "anonymous";
+    this.visualizerInit();
+
     // Initializes the WaveSurfer object
     this.wavesurfer = WaveSurfer.create({
       container: "#waveform",
@@ -979,8 +1043,12 @@ export default {
     });
 
     // Event for when song finishes
+
     this.wavesurfer.on("finish", () => {
+      if (this.finished) return;
+
       document.title = "Fury Music";
+      this.finished = true;
       self.elapsedPlaytime = self.currentSong.Length;
       document.getElementById("play" + self.currentSong.SongID).style.display =
         "block";
@@ -1039,7 +1107,7 @@ export default {
           .getElementById("wavesurferVolume")
           .classList.toggle("disabled");
         document.getElementById("volumeMute").classList.toggle("disabled");
-        document.getElementById("stepForward").classList.toggle("disabled");
+        document.getElementById("stepForwards").classList.toggle("disabled");
         if (
           !document
             .getElementById("stepBackwards")
@@ -1065,11 +1133,12 @@ export default {
     // Fires when wavesurfer is ready
     this.wavesurfer.on("waveform-ready", () => {
       self.loading = false;
+      this.finished = false;
       runOnce = false;
       document.getElementById("songLoader").style.display = "none";
       document.getElementById("divPlay").classList.toggle("disabled");
       document.getElementById("wavesurferVolume").classList.toggle("disabled");
-      document.getElementById("stepForward").classList.toggle("disabled");
+      document.getElementById("stepForwards").classList.toggle("disabled");
       if (self.historyIndex > 1) {
         document.getElementById("stepBackwards").classList.toggle("disabled");
       }
@@ -1373,6 +1442,7 @@ font-awesome-icon {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
+  filter: drop-shadow(3px 3px 2px #000000); 
   -webkit-line-clamp: 2; /* number of lines to show */
   -webkit-box-orient: vertical;
 }
@@ -1470,6 +1540,37 @@ font-awesome-icon {
   z-index: 1;
 }
 
+#stepForwards {
+  padding: 4px;
+  margin-left: 15px;
+  margin-top: 25px;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+#stepBackwards {
+  padding: 4px;
+  margin-right: 15px;
+  margin-top: 25px;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+#stepForwards:hover,
+#stepBackwards:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+}
+
+#canvasVisualizer {
+  position: absolute;
+  bottom: 0;
+  width: inherit;
+  height: 70px;
+}
+
 #songLoader {
   display: none;
   position: absolute;
@@ -1479,7 +1580,8 @@ font-awesome-icon {
   z-index: 1;
 }
 
-#divHorizontalCenter {
+/* Div used to position elements that need to be in the absolute center of screen */
+#divAbsoluteCenter {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1570,9 +1672,12 @@ font-awesome-icon {
   overflow: hidden;
 }
 
-#controlsWrapper {
+#divControlsWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 200px;
-  /* border: 1px solid red;  */
+  height: 100px;
 }
 
 .two-line {
@@ -1586,7 +1691,7 @@ font-awesome-icon {
   text-align: center;
   bottom: 130px;
   color: white;
-  background-color: rgba(0, 0, 0, 0.3);
+  /* background-color: rgba(0, 0, 0, 0.3); */
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
@@ -1662,9 +1767,12 @@ font-awesome-icon {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
+#pSidebarArtist {
+  filter: drop-shadow(3px 3px 2px #000000); 
+}
+
 #SongCoverImage {
   box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.75);
-  max-width: 120px;
 }
 
 #fontDeleteSong,
@@ -1689,10 +1797,8 @@ font-awesome-icon {
 
 #divPlay {
   display: block;
-  margin: auto;
-  margin-top: 15px;
   background-color: white;
-  border-radius: 100%;
+  border-radius: 50%;
   width: 75px;
   height: 75px;
   border: none;
@@ -1700,11 +1806,8 @@ font-awesome-icon {
 }
 
 #divPause {
-  display: block;
-  margin: auto;
-  margin-top: 15px;
   background-color: white;
-  border-radius: 100%;
+  border-radius: 50%;
   width: 75px;
   height: 75px;
   border: none;
