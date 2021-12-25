@@ -46,8 +46,7 @@
         src="../assets/fury-logo-prototype.webp"
         title="Fury Music"
         alt="Fury Music logo"
-        v-on:click="resetSearch()"
-        class="animate__animated animate__pulse animate__infinite animate__slow"
+        v-on:click="resetSearch()"   
         width="115"
       />
       <h3>Your library</h3>
@@ -86,6 +85,7 @@
         <img
           id="SongCoverImage"
           width="120"
+          height="120"
           alt="Track cover image"
           v-bind:src="currentSong.SongImageURL"
           v-show="currentSong.SongImageURL"
@@ -450,7 +450,6 @@ export default {
       analyser.fftSize = 256;
 
       var bufferLength = analyser.frequencyBinCount;
-      console.log(bufferLength);
 
       var dataArray = new Uint8Array(bufferLength);
 
@@ -1174,7 +1173,7 @@ export default {
 
     // Event for when space bar is pressed, mutes or plays track
     document.addEventListener("keydown", key => {
-      if (this.currentSong.SongID == "") return;
+      if (this.currentSong.SongID == "" || this.$store.state.overlayed) return;  // If no song is active, do nothing 
 
       if (key.code == "Space" && this.wavesurfer.isPlaying()) {
         key.preventDefault();
@@ -1691,7 +1690,7 @@ font-awesome-icon {
   text-align: center;
   bottom: 130px;
   color: white;
-  /* background-color: rgba(0, 0, 0, 0.3); */
+  background-color: rgba(0, 0, 0, 0.3);
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;

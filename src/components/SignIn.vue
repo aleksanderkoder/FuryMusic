@@ -1,56 +1,65 @@
 <template>
   <div id="pageWrapper">
     <div class="animate__animated animate__fadeInDownBig" id="divLogInWrapper">
-      <img
-        id="logo"
-        class="animate__animated animate__pulse animate__slow animate__infinite"
-        src="../assets/fury-logo-prototype-full-dark.webp"
-        width="200"
-      />
-      <br />
-      <h2 id="logInTittel">Sign in</h2>
-      <form onSubmit="return false">
-        <font-awesome-icon
-          class="fontAwesome"
-          style="color: black"
-          :icon="['fas', 'user']"
+      <div id="divLeft">
+        <img
+          src="../assets/fury-logo-prototype old large smaller.webp"
+          title="Fury Music"
+          alt="Fury Music logo"
+          width="250"
         />
-        <input
-          type="text"
-          v-model="username"
-          placeholder="Username"
-          id="username"
-        />
+        <h1 id="divLeftTitle">FURY MUSIC</h1>
+        <h2>No account?</h2>
+        <button v-on:click="goToSignUp()" class="btnSecondary">SIGN UP</button>
+      </div>
+      <div id="divRight">
+        <br />
+        <h2 id="logInTittel">
+          USER <br />
+          LOGIN
+        </h2>
+        <form onSubmit="return false">
+          <font-awesome-icon
+            class="fontAwesome"
+            style="color: black"
+            :icon="['fas', 'user']"
+          />
+          <input
+            type="text"
+            v-model="username"
+            placeholder="Username"
+            id="username"
+          />
+          <br />
+          <font-awesome-icon
+            class="fontAwesome"
+            style="color: black"
+            :icon="['fas', 'lock']"
+          />
+          <input
+            type="password"
+            v-model="password"
+            placeholder="Password"
+            id="password"
+          />
+          <br />
+          <p id="error" class="animate__animated animate__shakeX"></p>
+          <input
+            type="submit"
+            v-on:click="signIn()"
+            value="LOGIN"
+            id="btnLogIn"
+          />
+        </form>
+        <br />
         <br />
         <font-awesome-icon
-          class="fontAwesome"
-          style="color: black"
-          :icon="['fas', 'lock']"
+          id="loadingSpinner"
+          :icon="['fas', 'circle-notch']"
+          spin
         />
-        <input
-          type="password"
-          v-model="password"
-          placeholder="Password"
-          id="password"
-        />
-        <br />
-        <p id="error" class="animate__animated animate__shakeX"></p>
-        <input
-          type="submit"
-          v-on:click="signIn()"
-          value="Sign in"
-          id="btnLogIn"
-        />
-      </form>
-      <button id="btnGoToSignUp" v-on:click="goToSignUp()">Sign up</button>
-      <br />
-      <br />
-      <font-awesome-icon
-        id="loadingSpinner"
-        :icon="['fas', 'circle-notch']"
-        spin
-      />
-      <a href="">Forgot password?</a>
+        <a href="">Forgot password?</a>
+      </div>
     </div>
     <p id="makersMark">
       © 2021 Aleksander Johansen
@@ -73,7 +82,6 @@ export default {
       let self = this;
       document.getElementById("loadingSpinner").style.display = "block";
       document.getElementById("btnLogIn").style.display = "none";
-      document.getElementById("btnGoToSignUp").style.display = "none";
       document.getElementById("error").style.display = "none";
 
       if (this.regExSignIn()) {
@@ -90,7 +98,6 @@ export default {
               console.log(text);
               document.getElementById("loadingSpinner").style.display = "none";
               document.getElementById("btnLogIn").style.display = "block";
-              document.getElementById("btnGoToSignUp").style.display = "block";
 
               if (text != "Wrong info") {
                 console.log("Logging in user...");
@@ -136,7 +143,6 @@ export default {
             console.log(error);
             document.getElementById("loadingSpinner").style.display = "none";
             document.getElementById("btnLogIn").style.display = "block";
-            document.getElementById("btnGoToSignUp").style.display = "block";
             Ozone.fire("error", "Server out of reach", "top-right");
           });
       } else {
@@ -145,7 +151,6 @@ export default {
         document.getElementById("error").innerHTML =
           "Please provide a valid username and password!";
         document.getElementById("btnLogIn").style.display = "block";
-        document.getElementById("btnGoToSignUp").style.display = "block";
       }
     },
     regExSignIn() {
@@ -197,23 +202,77 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
+  backdrop-filter: blur(10px);
 }
 
-#logo {
-  width: 200px;
-  margin: 25px 0 25px 0;
+#divRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  padding: 15px;
+}
+
+#divLeft {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  background: url("../assets/polina-silivanova-42_l9l5Pxwk-unsplash.webp")
+    no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#divLeftTitle {
+  margin-bottom: 50px;
+  text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btnSecondary {
+  width: 115px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: transparent;
+  border: 3px solid white;
+  color: white;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.btnSecondary:hover {
+  background-color: white;
+  color: black;
+}
+
+h1 {
+  color: white;
+  font-size: 32px;
+}
+
+h2 {
+  color: white;
+  font-size: 26px;
 }
 
 #divLogInWrapper {
   text-align: center;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1;
   color: #2c3e50;
   background-color: rgba(255, 255, 255, 1);
-  width: 400px;
-  min-height: 670px;
+  width: 1200px;
+  min-height: 675px;
   margin: auto;
-  /* margin-top: 6.5%; */
-  border-radius: 1%;
-  padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   font-family: "Monsterrat";
 }
@@ -222,7 +281,6 @@ export default {
   color: black;
   font-size: 40px;
   display: none;
-  margin: auto;
 }
 
 #username,
@@ -246,17 +304,23 @@ export default {
 #btnLogIn {
   margin: auto;
   margin-top: 20px;
-  background-color: black;
+  background-color: transparent;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: white;
+  color: black;
+  font-size: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   text-decoration: none;
-  border: none;
-  height: 35px;
+  border: 3px solid black;
+  height: 45px;
   width: 140px;
-  border-radius: 4px;
-  font-family: "Wals";
-  transition: 0.3s;
+  transition: 0.2s;
   cursor: pointer;
+}
+
+#btnLogIn:hover {
+  background-color: black;
+  color: white;
 }
 
 #btnGoToSignUp {
@@ -280,11 +344,6 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-#btnLogIn:hover {
-  background-color: #2022259f;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
 #makersMark {
   position: absolute;
   display: block;
@@ -295,10 +354,9 @@ export default {
 }
 
 #logInTittel {
-  border-bottom: 1px solid;
-  width: 75px;
   margin: 20px auto;
   font-family: "Wals";
+  font-size: 45px;
   color: black;
 }
 
@@ -335,10 +393,6 @@ a {
 }
 
 @media screen and (min-width: 3840px) {
-  #logo {
-    width: 450px;
-  }
-
   #divLogInWrapper {
     width: 800px;
     min-height: 1340px;
