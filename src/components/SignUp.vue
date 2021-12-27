@@ -165,11 +165,13 @@ export default {
 
 #errors {
   color: red;
+  font-family: "Monsterrat";
 }
 
 #error2 {
   color: red;
   display: none;
+  font-family: "Monsterrat";
 }
 
 #btnRegUser {

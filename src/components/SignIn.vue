@@ -267,6 +267,7 @@ export default {
 }
 
 #divLeftTitle {
+  font-size: 45px;
   margin-bottom: 50px;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 }
