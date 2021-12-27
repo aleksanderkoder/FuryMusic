@@ -1,62 +1,55 @@
 <template>
-  <div id="pageWrapper">
-    <div class="animate__animated animate__fadeInDown" id="divSignUpWrapper">
-      <img
-        id="logo"
-        class="animate__animated animate__pulse animate__slow animate__infinite"
-        src="../assets/fury-logo-prototype-full-dark.webp"
-        width="200"
+  <div class="animate__animated animate__fadeIn" id="divSignUpWrapper">
+    <h2 id="regUserTittel">
+      USER <br />
+      SIGNUP
+    </h2>
+    <form onSubmit="return false">
+      <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
+      <input
+        type="text"
+        v-model="username"
+        placeholder="Choose a username"
+        id="regUsername"
       />
       <br />
-      <h2 id="regUserTittel">Sign up</h2>
-      <form onSubmit="return false">
-        <font-awesome-icon style="color: black" :icon="['fas', 'user']" />
-        <input
-          type="text"
-          v-model="username"
-          placeholder="Choose a username"
-          id="regUsername"
-        />
-        <br />
-        <font-awesome-icon style="color: black" :icon="['fas', 'at']" />
-        <input
-          type="text"
-          v-model="email"
-          placeholder="Your email address"
-          id="regEmail"
-        />
-        <br />
-        <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
-        <input
-          type="password"
-          v-model="password"
-          placeholder="Choose a password"
-          id="regPassword"
-        />
-        <br />
-        <p
-          id="errors"
-          v-for="error in errors"
-          :key="error"
-          class="animate__animated animate__shakeX"
-        >
-          {{ error }}
-        </p>
-        <p id="error2" class="animate__animated animate__shakeX"></p>
-        <font-awesome-icon
-          id="loadingSpinner"
-          :icon="['fas', 'circle-notch']"
-          spin
-        />
-        <input
-          type="submit"
-          v-on:click="registerUser()"
-          value="Sign up"
-          id="btnRegUser"
-        />
-      </form>
-      <button id="btnBack" v-on:click="goToSignIn()">Back to sign in</button>
-    </div>
+      <font-awesome-icon style="color: black" :icon="['fas', 'at']" />
+      <input
+        type="text"
+        v-model="email"
+        placeholder="Your email address"
+        id="regEmail"
+      />
+      <br />
+      <font-awesome-icon style="color: black" :icon="['fas', 'lock']" />
+      <input
+        type="password"
+        v-model="password"
+        placeholder="Choose a password"
+        id="regPassword"
+      />
+      <br />
+      <p
+        id="errors"
+        v-for="error in errors"
+        :key="error"
+        class="animate__animated animate__shakeX"
+      >
+        {{ error }}
+      </p>
+      <p id="error2" class="animate__animated animate__shakeX"></p>
+      <font-awesome-icon
+        id="loadingSpinner"
+        :icon="['fas', 'circle-notch']"
+        spin
+      />
+      <input
+        type="submit"
+        v-on:click="registerUser()"
+        value="SIGNUP"
+        id="btnRegUser"
+      />
+    </form>
   </div>
 </template>
 
@@ -141,40 +134,21 @@ export default {
       } else {
         this.errors.push("Please enter your information above!");
       }
-    },
-    goToSignIn() {
-      this.errors = [];
-      document.getElementById("error2").style.display = "none";
-      this.$store.commit("showSignIn");
     }
   }
 };
 </script>
 
 <style scoped>
-#pageWrapper {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-#logo {
-  width: 200px;
-  margin: 25px 0 25px 0;
-}
-
 #divSignUpWrapper {
-  text-align: center;
-  color: #2c3e50;
-  background-color: rgba(255, 255, 255, 1);
-  width: 400px;
-  min-height: 670px;
-  margin: auto;
-  border-radius: 1%;
-  padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  font-family: "Monsterrat";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  padding: 15px;
 }
 
 #regUsername,
@@ -199,51 +173,32 @@ export default {
 }
 
 #btnRegUser {
+  margin: auto;
   margin-top: 20px;
-  background-color: black;
+  background-color: transparent;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: white;
+  color: black;
+  font-size: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   text-decoration: none;
-  border: none;
-  height: 35px;
+  border: 3px solid black;
+  height: 45px;
   width: 140px;
-  border-radius: 4px;
-  font-family: "Wals";
-  transition: 0.3s;
+  transition: 0.2s;
   cursor: pointer;
 }
 
 #btnRegUser:hover {
-  background-color: #2022259f;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: black;
+  color: white;
 }
 
 #regUserTittel {
-  border-bottom: 2px solid;
-  width: 85px;
   margin: 20px auto;
   font-family: "Wals";
+  font-size: 45px;
   color: black;
-}
-
-#btnBack {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: black;
-  text-decoration: none;
-  border: none;
-  height: 35px;
-  width: 140px;
-  border-radius: 4px;
-  font-family: "Wals";
-  transition: 0.3s;
-}
-
-#btnBack:hover {
-  background-color: lightgrey;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 #loadingSpinner {

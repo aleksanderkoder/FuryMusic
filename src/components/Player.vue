@@ -46,10 +46,13 @@
         src="../assets/fury-logo-prototype.webp"
         title="Fury Music"
         alt="Fury Music logo"
-        v-on:click="resetSearch()"   
+        v-on:click="resetSearch()"
         width="115"
       />
-      <h3>Your library</h3>
+      <h3>
+        <font-awesome-icon style="font-size: 18px" :icon="['fas', 'stream']" />
+        LIBRARY
+      </h3>
 
       <span class="sidebarTitle" v-on:click="resetSearch()"
         >All public tracks</span
@@ -59,7 +62,10 @@
       >
 
       <div id="divPlaylists">
-        <h3>Playlists</h3>
+        <h3>
+          <font-awesome-icon style="font-size: 18px" :icon="['fas', 'list']" />
+          PLAYLISTS
+        </h3>
         <!-- TODO: Make function for creating new playlist -->
         <button id="btnNewPlaylist" v-on:click="createNewPlaylist()">
           <font-awesome-icon style="color: grey" :icon="['fas', 'plus']" />
@@ -91,7 +97,7 @@
           v-show="currentSong.SongImageURL"
           v-tilt="{ speed: 400, perspective: 500 }"
         />
-        
+
         <p
           class="clickToSearch two-line"
           style="font-weight: bold"
@@ -171,6 +177,7 @@
               v-bind:id="'running' + song.SongID"
               class="runningSongIcon"
               src="/src/assets/sound trans ani.gif"
+              width="20"
             />
           </div>
           <div class="divSongsSongName ellipsis">
@@ -426,7 +433,7 @@ export default {
       dblclickCounter: 0,
       muteStatus: false,
       isFading: false,
-      finished: false,  // Is needed for an issue where the "finish" event is fired multiple times when using MediaElement
+      finished: false, // Is needed for an issue where the "finish" event is fired multiple times when using MediaElement
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -1173,7 +1180,7 @@ export default {
 
     // Event for when space bar is pressed, mutes or plays track
     document.addEventListener("keydown", key => {
-      if (this.currentSong.SongID == "" || this.$store.state.overlayed) return;  // If no song is active, do nothing 
+      if (this.currentSong.SongID == "" || this.$store.state.overlayed) return; // If no song is active, do nothing
 
       if (key.code == "Space" && this.wavesurfer.isPlaying()) {
         key.preventDefault();
@@ -1441,7 +1448,7 @@ font-awesome-icon {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  filter: drop-shadow(3px 3px 2px #000000); 
+  filter: drop-shadow(3px 3px 2px #000000);
   -webkit-line-clamp: 2; /* number of lines to show */
   -webkit-box-orient: vertical;
 }
@@ -1756,7 +1763,7 @@ font-awesome-icon {
   display: block;
   width: 100%;
   position: relative;
-  color: white;
+  color: grey;
   padding: 3px;
   cursor: pointer;
   transition: 0.3s;
@@ -1764,10 +1771,11 @@ font-awesome-icon {
 
 .sidebarTitle:hover {
   background-color: rgba(255, 255, 255, 0.15);
+  color: white;
 }
 
 #pSidebarArtist {
-  filter: drop-shadow(3px 3px 2px #000000); 
+  filter: drop-shadow(3px 3px 2px #000000);
 }
 
 #SongCoverImage {
@@ -1821,6 +1829,7 @@ font-awesome-icon {
 #divPlayerWrapper {
   width: 100%;
   height: 100%;
+  /* backdrop-filter: blur(5px); */
 }
 
 .animation-pulse {
@@ -1858,7 +1867,6 @@ ul {
 
 h3 {
   color: white;
-  text-decoration: underline;
 }
 
 li {

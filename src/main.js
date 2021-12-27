@@ -28,7 +28,9 @@ import {
   faRandom,
   faStepBackward,
   faStepForward,
-  faShareAlt
+  faShareAlt,
+  faStream,
+  faList
 } from "@fortawesome/free-solid-svg-icons";
 import VueTilt from "vue-tilt.js"; 
 Vue.use(Vuex);
@@ -105,7 +107,9 @@ library.add(
   faRandom,
   faStepBackward,
   faStepForward,
-  faShareAlt
+  faShareAlt,
+  faStream,
+  faList
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);

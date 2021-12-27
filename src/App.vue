@@ -4,30 +4,24 @@
       v-show="this.$store.state.showLogIn"
       @fetchSongsGrant="fetchSongsGrant"
     />
-    <SignUp v-show="this.$store.state.showRegUser" />
+    <!-- <SignUp v-show="this.$store.state.showRegUser" /> -->
     <Player v-show="this.$store.state.showPlayer" v-bind:loggedIn="loggedIn" />
   </div>
 </template>
 
 <script>
 import SignIn from "./components/SignIn.vue";
-import SignUp from "./components/SignUp.vue";
 import Player from "./components/Player.vue";
 
 export default {
   name: "app",
   components: {
     SignIn,
-    SignUp,
     Player,
   },
   data() {
     return {
-      showLogInComp: true,
-      showRegUserComp: false,
-      showPlayerComp: false,
       loggedIn: false,
-      username: ""
     };
   },
   methods: {
@@ -68,7 +62,7 @@ export default {
   right: 0;
   bottom: 0;
   margin: auto;
-  background: url("./assets/def-back.webp") no-repeat center center
+  background: url("./assets/def back3.jpg") no-repeat center center
     fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;

@@ -9,56 +9,64 @@
           width="250"
         />
         <h1 id="divLeftTitle">FURY MUSIC</h1>
-        <h2>No account?</h2>
-        <button v-on:click="goToSignUp()" class="btnSecondary">SIGN UP</button>
+        <h2 id="h2Description">Don't have an account?</h2>
+        <button
+          id="btnGoToSignUp"
+          v-on:click="goToSignUp()"
+          class="btnSecondary"
+        >
+          SIGN UP
+        </button>
       </div>
       <div id="divRight">
-        <br />
-        <h2 id="logInTittel">
-          USER <br />
-          LOGIN
-        </h2>
-        <form onSubmit="return false">
-          <font-awesome-icon
-            class="fontAwesome"
-            style="color: black"
-            :icon="['fas', 'user']"
-          />
-          <input
-            type="text"
-            v-model="username"
-            placeholder="Username"
-            id="username"
-          />
+        <div id="divLogIn" v-show="showLogInForm">
+          <h2 id="logInTittel">
+            USER <br />
+            LOGIN
+          </h2>
+          <form onSubmit="return false">
+            <font-awesome-icon
+              class="fontAwesome"
+              style="color: black"
+              :icon="['fas', 'user']"
+            />
+            <input
+              type="text"
+              v-model="username"
+              placeholder="Username"
+              id="username"
+            />
+            <br />
+            <font-awesome-icon
+              class="fontAwesome"
+              style="color: black"
+              :icon="['fas', 'lock']"
+            />
+            <input
+              type="password"
+              v-model="password"
+              placeholder="Password"
+              id="password"
+            />
+            <br />
+            <p id="error" class="animate__animated animate__shakeX"></p>
+            <input
+              type="submit"
+              v-on:click="signIn()"
+              value="LOGIN"
+              id="btnLogIn"
+            />
+          </form>
+          <br />
           <br />
           <font-awesome-icon
-            class="fontAwesome"
-            style="color: black"
-            :icon="['fas', 'lock']"
+            id="loadingSpinner"
+            :icon="['fas', 'circle-notch']"
+            spin
           />
-          <input
-            type="password"
-            v-model="password"
-            placeholder="Password"
-            id="password"
-          />
-          <br />
-          <p id="error" class="animate__animated animate__shakeX"></p>
-          <input
-            type="submit"
-            v-on:click="signIn()"
-            value="LOGIN"
-            id="btnLogIn"
-          />
-        </form>
-        <br />
-        <br />
-        <font-awesome-icon
-          id="loadingSpinner"
-          :icon="['fas', 'circle-notch']"
-          spin
-        />
-        <a href="">Forgot password?</a>
+          <a href="">Forgot password?</a>
+        </div>
+        <SignUp v-show="showSignUpForm" />
       </div>
     </div>
     <p id="makersMark">
@@ -68,12 +76,19 @@
 </template>
 
 <script>
+import SignUp from "./SignUp.vue";
+
 export default {
   name: "SignIn",
+  components: {
+    SignUp
+  },
   data() {
     return {
       username: "",
       password: "",
+      showLogInForm: false,
+      showSignUpForm: false,
       apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
     };
   },
@@ -168,8 +183,20 @@ export default {
       }
     },
     goToSignUp() {
-      document.getElementById("error").style.display = "none";
-      this.$store.commit("showSignUp");
+      if (this.showLogInForm) {
+        document.getElementById("error").style.display = "none";
+        document.getElementById("btnGoToSignUp").innerHTML = "LOGIN";
+        document.getElementById("h2Description").innerHTML =
+          "Already have an account?";
+        this.showSignUpForm = true;
+        this.showLogInForm = false;
+      } else {
+        document.getElementById("btnGoToSignUp").innerHTML = "SIGN UP";
+        document.getElementById("h2Description").innerHTML =
+          "Don't have an account?";
+        this.showLogInForm = true;
+        this.showSignUpForm = false;
+      }
     }
   },
   mounted() {
@@ -192,6 +219,13 @@ export default {
         }, 1500);
       }
     }
+
+    // Fades in login form after 1 second from mounted
+    setTimeout(() => {
+      document.getElementById("divLogIn").className =
+        "animate__animated animate__fadeIn";
+      this.showLogInForm = true;
+    }, 1000);
   }
 };
 </script>
@@ -202,7 +236,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(5px);
 }
 
 #divRight {
@@ -274,13 +308,14 @@ h2 {
   min-height: 675px;
   margin: auto;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  font-family: "Monsterrat";
+  font-family: "Wals";
 }
 
 #loadingSpinner {
   color: black;
   font-size: 40px;
   display: none;
+  margin: auto;
 }
 
 #username,
@@ -321,27 +356,6 @@ h2 {
 #btnLogIn:hover {
   background-color: black;
   color: white;
-}
-
-#btnGoToSignUp {
-  margin: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  color: black;
-  text-decoration: none;
-  border: none;
-  height: 35px;
-  width: 140px;
-  border-radius: 4px;
-  font-family: "Wals";
-  transition: 0.3s;
-}
-
-#btnGoToSignUp:hover {
-  background-color: lightgrey;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 #makersMark {
@@ -421,19 +435,6 @@ a {
     font-size: 24px;
   }
 
-  #btnGoToSignUp {
-    margin-top: 40px;
-    margin-bottom: 40px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 6px 16px;
-    height: 70px;
-    width: 280px;
-    font-size: 24px;
-  }
-
-  #btnGoToSignUp:hover {
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 6px 16px;
-  }
-
   #btnLogIn:hover {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 6px 16px;
   }
@@ -443,10 +444,10 @@ a {
   }
 
   #logInTittel {
-    border-bottom: 2px solid;
-    width: 150px;
     margin: 40px auto;
-    font-size: 48px;
+    font-family: "Wals";
+    font-size: 90px;
+    color: black;
   }
 
   a {
