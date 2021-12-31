@@ -258,7 +258,7 @@ export default {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 1;
-  background: url("../assets/def-back-login.webp")
+  background: url("../assets/def-back-login (1).webp")
     no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
