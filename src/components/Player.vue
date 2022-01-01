@@ -654,8 +654,45 @@ export default {
         }
       }, 50);
     },
+    handleAudioContextState() {
+      if (!this.wavesurfer) {
+        this.initWavesurfer();
+      }
+
+      if (this.wavesurfer.backend.ac.state == "suspended") {
+        this.wavesurfer.backend.ac.resume();
+        console.log("Sat Wavesurfer backend state to 'running'");
+      }
+
+      if (!this.mediaElem) {
+        // Init media element used for rendering the audio visualizer
+        this.mediaElem = document.createElement("audio");
+        this.mediaElem.crossOrigin = "anonymous";
+        this.visualizerInit();
+        console.log("Initialized media context state for audio visualizer");
+      }
+    },
+    initWavesurfer() {
+      // Initializes the WaveSurfer object
+      this.wavesurfer = WaveSurfer.create({
+        container: "#waveform",
+        backend: "MediaElement",
+        waveColor: "white",
+        progressColor: "black",
+        barWidth: 2,
+        height: 100,
+        normalize: false,
+        fillParent: true,
+        responsive: true,
+        hideScrollbar: true
+      });
+      console.log("Created Wavesurfer instance");
+      this.subscribeToWavesurferInstance();
+    },
     playSong(song) {
       if (this.loading || this.isFading) return; // If something is already loading, don't do anything, temp work-around for an issue
+
+      this.handleAudioContextState(); // Needed to prevent autoplay from being blocked by Chromium autoplay policy
 
       if (
         !document
@@ -999,6 +1036,127 @@ export default {
       localStorage.removeItem("username");
       localStorage.removeItem("password");
       window.location.replace(location + "/?signedout=true");
+    },
+    subscribeToWavesurferInstance() {
+      let self = this;
+      console.log("Subscribed to Wavesurfer events");
+
+      // Event for when song finishes
+      this.wavesurfer.on("finish", () => {
+        if (this.finished) return;
+
+        document.title = "Fury Music";
+        this.finished = true;
+        self.elapsedPlaytime = self.currentSong.Length;
+        document.getElementById(
+          "play" + self.currentSong.SongID
+        ).style.display = "block";
+        document.getElementById(
+          "pause" + self.currentSong.SongID
+        ).style.display = "none";
+        document.getElementById(
+          "running" + self.currentSong.SongID
+        ).style.display = "none";
+        document.getElementById("divPlay").style.display = "block";
+        document.getElementById("divPause").style.display = "none";
+
+        setTimeout(() => {
+          if (!self.wavesurfer.isPlaying() && !self.loading) self.playNext();
+        }, 3000);
+      });
+
+      // Event for waveform interaction
+      this.wavesurfer.on("seek", () => {
+        if (this.wavesurfer.isPlaying()) {
+          this.wavesurfer.play();
+        }
+      });
+
+      // Event for when wavesurfer audio plays
+      // this.wavesurfer.on("play", () => {
+      //   self.volumeFadeIn();
+      // });
+
+      // Event for when wavesurfer audio pauses
+      // this.wavesurfer.on("pause", () => {
+      //   self.volumeFadeOut();
+      // });
+
+      // Event that fires continuously during audio playback
+      this.wavesurfer.on("audioprocess", progress => {
+        let minutes = parseInt(progress / 60);
+        let seconds = parseInt(progress - minutes * 60);
+        if (seconds < 10) {
+          seconds = "0" + seconds;
+        }
+        self.elapsedPlaytime = minutes + ":" + seconds;
+      });
+
+      // Fires when a song is loading
+      let runOnce = false;
+      this.wavesurfer.on("loading", progress => {
+        if (!runOnce) {
+          document.title = "Fury Music";
+          self.elapsedPlaytime = "0:00";
+          self.wavesurfer.setMute(self.muteStatus);
+          document.getElementById(
+            "play" + self.currentSong.SongID
+          ).style.display = "none";
+          document.getElementById("divPlay").classList.toggle("disabled");
+          document
+            .getElementById("wavesurferVolume")
+            .classList.toggle("disabled");
+          document.getElementById("volumeMute").classList.toggle("disabled");
+          document.getElementById("stepForwards").classList.toggle("disabled");
+          if (
+            !document
+              .getElementById("stepBackwards")
+              .classList.contains("disabled")
+          ) {
+            document
+              .getElementById("stepBackwards")
+              .classList.toggle("disabled");
+          }
+
+          document.getElementById("volumeUp").classList.toggle("disabled");
+          document.getElementById(
+            "load" + self.currentSong.SongID
+          ).style.display = "block";
+          document.getElementById("songLoader").style.display = "block";
+          if (localStorage.getItem("volumeLog")) {
+            self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
+          }
+          runOnce = true;
+          self.loading = true;
+        }
+        document.getElementById("songLoaderProgress").innerHTML =
+          progress + "%";
+      });
+
+      // Fires when wavesurfer is ready
+      this.wavesurfer.on("waveform-ready", () => {
+        self.loading = false;
+        this.finished = false;
+        runOnce = false;
+        document.getElementById("songLoader").style.display = "none";
+        document.getElementById("divPlay").classList.toggle("disabled");
+        document
+          .getElementById("wavesurferVolume")
+          .classList.toggle("disabled");
+        document.getElementById("stepForwards").classList.toggle("disabled");
+        if (self.historyIndex > 1) {
+          document.getElementById("stepBackwards").classList.toggle("disabled");
+        }
+        document.getElementById("volumeMute").classList.toggle("disabled");
+        document.getElementById("volumeUp").classList.toggle("disabled");
+        // document.getElementById("play" + self.currentSong.SongID).style.display =
+        //   "block";
+        document.getElementById(
+          "load" + self.currentSong.SongID
+        ).style.display = "none";
+        self.elapsedPlaytime = "0:00";
+        self.wavePlayPauseToggle("play");
+      });
     }
   },
   watch: {
@@ -1027,137 +1185,6 @@ export default {
     }
   },
   mounted() {
-    let self = this;
-
-    // Init media element used for rendering the audio visualizer
-    this.mediaElem = document.createElement("audio");
-    this.mediaElem.crossOrigin = "anonymous";
-    this.visualizerInit();
-
-    // Initializes the WaveSurfer object
-    this.wavesurfer = WaveSurfer.create({
-      container: "#waveform",
-      backend: "MediaElement",
-      waveColor: "white",
-      progressColor: "black",
-      barWidth: 2,
-      height: 100,
-      normalize: false,
-      fillParent: true,
-      responsive: true,
-      hideScrollbar: true
-    });
-
-    // Event for when song finishes
-
-    this.wavesurfer.on("finish", () => {
-      if (this.finished) return;
-
-      document.title = "Fury Music";
-      this.finished = true;
-      self.elapsedPlaytime = self.currentSong.Length;
-      document.getElementById("play" + self.currentSong.SongID).style.display =
-        "block";
-      document.getElementById("pause" + self.currentSong.SongID).style.display =
-        "none";
-      document.getElementById(
-        "running" + self.currentSong.SongID
-      ).style.display = "none";
-      document.getElementById("divPlay").style.display = "block";
-      document.getElementById("divPause").style.display = "none";
-
-      setTimeout(() => {
-        if (!self.wavesurfer.isPlaying() && !self.loading) self.playNext();
-      }, 3000);
-    });
-
-    // Event for waveform interaction
-    this.wavesurfer.on("seek", () => {
-      if (this.wavesurfer.isPlaying()) {
-        this.wavesurfer.play();
-      }
-    });
-
-    // Event for when wavesurfer audio plays
-    // this.wavesurfer.on("play", () => {
-    //   self.volumeFadeIn();
-    // });
-
-    // Event for when wavesurfer audio pauses
-    // this.wavesurfer.on("pause", () => {
-    //   self.volumeFadeOut();
-    // });
-
-    // Event that fires continuously during audio playback
-    this.wavesurfer.on("audioprocess", progress => {
-      let minutes = parseInt(progress / 60);
-      let seconds = parseInt(progress - minutes * 60);
-      if (seconds < 10) {
-        seconds = "0" + seconds;
-      }
-      self.elapsedPlaytime = minutes + ":" + seconds;
-    });
-
-    // Fires when a song is loading
-    let runOnce = false;
-    this.wavesurfer.on("loading", progress => {
-      if (!runOnce) {
-        document.title = "Fury Music";
-        self.elapsedPlaytime = "0:00";
-        self.wavesurfer.setMute(self.muteStatus);
-        document.getElementById(
-          "play" + self.currentSong.SongID
-        ).style.display = "none";
-        document.getElementById("divPlay").classList.toggle("disabled");
-        document
-          .getElementById("wavesurferVolume")
-          .classList.toggle("disabled");
-        document.getElementById("volumeMute").classList.toggle("disabled");
-        document.getElementById("stepForwards").classList.toggle("disabled");
-        if (
-          !document
-            .getElementById("stepBackwards")
-            .classList.contains("disabled")
-        ) {
-          document.getElementById("stepBackwards").classList.toggle("disabled");
-        }
-
-        document.getElementById("volumeUp").classList.toggle("disabled");
-        document.getElementById(
-          "load" + self.currentSong.SongID
-        ).style.display = "block";
-        document.getElementById("songLoader").style.display = "block";
-        if (localStorage.getItem("volumeLog")) {
-          self.wavesurfer.setVolume(localStorage.getItem("volumeLog"));
-        }
-        runOnce = true;
-        self.loading = true;
-      }
-      document.getElementById("songLoaderProgress").innerHTML = progress + "%";
-    });
-
-    // Fires when wavesurfer is ready
-    this.wavesurfer.on("waveform-ready", () => {
-      self.loading = false;
-      this.finished = false;
-      runOnce = false;
-      document.getElementById("songLoader").style.display = "none";
-      document.getElementById("divPlay").classList.toggle("disabled");
-      document.getElementById("wavesurferVolume").classList.toggle("disabled");
-      document.getElementById("stepForwards").classList.toggle("disabled");
-      if (self.historyIndex > 1) {
-        document.getElementById("stepBackwards").classList.toggle("disabled");
-      }
-      document.getElementById("volumeMute").classList.toggle("disabled");
-      document.getElementById("volumeUp").classList.toggle("disabled");
-      // document.getElementById("play" + self.currentSong.SongID).style.display =
-      //   "block";
-      document.getElementById("load" + self.currentSong.SongID).style.display =
-        "none";
-      self.elapsedPlaytime = "0:00";
-      self.wavePlayPauseToggle("play");
-    });
-
     // Controls volume slider and saving of value
     let volumeSlider = document.getElementById("wavesurferVolume");
     if (localStorage.getItem("volume")) {
