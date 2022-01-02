@@ -1192,7 +1192,7 @@ export default {
     }
     volumeSlider.oninput = () => {
       let vol = (volumeSlider.value * volumeSlider.value) / 10000;
-      self.wavesurfer.setVolume(vol);
+      this.wavesurfer.setVolume(vol);
       localStorage.setItem("volume", volumeSlider.value);
       localStorage.setItem("volumeLog", vol);
 
