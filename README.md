@@ -1,5 +1,3 @@
-<img src="https://user-images.githubusercontent.com/49065176/145635736-888ad854-d5c5-42b8-a3b2-43eb9aa26a0d.png" width="115"> 
-
 # Fury Music
 
 > A music player application built for the web.
