@@ -236,7 +236,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(15px);
 }
 
 #divRight {
@@ -258,8 +258,7 @@ export default {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 1;
-  background: url("../assets/def-back-login (1).webp")
-    no-repeat center center fixed;
+  background: url("../assets/def-back2.jpg");
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

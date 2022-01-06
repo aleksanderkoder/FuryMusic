@@ -62,7 +62,7 @@ export default {
   right: 0;
   bottom: 0;
   margin: auto;
-  background: url("./assets/def-back (1).webp") no-repeat center center
+  background: url("./assets/def-back.jpg") no-repeat center center
     fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
