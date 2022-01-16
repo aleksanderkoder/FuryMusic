@@ -821,6 +821,16 @@ export default {
         if (showBannerObj.SongImageURL) {
           document.getElementById("imgBannerImage").src =
             showBannerObj.SongImageURL;
+
+          // // COLORTHIEF - Doesn't work correctly due to CORS policy on image servers 
+          // const colorThief = new ColorThief();
+          // const img = document.getElementById("imgBannerImage");
+
+          // // Make sure image is finished loading
+          //   img.addEventListener("load", function() {
+          //     let color = colorThief.getColor(img);
+          //     document.getElementById("divBanner").style.backgroundImage = `linear-gradient(to left, rgba(${color[0]}, ${color[1]}, ${color[2]}, 0), rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.5))`;
+          //   });
         } else {
           document.getElementById("imgBannerImage").src = "";
         }
