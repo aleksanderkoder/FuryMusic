@@ -163,13 +163,13 @@
               v-bind:id="'pause' + song.SongID"
               v-on:click="pauseSong(song.SongID)"
               class="fontSongPane"
-              style="display: none;"
+              style="display: none"
               :icon="['fas', 'pause']"
             />
             <font-awesome-icon
               v-bind:id="'load' + song.SongID"
               class="fontSongPane"
-              style="display: none; color: black; filter: none;"
+              style="display: none; color: black; filter: none"
               :icon="['fas', 'circle-notch']"
               spin
             />
@@ -235,8 +235,8 @@
           <img
             v-if="
               song.SongImageURL != undefined &&
-                song.SongImageURL != '' &&
-                song.SongImageURL != null
+              song.SongImageURL != '' &&
+              song.SongImageURL != null
             "
             class="songPaneImage"
             v-bind:src="song.SongImageURL"
@@ -301,14 +301,29 @@
           id="volumeUp"
           title="Mute"
           v-on:click="mute()"
-          style="position: absolute; bottom: 15px; left: 30px; color: white; font-size: 17px; cursor: pointer;"
+          style="
+            position: absolute;
+            bottom: 15px;
+            left: 30px;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+          "
           :icon="['fas', 'volume-up']"
         />
         <font-awesome-icon
           id="volumeMute"
           title="Unmute"
           v-on:click="unmute()"
-          style="position: absolute; bottom: 15px; left: 25px; color: white; font-size: 17px; display: none; cursor: pointer;"
+          style="
+            position: absolute;
+            bottom: 15px;
+            left: 25px;
+            color: white;
+            font-size: 17px;
+            display: none;
+            cursor: pointer;
+          "
           :icon="['fas', 'volume-mute']"
         />
         <input
@@ -368,7 +383,7 @@
     <div id="divPlayerOptions" class="animate__animated animate__flipInY">
       <font-awesome-icon
         id="fontToggleShuffle"
-        style="opacity: 0.25;"
+        style="opacity: 0.25"
         title="Toggle shuffle"
         v-on:click="toggleShufflePlay()"
         :icon="['fas', 'random']"
@@ -401,13 +416,13 @@ export default {
   name: "Player",
   components: {
     UploadBackImg,
-    UploadSong
+    UploadSong,
   },
   props: {
     loggedIn: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -415,13 +430,13 @@ export default {
       mediaElem: null,
       songs: [],
       currentSong: {
-        SongID: "",
+        SongID: 0,
         SongURL: "",
         SongName: "",
         ArtistName: "",
         Length: 0,
         Album: "",
-        SongImageURL: ""
+        SongImageURL: "",
       },
       songHistory: [],
       historyIndex: 0,
@@ -434,40 +449,44 @@ export default {
       muteStatus: false,
       isFading: false,
       finished: false, // Is needed for an issue where the "finish" event is fired multiple times when using MediaElement
-      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/"
+      apiURL: "https://furymusicplayer.000webhostapp.com/scripts/",
     };
   },
   props: {
-    loggedIn: Boolean
+    loggedIn: Boolean,
   },
   methods: {
     visualizerInit() {
-      var context = new AudioContext();
-      var src = context.createMediaElementSource(this.mediaElem);
-      var analyser = context.createAnalyser();
+      let context = new AudioContext();
+      let src = context.createMediaElementSource(this.mediaElem);
+      let analyser = context.createAnalyser();
 
-      var canvas = document.getElementById("canvasVisualizer");
+      let canvas = document.getElementById("canvasVisualizer");
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      var ctx = canvas.getContext("2d");
+      let ctx = canvas.getContext("2d");
 
       src.connect(analyser);
       analyser.connect(context.destination);
 
       analyser.fftSize = 256;
 
-      var bufferLength = analyser.frequencyBinCount;
+      let bufferLength = analyser.frequencyBinCount;
 
-      var dataArray = new Uint8Array(bufferLength);
+      let dataArray = new Uint8Array(bufferLength);
 
-      var WIDTH = canvas.width;
-      var HEIGHT = canvas.height;
+      let WIDTH = canvas.width;
+      let HEIGHT = canvas.height;
 
-      var barWidth = Math.round((WIDTH / bufferLength) * 2.5);
-      var barHeight;
-      var x = 0;
+      let barWidth = Math.round((WIDTH / bufferLength) * 2.5);
+      let barHeight;
+      let x = 0;
 
-      let self = this;
+      let grd = ctx.createLinearGradient(0, 0, 0, 900);
+      grd.addColorStop(0, "transparent");
+      grd.addColorStop(0.65, "transparent");
+      grd.addColorStop(1, "white");
+
       function renderFrame() {
         requestAnimationFrame(renderFrame);
 
@@ -477,14 +496,14 @@ export default {
 
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-        for (var i = 0; i < bufferLength; i++) {
+        for (let i = 0; i < bufferLength; i++) {
           barHeight = dataArray[i];
 
-          // var r = barHeight + 25 * (i / bufferLength);
-          // var g = 250 * (i / bufferLength);
-          // var b = 50;
+          // let r = barHeight + 25 * (i / bufferLength);
+          // let g = 250 * (i / bufferLength);
+          // let b = 50;
           // console.log(x)
-          ctx.fillStyle = "rgba(255, 255, 255, 1)";
+          ctx.fillStyle = grd;
           ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
 
           x += barWidth;
@@ -515,7 +534,7 @@ export default {
     dblClickPlay(song) {
       this.dblclickCounter++;
       let self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         self.dblclickCounter = 0;
       }, 250);
       if (this.dblclickCounter >= 2) {
@@ -602,20 +621,20 @@ export default {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: song.SongName,
           artist: song.ArtistName,
-          album: song.Album
+          album: song.Album,
           // artwork: {src: song.SongImageURL, type: 'image'} TO DO: FIX THIS SO IT WORKS!
         });
 
-        navigator.mediaSession.setActionHandler("play", function() {
+        navigator.mediaSession.setActionHandler("play", function () {
           self.wavePlayPauseToggle("play");
         });
-        navigator.mediaSession.setActionHandler("pause", function() {
+        navigator.mediaSession.setActionHandler("pause", function () {
           self.wavePlayPauseToggle("pause");
         });
-        navigator.mediaSession.setActionHandler("previoustrack", function() {
+        navigator.mediaSession.setActionHandler("previoustrack", function () {
           self.playPrevious();
         });
-        navigator.mediaSession.setActionHandler("nexttrack", function() {
+        navigator.mediaSession.setActionHandler("nexttrack", function () {
           self.playNext();
         });
 
@@ -684,7 +703,7 @@ export default {
         normalize: false,
         fillParent: true,
         responsive: true,
-        hideScrollbar: true
+        hideScrollbar: true,
       });
       console.log("Created Wavesurfer instance");
       this.subscribeToWavesurferInstance();
@@ -775,7 +794,7 @@ export default {
       }
     },
     populateSongList(songs) {
-      for (var i = 0; i < songs.length; i += 8) {
+      for (let i = 0; i < songs.length; i += 8) {
         let minutes = parseInt(songs[i + 4] / 60);
         let seconds = parseInt(songs[i + 4] - minutes * 60);
 
@@ -790,7 +809,7 @@ export default {
           Length: minutes + ":" + seconds,
           Publisher: songs[i + 6],
           SongImageURL: songs[i + 7],
-          Show: true
+          Show: true,
         });
       }
     },
@@ -799,12 +818,21 @@ export default {
         document.getElementById("spanBannerHeader").innerHTML =
           showBannerObj.ArtistName;
         document.getElementById("spanBannerDesc").innerHTML =
-          "Showing tracks by this artist";
+          "Artist • " +
+          this.getAmountOfTracksByArtist(showBannerObj.ArtistName) +
+          " tracks • " +
+          this.getAmountOfAlbumsByArtist(showBannerObj.ArtistName) +
+          " albums";
       } else if (type == "album") {
         document.getElementById("spanBannerHeader").innerHTML =
           showBannerObj.Album;
         document.getElementById("spanBannerDesc").innerHTML =
           "Album by " + showBannerObj.ArtistName;
+      } else if (type == "generic") {
+        document.getElementById("spanBannerHeader").innerHTML =
+          showBannerObj.Header;
+        document.getElementById("spanBannerDesc").innerHTML =
+          showBannerObj.Desc;
       }
 
       if (mode == "show") {
@@ -822,7 +850,7 @@ export default {
           document.getElementById("imgBannerImage").src =
             showBannerObj.SongImageURL;
 
-          // // COLORTHIEF - Doesn't work correctly due to CORS policy on image servers 
+          // // COLORTHIEF - Doesn't work correctly due to CORS policy on image servers
           // const colorThief = new ColorThief();
           // const img = document.getElementById("imgBannerImage");
 
@@ -844,6 +872,34 @@ export default {
           .getElementById("divCenterHeader")
           .classList.remove("divCenterHeaderRetracted");
       }
+    },
+    getAmountOfAlbumsByArtist(artistName) {
+      let foundAlbum = [];
+      let amount = 0;
+      for (let i = 0; i < this.songs.length; i++) {
+        if (
+          this.songs[i].ArtistName == artistName &&
+          !foundAlbum.includes(this.songs[i].Album)
+        ) {
+          amount++;
+          foundAlbum.push(this.songs[i].Album);
+        }
+      }
+      return amount;
+    },
+    getAmountOfTracksByArtist(artistName) {
+      let foundTracks = [];
+      let amount = 0;
+      for (let i = 0; i < this.songs.length; i++) {
+        if (
+          this.songs[i].ArtistName == artistName &&
+          !foundTracks.includes(this.songs[i].SongName)
+        ) {
+          amount++;
+          foundTracks.push(this.songs[i].SongName);
+        }
+      }
+      return amount;
     },
     resetSearch() {
       //document.getElementById("searchSong").value = "";
@@ -921,17 +977,17 @@ export default {
         "dialog",
         "Delete",
         "Cancel",
-        function() {
+        function () {
           let fd = new FormData();
           fd.append("username", self.$store.state.username);
           fd.append("songURL", songurl);
 
           fetch(self.apiURL + "deleteSong.php", {
             method: "post",
-            body: fd
+            body: fd,
           })
-            .then(function(response) {
-              return response.text().then(function(text) {
+            .then(function (response) {
+              return response.text().then(function (text) {
                 if (text == "OK") {
                   Ozone.fire(
                     "success",
@@ -946,7 +1002,7 @@ export default {
                 }
               });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.error("Error:", error);
             });
         }
@@ -1032,11 +1088,11 @@ export default {
         "&image=" +
         encodeURIComponent(song.SongImageURL);
       navigator.clipboard.writeText(link).then(
-        function() {
+        function () {
           /* clipboard successfully set */
           Ozone.fire("success", "Song link has been copied", "top-right");
         },
-        function() {
+        function () {
           /* clipboard write failed */
           Ozone.fire("error", "Couldn't copy to clipboard", "top-right");
         }
@@ -1093,7 +1149,7 @@ export default {
       // });
 
       // Event that fires continuously during audio playback
-      this.wavesurfer.on("audioprocess", progress => {
+      this.wavesurfer.on("audioprocess", (progress) => {
         let minutes = parseInt(progress / 60);
         let seconds = parseInt(progress - minutes * 60);
         if (seconds < 10) {
@@ -1104,7 +1160,7 @@ export default {
 
       // Fires when a song is loading
       let runOnce = false;
-      this.wavesurfer.on("loading", progress => {
+      this.wavesurfer.on("loading", (progress) => {
         if (!runOnce) {
           document.title = "Fury Music";
           self.elapsedPlaytime = "0:00";
@@ -1167,21 +1223,21 @@ export default {
         self.elapsedPlaytime = "0:00";
         self.wavePlayPauseToggle("play");
       });
-    }
+    },
   },
   watch: {
-    loggedIn: function() {
+    loggedIn: function () {
       console.log("Fetching all tracks...");
-      var self = this;
+      let self = this;
       fetch(self.apiURL + "getAllSongs.php", {
-        method: "post"
+        method: "post",
       })
-        .then(function(response) {
-          return response.json().then(function(text) {
+        .then(function (response) {
+          return response.json().then(function (text) {
             if (text != "Error") {
               document.getElementById("centerLoader").style.display = "none";
               self.populateSongList(text);
-              setTimeout(function() {
+              setTimeout(function () {
                 self.playLinkedSong();
               }, 1500);
             } else {
@@ -1189,10 +1245,10 @@ export default {
             }
           });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
-    }
+    },
   },
   mounted() {
     // Controls volume slider and saving of value
@@ -1216,7 +1272,7 @@ export default {
     };
 
     // Event for when space bar is pressed, mutes or plays track
-    document.addEventListener("keydown", key => {
+    document.addEventListener("keydown", (key) => {
       if (this.currentSong.SongID == "" || this.$store.state.overlayed) return; // If no song is active, do nothing
 
       if (key.code == "Space" && this.wavesurfer.isPlaying()) {
@@ -1226,7 +1282,7 @@ export default {
         this.wavePlayPauseToggle("play");
       }
     });
-  }
+  },
 };
 </script>
 
@@ -1363,7 +1419,6 @@ export default {
 
 .fontSongPane:hover {
   color: black;
-  filter: none;
 }
 
 .divSongsPlay {
@@ -1789,10 +1844,11 @@ font-awesome-icon {
 }
 
 #wavesurferVolume::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
-  background: #ffffff;
-  border-radius: 100%;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  border: none;
   cursor: pointer;
 }
 
