@@ -486,19 +486,21 @@ export default {
       grd.addColorStop(0, "transparent");
       grd.addColorStop(0.65, "transparent");
       grd.addColorStop(1, "white");
-
+      let image = document.getElementById("SongCoverImage");
+      let average; 
       function renderFrame() {
         requestAnimationFrame(renderFrame);
 
         x = 0;
 
         analyser.getByteFrequencyData(dataArray);
-
+        average = 0; 
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        
 
         for (let i = 0; i < bufferLength; i++) {
           barHeight = dataArray[i];
-
+          average += barHeight; 
           // let r = barHeight + 25 * (i / bufferLength);
           // let g = 250 * (i / bufferLength);
           // let b = 50;
@@ -508,6 +510,10 @@ export default {
 
           x += barWidth;
         }
+        average = average / bufferLength; 
+        image.style.boxShadow = "0px 0px " + 0 + average / 4 + "px " + "rgba(255, 255, 255, 0.5)"; 
+        image.height = 120 + average / 12; 
+        image.width = 120 + average / 12; 
       }
       renderFrame();
     },
