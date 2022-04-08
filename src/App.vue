@@ -139,8 +139,13 @@ a {
   src: url(/src/assets/fonts/GTWalsheimPro-Regular.ttf);
 }
 
-/* To remove 000webhost label */
+/* To remove 000webhost free label */
 img[src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"] {
+  display: none; 
+}
+
+/* To remove "Ukraine war" label */
+.disclaimer {
   display: none; 
 }
 

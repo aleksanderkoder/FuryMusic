@@ -81,13 +81,12 @@
         Upload track
       </button>
 
-      <canvas id="canvasVisualizer"> </canvas>
-
       <div
         id="divSidebarCurrentSongInfo"
         v-show="currentSong.SongName"
         class="animate__animated animate__fadeInLeft"
       >
+      <div v-show="currentSong.SongImageURL" id="divSongCoverAndVisualizer" v-tilt="{ speed: 400, perspective: 500 }">
         <img
           id="SongCoverImage"
           width="120"
@@ -95,9 +94,9 @@
           alt="Track cover image"
           v-bind:src="currentSong.SongImageURL"
           v-show="currentSong.SongImageURL"
-          v-tilt="{ speed: 400, perspective: 500 }"
         />
-
+        <canvas id="canvasVisualizer"> </canvas>
+      </div>
         <p
           class="clickToSearch two-line"
           style="font-weight: bold"
@@ -342,7 +341,7 @@
 
     <div id="divAbsoluteCenter">
       <p id="pZeroMatches" class="animate__animated animate__wobble">
-        No matches were found
+        No matches found
       </p>
 
       <font-awesome-icon
@@ -497,7 +496,7 @@ export default {
         average = 0; 
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
         
-
+        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
         for (let i = 0; i < bufferLength; i++) {
           barHeight = dataArray[i];
           average += barHeight; 
@@ -505,15 +504,15 @@ export default {
           // let g = 250 * (i / bufferLength);
           // let b = 50;
           // console.log(x)
-          ctx.fillStyle = grd;
+          
           ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
 
           x += barWidth;
         }
         average = average / bufferLength; 
-        image.style.boxShadow = "0px 0px " + 0 + average / 4 + "px " + "rgba(255, 255, 255, 0.5)"; 
-        image.height = 120 + average / 12; 
-        image.width = 120 + average / 12; 
+        image.style.boxShadow = "0px 0px " + 0 + average / 4 + "px " + "rgba(255, 255, 255, 0.33)"; 
+        //image.height = 120 + average / 12; 
+        //image.width = 120 + average / 12; 
       }
       renderFrame();
     },
@@ -1513,9 +1512,9 @@ export default {
 #divSongPane {
   display: flex;
   text-align: left;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
-  box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 4px;
   padding: 10px;
   width: 95%;
   height: 18px;
@@ -1559,7 +1558,7 @@ font-awesome-icon {
 
 #divTopbar {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.6);
   height: 27px;
   left: 171px;
   right: 0;
@@ -1624,18 +1623,18 @@ font-awesome-icon {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.6);
   width: 170px;
   top: 0;
   bottom: 0;
   z-index: 1;
-  border-right: 1px solid white;
+  border-right: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 #divPlayerControls {
   display: none;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.6);
   height: 130px;
   margin-left: 171px;
   left: 0;
@@ -1671,8 +1670,15 @@ font-awesome-icon {
 #canvasVisualizer {
   position: absolute;
   bottom: 0;
+  left: 0;
   width: inherit;
   height: 70px;
+}
+
+#divSongCoverAndVisualizer {
+  width: 120px;
+  height: 120px;
+  margin: auto; 
 }
 
 #songLoader {
@@ -1928,7 +1934,7 @@ font-awesome-icon {
 #divPlayerWrapper {
   width: 100%;
   height: 100%;
-  /* backdrop-filter: blur(0px); */
+  backdrop-filter: blur(0px) brightness(35%);
 }
 
 .animation-pulse {
