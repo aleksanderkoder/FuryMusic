@@ -1934,7 +1934,7 @@ font-awesome-icon {
 #divPlayerWrapper {
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(0px) brightness(35%);
+  backdrop-filter: brightness(35%);
 }
 
 .animation-pulse {
