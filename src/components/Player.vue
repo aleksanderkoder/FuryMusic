@@ -541,7 +541,7 @@ export default {
       let self = this;
       setTimeout(function () {
         self.dblclickCounter = 0;
-      }, 250);
+      }, 300);
       if (this.dblclickCounter >= 2) {
         if (this.currentSong.SongID != song.SongID) {
           this.playSong(song);
@@ -1869,7 +1869,8 @@ font-awesome-icon {
   width: 100%;
   position: relative;
   color: grey;
-  padding: 3px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   cursor: pointer;
   transition: 0.3s;
 }
