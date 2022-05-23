@@ -70,7 +70,7 @@
       </div>
     </div>
     <p id="makersMark">
-      © 2021 Aleksander Johansen
+      © 2022 Aleksander Johansen
     </p>
   </div>
 </template>
