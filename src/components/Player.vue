@@ -232,6 +232,7 @@
           </div>
 
           <img
+            v-bind:id="'image' + song.SongID"
             v-if="
               song.SongImageURL != undefined &&
               song.SongImageURL != '' &&
@@ -738,6 +739,7 @@ export default {
           .parentElement.parentElement.classList.toggle("divSongPaneSelected");
         document.getElementById("play" + song.SongID).style.display = "none";
         document.getElementById("load" + song.SongID).style.display = "block";
+        document.getElementById("image" + song.SongID).style.filter = "grayscale(0)";
       }
       // Continues paused song
       else if (this.currentSong.SongID == song.SongID) {
@@ -756,8 +758,8 @@ export default {
       }
       // If a song has been selected before, but it's not the same song
       else {
+        // Reset previous song
         document.title = "Fury Music";
-        this.setMediaMetaData(song);
         document.getElementById(
           "play" + this.currentSong.SongID
         ).style.display = "block";
@@ -770,11 +772,15 @@ export default {
         document.getElementById(
           "load" + this.currentSong.SongID
         ).style.display = "none";
+        document.getElementById("image" + this.currentSong.SongID).style.filter = "grayscale(1)";
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
         document
           .getElementById("play" + this.currentSong.SongID)
           .parentElement.parentElement.classList.toggle("divSongPaneSelected");
+
+        // Prepare new song
+        this.setMediaMetaData(song);
         this.historyIndex++;
         this.songHistory.push(song);
         this.currentSong = song;
@@ -785,6 +791,7 @@ export default {
           .parentElement.parentElement.classList.toggle("divSongPaneSelected");
         document.getElementById("load" + song.SongID).style.display = "block";
         document.getElementById("play" + song.SongID).style.display = "none";
+        document.getElementById("image" + song.SongID).style.filter = "grayscale(0)";
       }
     },
     pauseSong(SongID) {
@@ -1308,6 +1315,7 @@ export default {
   height: 38px;
   width: 38px;
   right: 0;
+  filter: grayscale(1);
 }
 
 #customBackgroundImagePanel {
@@ -1948,7 +1956,7 @@ font-awesome-icon {
   }
 
   70% {
-    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
   }
 
   100% {
