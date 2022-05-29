@@ -359,7 +359,7 @@
       <div
         id="divPlayerMinimize"
         title="Minimize player"
-        v-on:click="minimizeMaximizePlayer('min')"
+        v-on:click="minimizePlayer()"
         class="animate__animated animate__flipInY"
       >
         <font-awesome-icon
@@ -372,7 +372,7 @@
       <div
         id="divPlayerMaximize"
         title="Maximize player"
-        v-on:click="minimizeMaximizePlayer('max')"
+        v-on:click="maximizePlayer()"
         class="animate__animated animate__flipInY"
       >
         <span id="spanPlayerMaximize">Maximize</span>
@@ -724,7 +724,7 @@ export default {
           .getElementById("divCenter")
           .classList.contains("divCenterRetractedBottom")
       )
-        this.minimizeMaximizePlayer("max");
+        this.maximizePlayer();
 
       // If no song is selected, load selected song
       if (this.currentSong.SongID == "") {
@@ -739,7 +739,9 @@ export default {
           .parentElement.parentElement.classList.toggle("divSongPaneSelected");
         document.getElementById("play" + song.SongID).style.display = "none";
         document.getElementById("load" + song.SongID).style.display = "block";
-        document.getElementById("image" + song.SongID).style.filter = "grayscale(0)";
+        let songPaneImage = document.getElementById("image" + song.SongID);
+        if (songPaneImage)
+          songPaneImage.style.filter = "grayscale(0)";
       }
       // Continues paused song
       else if (this.currentSong.SongID == song.SongID) {
@@ -772,7 +774,9 @@ export default {
         document.getElementById(
           "load" + this.currentSong.SongID
         ).style.display = "none";
-        document.getElementById("image" + this.currentSong.SongID).style.filter = "grayscale(1)";
+        songPaneImage = document.getElementById("image" + this.currentSong.SongID);
+        if (songPaneImage)
+          songPaneImage.style.filter = "grayscale(1)";
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
         document
@@ -791,7 +795,9 @@ export default {
           .parentElement.parentElement.classList.toggle("divSongPaneSelected");
         document.getElementById("load" + song.SongID).style.display = "block";
         document.getElementById("play" + song.SongID).style.display = "none";
-        document.getElementById("image" + song.SongID).style.filter = "grayscale(0)";
+        let songPaneImage = document.getElementById("image" + song.SongID);
+        if (songPaneImage)
+          songPaneImage.style.filter = "grayscale(0)";
       }
     },
     pauseSong(SongID) {
@@ -1041,9 +1047,7 @@ export default {
       this.wavesurfer.setVolume((this.oldVol * this.oldVol) / 10000);
       this.wavesurfer.setMute(false);
     },
-    minimizeMaximizePlayer(mode) {
-      let self = this;
-      if (mode == "min") {
+    minimizePlayer() {
         document
           .getElementById("divCenter")
           .classList.toggle("divCenterRetractedBottom");
@@ -1051,11 +1055,9 @@ export default {
         document.getElementById("divPlayerMinimize").style.display = "none";
         document.getElementById("divPlayerMaximize").style.display = "block";
         document.getElementById("divPlayerOptions").style.display = "none";
-      } else if (
-        mode ==
-        "max" /*&& document.getElementById("divPlayerControls").style.display == "none"*/
-      ) {
-        document
+    },
+    maximizePlayer() {
+      document
           .getElementById("divCenter")
           .classList.toggle("divCenterRetractedBottom");
         document.getElementById("divPlayerMaximize").style.display = "none";
@@ -1065,12 +1067,11 @@ export default {
           document.getElementById("divPlayerOptions").style.display = "block";
           // Scroll song pane into view if not visible. Needed because song pane might get hidden by the player controls wrapper sliding up.
           document
-            .getElementById("play" + self.currentSong.SongID)
+            .getElementById("play" + this.currentSong.SongID)
             .parentElement.scrollIntoViewIfNeeded();
         }, 1000);
         document.getElementById("divPlayerControls").style.display = "block";
-        self.wavesurfer.drawBuffer();
-      }
+        this.wavesurfer.drawBuffer();
     },
     playLinkedSong() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -1138,9 +1139,7 @@ export default {
         document.getElementById("divPlay").style.display = "block";
         document.getElementById("divPause").style.display = "none";
 
-        setTimeout(() => {
-          if (!self.wavesurfer.isPlaying() && !self.loading) self.playNext();
-        }, 3000);
+        if (!self.wavesurfer.isPlaying() && !self.loading) self.playNext();
       });
 
       // Event for waveform interaction
