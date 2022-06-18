@@ -1891,10 +1891,6 @@ font-awesome-icon {
   filter: drop-shadow(3px 3px 2px #000000);
 }
 
-#SongCoverImage {
-  box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.75);
-}
-
 #fontDeleteSong,
 #fontShareSong,
 #fontDownloadSong {
