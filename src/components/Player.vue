@@ -148,8 +148,8 @@
           v-show="song.Show"
           v-on:click="dblClickPlay(song)"
           class="animate__animated animate__fadeInRight"
-          @mouseover="showRunningIcon(song.SongID)"
-          @mouseleave="hideRunningIcon(song.SongID)"
+          @mouseover="hideRunningIcon(song.SongID)"
+          @mouseleave="showRunningIcon(song.SongID)"
         >
           <div class="divSongsPlay">
             <font-awesome-icon
@@ -409,8 +409,8 @@
 </template>
 
 <script>
-import UploadBackImg from "./UploadBackImg.vue";
-import UploadSong from "./UploadSong.vue";
+import UploadBackImg from "./uploadBackImg.vue";
+import UploadSong from "./uploadSong.vue";
 
 export default {
   name: "Player",
@@ -482,22 +482,17 @@ export default {
       let barHeight;
       let x = 0;
 
-      let grd = ctx.createLinearGradient(0, 0, 0, 900);
-      grd.addColorStop(0, "transparent");
-      grd.addColorStop(0.65, "transparent");
-      grd.addColorStop(1, "white");
       let image = document.getElementById("SongCoverImage");
       let average; 
       function renderFrame() {
         requestAnimationFrame(renderFrame);
 
         x = 0;
-
         analyser.getByteFrequencyData(dataArray);
         average = 0; 
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
         
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
         for (let i = 0; i < bufferLength; i++) {
           barHeight = dataArray[i];
           average += barHeight; 
@@ -511,13 +506,11 @@ export default {
           x += barWidth;
         }
         average = average / bufferLength; 
-        image.style.boxShadow = "0px 0px " + 0 + average / 4 + "px " + "rgba(255, 255, 255, 0.33)"; 
-        //image.height = 120 + average / 12; 
-        //image.width = 120 + average / 12; 
+        image.style.boxShadow = "0px 0px " + average / 4 + "px " + "rgba(255, 255, 255, 0.33)"; 
       }
       renderFrame();
     },
-    showRunningIcon(id) {
+    hideRunningIcon(id) {
       if (
         this.currentSong.SongID != id ||
         this.muteStatus ||
@@ -527,7 +520,7 @@ export default {
       document.getElementById("running" + id).style.display = "none";
       document.getElementById("pause" + id).style.display = "block";
     },
-    hideRunningIcon(id) {
+    showRunningIcon(id) {
       if (
         this.currentSong.SongID != id ||
         this.muteStatus ||
@@ -1348,7 +1341,7 @@ export default {
 #divSearchSong {
   background-color: white;
   height: 24px;
-  border-radius: 100px;
+  border-radius: 15px;
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -1527,11 +1520,12 @@ export default {
   height: 18px;
   margin-top: 15px;
   margin-left: 15px;
+  transition: background-color 0.4s; 
 }
 
 #divSongPane:hover {
-  background-color: white !important;
-  color: black !important;
+  background-color: white;
+  color: black;
 }
 
 .divSongPaneSelected {
@@ -1679,13 +1673,17 @@ font-awesome-icon {
   bottom: 0;
   left: 0;
   width: inherit;
-  height: 70px;
+  height: inherit;
+  transform: rotate(90deg); 
 }
 
 #divSongCoverAndVisualizer {
   width: 120px;
   height: 120px;
   margin: auto; 
+  border-width: 3px 0px 3px 3px;
+  border-style: solid;
+  border-image: linear-gradient(to right, white, black) 1; 
 }
 
 #songLoader {
@@ -1785,7 +1783,6 @@ font-awesome-icon {
   padding-top: 15px;
   margin-left: 260px;
   outline: none;
-  cursor: pointer;
   overflow: hidden;
 }
 

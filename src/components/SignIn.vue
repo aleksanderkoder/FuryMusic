@@ -340,22 +340,25 @@ h2 {
   margin: auto;
   margin-top: 20px;
   background-color: transparent;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
   color: black;
   font-size: 18px;
   padding-top: 10px;
   padding-bottom: 10px;
   text-decoration: none;
-  border: 3px solid black;
+  border-width: 3px 3px 3px 3px;
+  border-style: solid;
+  border-image: linear-gradient(to right, black, white) 1; 
   height: 45px;
   width: 140px;
-  transition: 0.2s;
+  transition: 1s;
   cursor: pointer;
 }
 
 #btnLogIn:hover {
-  background-color: black;
-  color: white;
+  border-width: 3px 3px 3px 3px;
+  border-style: solid;
+  border-image: linear-gradient(to left, black, white) 1; 
 }
 
 #makersMark {
