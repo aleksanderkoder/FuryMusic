@@ -351,7 +351,7 @@ h2 {
   border-image: linear-gradient(to right, black, white) 1; 
   height: 45px;
   width: 140px;
-  transition: 1s;
+  transition: 0.75s;
   cursor: pointer;
 }
 

@@ -40,7 +40,7 @@ export default {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("signedout")) {
       window.history.pushState("", "", "/");
-      setTimeout(function () {
+      setTimeout(() => {
         Ozone.fire("success", "You have been signed out", "top-right");
       }, 1500);
     }
@@ -49,7 +49,6 @@ export default {
 </script>
 
 <style>
-
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -62,8 +61,7 @@ export default {
   right: 0;
   bottom: 0;
   margin: auto;
-  background: url("./assets/def-back.jpg") no-repeat center center
-    fixed;
+  background: url("./assets/def-back.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -73,11 +71,11 @@ export default {
 body {
   background-color: black;
   font-family: "Wals";
-  overflow: hidden; 
-  -webkit-user-select: none;        
-  -moz-user-select: none; 
-  -ms-user-select: none; 
-  user-select: none; 
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 input:focus {
@@ -111,17 +109,17 @@ a {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: transparent; 
+  background: transparent;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: white; 
+  background: white;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(184, 183, 183); 
+  background: rgb(184, 183, 183);
 }
 
 @font-face {
@@ -140,13 +138,13 @@ a {
 }
 
 /* To remove 000webhost free label */
-img[src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"] {
-  display: none; 
+img[src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"]
+{
+  display: none;
 }
 
 /* To remove "Ukraine war" label */
 .disclaimer {
-  display: none; 
+  display: none;
 }
-
 </style>
